@@ -1,0 +1,14 @@
+.qr button{
+  bottom: 5%;
+  border: none;
+  box-shadow: none;
+}
+.qr button:focus{
+  box-shadow: none;
+}
+.qr button:hover{
+  background-color: #c2c2c2;
+}
+.qr button:active{
+  background-color: #e0e0e0;
+}

@@ -1,0 +1,5 @@
+<select [(ngModel)]="selectLocale" (change)="onChangeLocal()">
+  <option *ngFor="let l of getLocales()">{{l}}</option>
+</select>
+<router-outlet></router-outlet>
+<app-footer></app-footer>

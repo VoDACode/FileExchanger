@@ -1,0 +1,80 @@
+.main{
+  top: 75px;
+  left: 10%;
+  display: grid;
+  grid-template-columns: auto auto;
+}
+.main > div,
+.main > div > working-group,
+.main > div > div,
+.main > div{
+  margin: 5px;
+}
+
+.left-main{
+  display: grid;
+  grid-template-rows: auto auto;
+}
+#upload{
+  max-width: 380px;
+  border: #adadad solid 1px;
+  border-radius: 5px;
+  padding: 5px;
+}
+#list{
+  overflow: auto;
+  margin: 2px;
+}
+.uploadBar{
+  margin-top: 5px;
+}
+.open-group-menu{
+  display: none;
+}
+@media screen and (max-width: 1250px) and (min-width: 1px){
+  .main{
+    top: 25px;
+    left: 0;
+    grid-template-columns: none;
+    grid-template-rows: auto auto;
+  }
+  #upload{
+    border: none;
+    padding: 0;
+    max-width: 100%;
+  }
+  .left-main{
+    display: block;
+    grid-template-rows: none;
+  }
+  .main > div,
+  .main > div > working-group,
+  .main > div > div,
+  .main > div{
+    margin: 3px;
+  }
+}
+
+@media screen and (max-width: 1250px) and (min-width: 775px){
+  .left-main{
+    display: grid;
+    grid-template-columns: auto auto;
+  }
+  #upload{
+    border: #adadad solid 1px;
+    border-radius: 5px;
+    padding: 5px;
+  }
+}
+
+@media screen and (max-width: 775px) and (min-width: 1px){
+  .open-group-menu{
+    display: block;
+  }
+}
+
+@media screen and (max-height: 775px) and (min-height: 1px){
+  .main{
+    top: 25px;
+  }
+}

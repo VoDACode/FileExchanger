@@ -1,0 +1,32 @@
+.root{
+  position: relative;
+  border: #adadad solid 1px;
+  border-radius: 5px;
+  padding: 5px;
+  display: grid;
+}
+.root > .title{
+  grid-row: 0;
+  margin-left: 35%;
+}
+.isExist > .isJoin{
+  position: relative;
+}
+.isExist > .isJoin > div{
+  display: grid;
+  margin-top: 5px;
+}
+
+.join_or_create > div{
+  margin: 5px;
+  border: #adadad solid 1px;
+  border-radius: 5px;
+  padding: 2px;
+}
+
+@media screen and (max-width: 775px) and (min-width: 1px){
+  .root{
+    display: none;
+  }
+}
+

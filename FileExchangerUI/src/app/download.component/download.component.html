@@ -1,0 +1,26 @@
+<div class="position-relative">
+  <p *ngFor="let alert of alerts">
+    <ngb-alert [type]="alert.type" (closed)="close(alert)">{{ alert.message }}</ngb-alert>
+  </p>
+</div>
+
+<div class="position-absolute top-50 start-50 translate-middle">
+  <div>
+    <span>{{ 'FileList.Name' | translate }}: {{name}}</span><br>
+    <span>{{ 'FileList.Size' | translate }}: {{convertSize(size)}}</span><br>
+  </div>
+  <div *ngIf="isLocked">
+    <div class="input-group mb-3">
+      <span class="input-group-text" id="basic-addon1">{{ 'Upload.Password' | translate }}</span>
+      <input type="password" class="form-control" [(ngModel)]="pin" aria-describedby="basic-addon1">
+    </div>
+    <button type="button" class="btn btn-primary" (click)="downloadLockedFile()">{{ 'Download.Download' | translate }}</button>
+  </div>
+  <div *ngIf="!isLocked">
+    <form method="get" id="downloadForm" action="{{downloadPath}}">
+      <input type="hidden" name="p" value="{{pin}}" />
+      <input type="submit" value="Download!" (click)="onDownload()">
+    </form>
+  </div>
+  <h2>{{ 'Download.Thanks' | translate }}</h2>
+</div>

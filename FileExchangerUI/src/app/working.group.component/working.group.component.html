@@ -1,0 +1,42 @@
+<p *ngFor="let alert of alerts">
+  <ngb-alert [type]="alert.type" (closed)="close(alert)">{{ alert.message }}</ngb-alert>
+</p>
+<div class="root">
+  <div class="title">
+    <span>{{ 'GroupSettings.Title' | translate }}</span>
+  </div>
+  <div class="input-group mb-1">
+    <span class="input-group-text" id="inputGroup-nickname">{{ 'GroupSettings.SessionName' | translate }}</span>
+    <input type="text" class="form-control" [(ngModel)]="sessionName" aria-describedby="inputGroup-sessionName">
+    <button type="button" class="btn btn-primary" (click)="onSetSessionName()">Set</button>
+  </div>
+  <div *ngIf="isExistInGroup" id="isExist">
+    <div class="isJoin">
+      <div *ngIf="!isPermissionAddUser" class="alert-not-add-permission">
+        <span>{{ 'GroupSettings.Alerts.Member' | translate }}</span>
+      </div>
+      <div *ngIf="isPermissionAddUser" class="join_box">
+        <button type="button" class="btn btn-info" (click)="viewJoinInfo()">{{ 'GroupSettings.Buttons.ViewJoinInfo' | translate }}</button>
+      </div>
+      <div *ngIf="isCreator">
+        <button type="button" (click)="viewUserList()" class="btn btn-info">{{ 'GroupSettings.Buttons.UserList' | translate }}</button>
+      </div>
+      <div>
+        <button *ngIf="isCreator" type="button" class="btn btn-danger" (click)="onLeave()">{{ 'GroupSettings.Buttons.Leave.Remove' | translate }}</button>
+        <button *ngIf="!isCreator" type="button" class="btn btn-danger" (click)="onLeave()">{{ 'GroupSettings.Buttons.Leave.Leave' | translate }}</button>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="!isExistInGroup" id="join_or_create" class="mb-3">
+    <div class="join">
+      <div class="input-group mb-1">
+        <span class="input-group-text" id="inputGroup-key">{{ 'GroupSettings.Key' | translate }}</span>
+        <input type="text" [(ngModel)]="joinToKey" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-key">
+        <button type="button" class="btn btn-primary" (click)="onJoinToKey()">{{ 'GroupSettings.Buttons.Join' | translate }}</button>
+      </div>
+    </div>
+    <div class="create">
+      <button type="button" class="btn btn-info" (click)="onCreate()">{{ 'GroupSettings.Buttons.Create' | translate }}</button>
+    </div>
+  </div>
+</div>

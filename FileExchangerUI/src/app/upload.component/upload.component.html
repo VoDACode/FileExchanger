@@ -1,0 +1,92 @@
+<p *ngFor="let alert of alerts">
+  <ngb-alert [type]="alert.type" (closed)="close(alert)">{{ alert.message }}</ngb-alert>
+</p>
+
+<div class="d-grid main position-absolute">
+  <div class="d-grid left-main">
+    <button type="button" class="btn btn-info open-group-menu" (click)="openGroupMenu()">{{ 'GroupSettings.Title' | translate }}</button>
+    <div id="upload">
+      <label class="form-label">{{ 'Upload.Password' | translate }}</label>
+      <div class="input-group mb-3">
+        <div class="input-group-text">
+          <input class="form-check-input mt-0" type="checkbox" (click)="onSelectPassword($event)" [(ngModel)]="isLimited">
+        </div>
+        <input id="obj_pin" [disabled]="!isLimited" [(ngModel)]="pin" type="password" class="form-control">
+      </div>
+      <div class="input-group mb-3">
+          <select class="form-select" aria-label="Default select example" [(ngModel)]="MaxCountDownload">
+            <option selected value="0">{{ 'Upload.MaxCountDownload.Title' | translate }}</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="-1">{{ 'Upload.MaxCountDownload.Unlimited' | translate }}</option>
+          </select>
+      </div>
+      <div class="input-group mb-3">
+        <div class="input-group mb-3">
+          <select class="form-select" id="saveTime" aria-label="Save time" [(ngModel)]="SaveTime">
+            <option selected value="0">{{ 'Upload.SaveTime.Title' | translate }}</option>
+            <option value="1">1{{ 'Upload.SaveTime.H' | translate }}</option>
+            <option value="2">2{{ 'Upload.SaveTime.H' | translate }}</option>
+            <option value="3">3{{ 'Upload.SaveTime.H' | translate }}</option>
+            <option value="6">6{{ 'Upload.SaveTime.H' | translate }}</option>
+            <option value="8">8{{ 'Upload.SaveTime.H' | translate }}</option>
+            <option value="10">10{{ 'Upload.SaveTime.H' | translate }}</option>
+            <option value="12">12{{ 'Upload.SaveTime.H' | translate }}</option>
+            <option value="20">20{{ 'Upload.SaveTime.H' | translate }}</option>
+            <option value="24">24{{ 'Upload.SaveTime.H' | translate }}</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <label for="selectFile" class="form-label">{{ 'Upload.SelectFile' | translate }}</label>
+        <input class="form-control form-control-lg" id="selectFile"  type="file">
+      </div>
+      <div>
+        <button type="button" class="btn btn-primary" (click)="onUpload()">{{ 'Upload.Upload' | translate }}</button>
+      </div>
+      <div>
+        <ngb-progressbar class="uploadBar" [max]="100" [value]="UploadProgress()" type="info">{{UploadProgress()}}%</ngb-progressbar>
+      </div>
+    </div>
+    <working-group></working-group>
+  </div>
+  <div id="list">
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">{{ 'FileList.Name' | translate }}</th>
+        <th scope="col">{{ 'FileList.Size' | translate }}</th>
+        <th scope="col">{{ 'FileList.UploadDate' | translate }}</th>
+        <th scope="col">{{ 'FileList.DownloadCount' | translate }}</th>
+        <th scope="col">{{ 'FileList.RemovalTime' | translate }}</th>
+        <th scope="col">{{ 'FileList.Link' | translate }}</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let obj of files; index as i">
+        <th scope="row">{{i+1}}</th>
+        <td [innerText]="setLengthName(obj.name)" title="{{obj.name}}"></td>
+        <td>{{convertSize(obj.size)}}</td>
+        <td title="{{obj.createDate}}">{{getTime(obj.createDate)}}</td>
+        <td>{{obj.downloadCount}}/{{obj.maxDownloadCount}}</td>
+        <td>{{viewDeleteTime(obj)}}</td>
+        <td (click)="onCopyLink(obj)" style="cursor: pointer">{{ 'FileList.CopyLink' | translate }}</td>
+        <td><button type="button" class="btn btn-dark" (click)="onDelete(obj)">{{ 'FileList.Delete' | translate }}</button></td>
+        <td>
+          <form *ngIf="obj.accessMode != '2'" method="get" id="downloadForm_{{obj.id}}" action="/api/files/download/{{obj.downloadKey}}/{{obj.name}}">
+            <button type="button" class="btn btn-info" (click)="onDownload(obj)">{{ 'FileList.Download' | translate }}</button>
+          </form>
+            <button *ngIf="obj.accessMode == '2'" type="button" class="btn btn-info" [routerLink]="['d',obj.downloadKey, obj.name]">{{ 'FileList.Download' | translate }}</button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
