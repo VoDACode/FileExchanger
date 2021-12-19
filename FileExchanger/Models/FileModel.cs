@@ -29,7 +29,7 @@ namespace FileExchanger.Models
         public FileAccessMode AccessMode { get; set; } = FileAccessMode.Private;
         public string DownloadKey { get; set; }
         public string Password { get; set; }
-        public double SaveTime { get; set; } = TimeSpan.FromDays(2).Seconds;
+        public double SaveTime { get; set; } = TimeSpan.FromHours(1).Seconds;
         public int DownloadCount { get; set; } = 0;
         public int MaxDownloadCount { get; set; } = 0;
 

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace FileExchanger.Helpers
 {
@@ -27,6 +29,25 @@ namespace FileExchanger.Helpers
             else
                 result = $"{b}b";
             return result.Replace(",", ".");
+        }
+
+        public static double SizeParser(string size)
+        {
+            Regex gb = new Regex(@"\dGb");
+            Regex mb = new Regex(@"\dMb");
+            Regex kb = new Regex(@"\dKb");
+            double result = 0;
+            StringBuilder strNum = new StringBuilder(size.Length - 2);
+            for(int i = 0; i < strNum.Capacity; i++)
+                strNum.Append(size[i]);
+            result = double.Parse(strNum.ToString());
+            if(gb.IsMatch(size))
+                return result * Math.Pow(1024, 3);
+            if (mb.IsMatch(size))
+                return result * Math.Pow(1024, 2);
+            if (kb.IsMatch(size))
+                return result * 1024;
+            throw new Exception("Incorrect config parameter 'MaxSaveSize'");
         }
     }
 }
