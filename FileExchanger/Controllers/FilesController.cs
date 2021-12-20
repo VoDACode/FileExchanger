@@ -33,13 +33,14 @@ namespace FileExchanger.Controllers
                 return uwg.WorkingGroup;
             }
         }
-
         private DbApp db;
         public FilesController(DbApp db)
         {
             this.db = db;
             Cleaner.ClearFiles(db);
         }
+        [RequestSizeLimit(100L * 1024L * 1024L * 1024L)]
+        [RequestFormLimits(MultipartBodyLengthLimit = 100L * 1024L * 1024L * 1024L)]
         [HttpPost("upload")]
         public IActionResult UploadFile(IFormFile file, FileAccessMode m, string p, double st, int dc)
         {
