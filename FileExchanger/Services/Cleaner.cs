@@ -23,6 +23,7 @@ namespace FileExchanger.Services
                     FtpService.DeleteDir(file.DownloadKey);
                 }
                 db.Files.RemoveRange(files);
+                db.SaveChanges();
                 db.WorkingGroups.ToList();
                 var userGroups = db.UserInWorkingGroups.Where(p => p.User == user).ToList();
                 foreach (var group in userGroups)

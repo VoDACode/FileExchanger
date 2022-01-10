@@ -82,12 +82,12 @@ namespace FileExchanger.Controllers
             if (!existUserInGroups)
                 return BadRequest("You are not in any group!");
             if (!getUserWorkingGroup.IsCreator)
-            {
                 return Leave();
-            }
+
             var group = getWorkingGroup;
             var users = db.UserInWorkingGroups.Where(p => p.WorkingGroup == group);
             db.UserInWorkingGroups.RemoveRange(users);
+            db.SaveChanges();
             db.WorkingGroups.Remove(group);
             db.SaveChanges();
             return Ok();

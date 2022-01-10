@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 
 namespace FileExchanger.Helpers
@@ -33,21 +34,39 @@ namespace FileExchanger.Helpers
 
         public static double SizeParser(string size)
         {
-            Regex gb = new Regex(@"\dGb");
-            Regex mb = new Regex(@"\dMb");
-            Regex kb = new Regex(@"\dKb");
+            var tmp = size.Split(' ');
             double result = 0;
-            StringBuilder strNum = new StringBuilder(size.Length - 2);
-            for(int i = 0; i < strNum.Capacity; i++)
-                strNum.Append(size[i]);
-            result = double.Parse(strNum.ToString());
-            if(gb.IsMatch(size))
-                return result * Math.Pow(1024, 3);
-            if (mb.IsMatch(size))
-                return result * Math.Pow(1024, 2);
-            if (kb.IsMatch(size))
-                return result * 1024;
-            throw new Exception("Incorrect config parameter 'MaxSaveSize'");
+            try
+            {
+                result = tmp[0].ToDouble();
+                if (tmp[1] == "Gb")
+                    return result * Math.Pow(1024, 3);
+                if (tmp[1] == "Mb")
+                    return result * Math.Pow(1024, 2);
+                if (tmp[1] == "Kb")
+                    return result * 1024;
+                throw new Exception();
+            }
+            catch(Exception ex)
+            {
+                throw new ArgumentException($"Incorrect config parameter MaxSaveSize: '{tmp[0]}' (len: {tmp[0].Length}; {result})\n" +
+                    $"Input: '{size}'\n" +
+                    $"{JsonSerializer.Serialize(tmp)}\n------------------\n" +
+                    $"Message: '{ex}'");
+            }
+        }
+
+        public static double ToDouble(this string str)
+        {
+            if(str == null)
+                throw new ArgumentNullException(nameof(str));
+            double result = 0;
+            string[] vs = str.Split(new char[]{ ',', '.' });
+            for (int i = 0, k = vs[0].Length - 1; i < vs[0].Length; i++, k--)
+                result += (int)(vs[0][i] - 48)*Math.Pow(10, k);
+            for (int i = 0; i < vs[1].Length; i++)
+                result += (int)(vs[1][i] - 48)/Math.Pow(10, i+1);
+            return result;
         }
     }
 }
