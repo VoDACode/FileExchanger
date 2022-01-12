@@ -10,7 +10,7 @@ namespace FileExchanger
 {
     public static class Config
     {
-        public static dynamic ConfigFile => JsonConvert.DeserializeObject(File.ReadAllText(@".\appsettings.json"));
+        public static dynamic ConfigFile => JsonConvert.DeserializeObject(File.ReadAllText(@"appsettings.json"));
         #region FTP
         public static string FtpUsername => (string)ConfigFile["FTP"]["Username"];
         public static string FtpPassword => (string)ConfigFile["FTP"]["Password"];

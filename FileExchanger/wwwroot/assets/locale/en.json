@@ -1,0 +1,77 @@
+{
+  "Upload": {
+    "Password": "Password",
+    "MaxCountDownload": {
+      "Title": "Max count download",
+      "Unlimited": "Unlimited"
+    },
+    "SaveTime": {
+      "Title": "Save time",
+      "H": "h"
+    },
+    "SelectFile": "Select file",
+    "Upload": "Upload"
+  },
+  "GroupSettings": {
+    "Title": "Group settings",
+    "Key": "Key",
+    "SessionName": "Session name",
+    "Buttons": {
+      "ViewJoinInfo": "Join info",
+      "UserList": "User list",
+      "Leave": {
+        "Leave": "Leave",
+        "Remove": "Remove"
+      },
+      "Join": "Join",
+      "Create": "Create group"
+    },
+    "ModelJoinLink": {
+      "Title": "Join link",
+      "Copy": "Copy",
+      "Close": "Close"
+    },
+    "ModelUserList": {
+      "Title": "User list",
+      "Close": "Close",
+      "Table": {
+        "Titles": {
+          "SessionName": "Session name",
+          "JoinDate": "Join date",
+          "LastActive": "Last active",
+          "AddUsers": "Add users",
+          "Settings": "Settings"
+        },
+        "Buttons": {
+          "AddUser": "Add users",
+          "Kik": "Kik"
+        }
+      }
+    },
+    "Alerts": {
+      "Member": "You are a member of the working group!",
+      "Leave": ""
+    }
+  },
+  "FileList": {
+    "Name": "Name",
+    "Size": "Size",
+    "UploadDate": "Upload date",
+    "DownloadCount": "Download count",
+    "RemovalTime": "Removal time",
+    "Link": "Link",
+    "Delete": "Delete",
+    "Download": "Download",
+    "CopyLink": "Copy link"
+  },
+  "Footer": {
+    "Donation": "Donation"
+  },
+  "Download": {
+    "Download": "Download",
+    "Thanks": "Thanks for using \uD83D\uDE0A"
+  },
+  "Warnings": {
+    "Password": "Encryption and decryption of the file is performed on the client side, ie the larger the file, the longer the encryption and decryption!"
+  }
+}
