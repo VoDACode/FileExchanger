@@ -7,7 +7,7 @@ namespace FileExchanger.Models.ConfigModels
         public override string Parameter => "MaxUploadCount";
 
         protected override List<string> Templates => new List<string> { @"[1-999999]\d" };
-        protected override string DefaultValue => "2";
+        public override string DefaultValue => "2";
 
         protected override string PathInConfigFile => "FileStorage:MaxUploadCount";
 

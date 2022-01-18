@@ -12,7 +12,7 @@ namespace FileExchanger.Models.ConfigModels
         private string value;
         public abstract string Parameter { get; }
         protected abstract string PathInConfigFile { get; }
-        protected virtual string DefaultValue => null;
+        public virtual string DefaultValue => null;
         public string Value { get => value; set
             {
                 IsSet = true;

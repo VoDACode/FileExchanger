@@ -8,7 +8,7 @@ namespace FileExchanger.Models.ConfigModels
 
         protected override List<string> Templates => new List<string> { @"\S@\S" };
         public override string ErrorMessage => "Incorrect parameter 'FTP_AUTH'!\nFormat: user@password";
-        protected override string DefaultValue => "anon@anon";
+        public override string DefaultValue => "anon@anon";
 
         protected override string PathInConfigFile => "FTP:Auth";
 

@@ -7,7 +7,7 @@ namespace FileExchanger.Models.ConfigModels
         public override string Parameter => "FTP_SSL";
         protected override List<string> Templates => new List<string> { @"[0-1]\d" };
         public override string ErrorMessage => "Incorrect parameter 'FTP_SSL'!\nFormat: 1 or 0";
-        protected override string DefaultValue => "0";
+        public override string DefaultValue => "0";
         protected override string PathInConfigFile => "FTP:EnableSFTP";
         public override dynamic SaveChanage(dynamic config)
         {

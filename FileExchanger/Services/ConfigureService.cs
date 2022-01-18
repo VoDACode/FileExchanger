@@ -96,7 +96,7 @@ namespace FileExchanger.Services
             {
                 var str = $"\t-{item.Parameter}\n";
                 if (!item.IsRequired)
-                    str += $"\tDefault: '{item.Value}'";
+                    str += $"\tDefault: '{item.DefaultValue}'";
                 Console.WriteLine($"{str}\n");
             }
             Console.WriteLine($"\t--help\n\tPrint this menu :D\n\n");
