@@ -25,10 +25,8 @@ namespace FileExchanger
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            string connection = Configuration["Db:Connect"];
-            // добавляем контекст MobileContext в качестве сервиса в приложение
             services.AddDbContext<DbApp>(options =>
-                options.UseSqlServer(Configuration["Db:Connect"]));
+                options.UseSqlServer(Config.DbConnect));
             services.AddControllers();
             services.AddControllersWithViews();
             services.Configure<FormOptions>(x =>

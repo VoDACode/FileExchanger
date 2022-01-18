@@ -10,7 +10,15 @@ namespace FileExchanger
 {
     public static class Config
     {
-        public static dynamic ConfigFile => JsonConvert.DeserializeObject(File.ReadAllText(@"appsettings.json"));
+        public static string ConfigFileName => @"appsettings.json";
+        public static dynamic ConfigFile => JsonConvert.DeserializeObject(File.ReadAllText(ConfigFileName));
+
+        public static string DbConnect => $"Data Source={ConfigFile["Db"]["Host"]},{ConfigFile["Db"]["Port"]};" +
+                $"Initial Catalog={ConfigFile["Db"]["DbName"]};" +
+                $"Persist Security Info=True;" +
+                $"User ID={ConfigFile["Db"]["UserId"]};" +
+                $"Password={ConfigFile["Db"]["Password"]}";
+
         #region FTP
         public static string FtpUsername => (string)ConfigFile["FTP"]["Username"];
         public static string FtpPassword => (string)ConfigFile["FTP"]["Password"];
@@ -24,5 +32,7 @@ namespace FileExchanger
         public static double MaxSaveTime => (double)ConfigFile["FileStorage"]["MaxSaveTime"];
         public static int MaxUploadCount => (int)ConfigFile["FileStorage"]["MaxUploadCount"];
         #endregion
+
+        public static bool IsFirstStart => (string)ConfigFile["FirstStart"] == "True";
     }
 }

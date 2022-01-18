@@ -26,7 +26,7 @@ namespace FileExchanger.Helpers
             else if (mb > 0)
                 result = $"{mb}Mb";
             else if (kb > 0)
-                result = $"{kb}Mb";
+                result = $"{kb}Kb";
             else
                 result = $"{b}b";
             return result.Replace(",", ".");
