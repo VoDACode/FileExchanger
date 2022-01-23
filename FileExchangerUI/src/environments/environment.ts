@@ -5,7 +5,8 @@
 export const environment = {
   production: false,
   locales: ['en', 'ru', 'ua'],
-  defaultLocale: 'en'
+  defaultLocale: 'en',
+  GA_TRACKING_ID: 'G-2G2D6C6HHQ'
 };
 
 /*

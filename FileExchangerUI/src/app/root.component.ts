@@ -1,8 +1,12 @@
+import { Router, NavigationEnd } from '@angular/router';
 import {Component, OnInit} from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
 import * as $ from 'jquery';
 import {environment} from "../environments/environment";
 import {CookieService} from "ngx-cookie-service";
+import { filter } from 'rxjs/operators';
+
+declare const gtag: Function;
 
 @Component({
   selector: 'app-root',
@@ -13,11 +17,22 @@ export class RootComponent implements OnInit {
     return environment.locales;
   }
   selectLocale: string = environment.defaultLocale;
-  constructor(private translateService: TranslateService, private cookie: CookieService) {
+  constructor(private translateService: TranslateService, private cookie: CookieService, private router: Router) {
     $.ajax({
       url: 'api/user/create',
       method: 'POST',
       async: false
+    })
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+      //@ts-ignore
+    ).subscribe((event: NavigationEnd) => {
+      /** START : Code to Track Page View  */
+      console.log("EVENT CLICK", event.urlAfterRedirects);
+      gtag('event', 'page_view', {
+        page_path: event.urlAfterRedirects
+      })
+      /** END */
     })
   }
   ngOnInit(): void {
