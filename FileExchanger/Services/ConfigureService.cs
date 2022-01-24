@@ -41,6 +41,11 @@ namespace FileExchanger.Services
                 return false;
             }
 
+            if(Config.IsFirstStart && !editedParameters.Any(p => p.Parameter == "DB_NAME"))
+            {
+                ConfigParameters.Single(p => p.Parameter == "DB_NAME").Value = $"FileExchanger_{DateTime.Now.Ticks}"; ;
+            }
+
             saveChanges();
             
             return true;
