@@ -14,7 +14,7 @@ namespace FileExchanger.Models.ConfigModels
             @"\dm",
             @"\ds",
         };
-        public override string ErrorMessage => "Incorrect parameter 'FILE_MaxSaveTime'!\nFormat: '1d 5h 40m 50s'";
+        public override string ErrorMessage => "Incorrect parameter 'MaxSaveTime'!\nFormat: '1d 5h 40m 50s'";
         public override string DefaultValue => "1d";
 
         protected override string PathInConfigFile => "FileStorage:MaxSaveTime";

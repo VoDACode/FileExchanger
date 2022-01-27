@@ -11,7 +11,7 @@ namespace FileExchanger.Models.ConfigModels
             @"\d Mb",
             @"\d Kb",
         };
-        public override string ErrorMessage => "Incorrect parameter 'FILE_MaxSaveTime'!\nFormat: '1.5 Gb' or '512 Mb' or '900 Kb'";
+        public override string ErrorMessage => "Incorrect parameter 'MaxSaveSize'!\nFormat: '1.5 Gb' or '512 Mb' or '900 Kb'";
         public override string DefaultValue => "1.5 Gb";
         protected override string PathInConfigFile => "FileStorage:MaxSaveSize";
 
