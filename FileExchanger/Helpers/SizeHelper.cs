@@ -64,8 +64,9 @@ namespace FileExchanger.Helpers
             string[] vs = str.Split(new char[]{ ',', '.' });
             for (int i = 0, k = vs[0].Length - 1; i < vs[0].Length; i++, k--)
                 result += (int)(vs[0][i] - 48)*Math.Pow(10, k);
-            for (int i = 0; i < vs[1].Length; i++)
-                result += (int)(vs[1][i] - 48)/Math.Pow(10, i+1);
+            if(vs.Length > 1)
+                for (int i = 0; i < vs[1].Length; i++)
+                    result += (int)(vs[1][i] - 48)/Math.Pow(10, i+1);
             return result;
         }
     }
