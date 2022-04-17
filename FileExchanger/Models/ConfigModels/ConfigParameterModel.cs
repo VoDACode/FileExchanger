@@ -38,9 +38,9 @@ namespace FileExchanger.Models.ConfigModels
 
         public void SaveChanage()
         {
-            dynamic config = Config.ConfigFile;
+            dynamic config = Config.Instance.ConfigFile;
             config = SaveChanage(config);
-            File.WriteAllText(Config.ConfigFileName, JsonConvert.SerializeObject(config));
+            File.WriteAllText(Config.Instance.ConfigFileName, JsonConvert.SerializeObject(config));
         }
 
         public abstract object SaveChanage(dynamic config);

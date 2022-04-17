@@ -1,5 +1,6 @@
 ﻿using FileExchanger.Models;
 using FileExchanger.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace FileExchanger.Controllers
 {
+    [Authorize(Policy = "AuthExchanger")]
     [Route("api/group")]
     [ApiController]
     public class WorkingGroupController : ControllerBase

@@ -35,17 +35,21 @@ namespace FileExchanger.Services
 
             var editedParameters = ConfigParameters.Where(p => p.IsSet).ToList();
 
-            if(Config.IsFirstStart && editedParameters.Count < ConfigParameters.Count(p => p.IsRequired))
+            if(Config.Instance.IsFirstStart && editedParameters.Count < ConfigParameters.Count(p => p.IsRequired))
             {
                 Console.WriteLine("Pleace configure project!\n\t--help\tFor help");
                 return false;
             }
 
-            if(Config.IsFirstStart && !ConfigParameters.Any(p => p.Parameter == "DB_NAME" && p.IsSet))
+            if(Config.Instance.IsFirstStart && !ConfigParameters.Any(p => p.Parameter == "DB_NAME" && p.IsSet))
             {
                 ConfigParameters.Single(p => p.Parameter == "DB_NAME").Value = $"FileExchanger_{DateTime.Now.Ticks}";
             }
 
+            if (string.IsNullOrWhiteSpace((string)Config.Instance.ConfigFile["Auth"]["KEY"]))
+            {
+                Config.Instance.ConfigFile["Auth"]["KEY"] = "".RandomString(128);
+            }
             saveChanges();
             
             return true;
@@ -87,12 +91,12 @@ namespace FileExchanger.Services
 
         private void saveChanges()
         {
-            var config = Config.ConfigFile;
+            var config = Config.Instance.ConfigFile;
             foreach(var conf in ConfigParameters.Where(p => p.IsSet))
                 conf.SaveChanage(config);
-            if (Config.IsFirstStart)
+            if (Config.Instance.IsFirstStart)
                 config["FirstStart"] = "False";
-            File.WriteAllText(Config.ConfigFileName, JsonConvert.SerializeObject(config));
+            File.WriteAllText(Config.Instance.ConfigFileName, JsonConvert.SerializeObject(config));
         }
 
         private void help()

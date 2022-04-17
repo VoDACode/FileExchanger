@@ -1,4 +1,5 @@
-﻿using FileExchanger.Models;
+﻿using FileExchanger.Configs;
+using FileExchanger.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,13 +11,35 @@ namespace FileExchanger.Services
 {
     public static class FtpService
     {
-
-        public static void Upload(Stream file, FileModel fileModel)
+        static FtpService()
         {
-            mkdir(fileModel.DownloadKey);
-            FtpWebRequest request = (FtpWebRequest)WebRequest.Create($"{Config.FtpPath}{fileModel.DownloadKey}/{fileModel.Name}");
+            try
+            {
+                mkdir($"{Config.Instance.Ftp.Path}/exchange");
+            }
+            catch { }
+            try
+            {
+                mkdir($"{Config.Instance.Ftp.Path}/storage");
+            }
+            catch { }
+        }
+        private static string getPath(DefaultService service, IFile file)
+        {
+            string path = service == DefaultService.FileStorage ? "storage" : "exchange";
+            return $"{Config.Instance.Ftp.Path}{path}/{file.Key}/{file.Name}";
+        }
+        private static string getPath(DefaultService service, string path)
+        {
+            string p = service == DefaultService.FileStorage ? "storage" : "exchange";
+            return $"{Config.Instance.Ftp.Path}{p}/{path}";
+        }
+        public static void Upload(Stream file, IFile fileModel, DefaultService service)
+        {
+            mkdir(getPath( service,fileModel.Key));
+            FtpWebRequest request = (FtpWebRequest)WebRequest.Create(getPath(service, fileModel));
             request.Method = WebRequestMethods.Ftp.UploadFile;
-            request.Credentials = new NetworkCredential(Config.FtpUsername, Config.FtpPassword);
+            request.Credentials = new NetworkCredential(Config.Instance.Ftp.Username, Config.Instance.Ftp.Password);
 
             request.ContentLength = file.Length;
 
@@ -25,26 +48,26 @@ namespace FileExchanger.Services
             ftpStream.Close();
         }
 
-        public static Stream Download(FileModel file)
+        public static Stream Download(IFile file, DefaultService service)
         {
-            FtpWebRequest request = (FtpWebRequest)WebRequest.Create($"{Config.FtpPath}/{file.DownloadKey}/{file.Name}");
+            FtpWebRequest request = (FtpWebRequest)WebRequest.Create(getPath(service, file));
             request.Method = WebRequestMethods.Ftp.DownloadFile;
 
-            request.Credentials = new NetworkCredential(Config.FtpUsername, Config.FtpPassword);
+            request.Credentials = new NetworkCredential(Config.Instance.Ftp.Username, Config.Instance.Ftp.Password);
 
             FtpWebResponse response = (FtpWebResponse)request.GetResponse();
 
             return response.GetResponseStream();
         }
 
-        public static FtpStatusCode DeleteFile(FileModel file)
+        public static FtpStatusCode DeleteFile(IFile file, DefaultService service)
         {
             try
             {
-                FtpWebRequest request = (FtpWebRequest)WebRequest.Create($"{Config.FtpPath}/{file.DownloadKey}/{file.Name}");
+                FtpWebRequest request = (FtpWebRequest)WebRequest.Create(getPath(service, file));
                 request.Method = WebRequestMethods.Ftp.DeleteFile;
 
-                request.Credentials = new NetworkCredential(Config.FtpUsername, Config.FtpPassword);
+                request.Credentials = new NetworkCredential(Config.Instance.Ftp.Username, Config.Instance.Ftp.Password);
                 FtpWebResponse response = (FtpWebResponse)request.GetResponse();
                 var code = response.StatusCode;
                 response.Close();
@@ -57,14 +80,14 @@ namespace FileExchanger.Services
             }
         }
 
-        public static FtpStatusCode DeleteDir(string dir)
+        public static FtpStatusCode DeleteDir(string dir, DefaultService service)
         {
             try
             {
-                FtpWebRequest request = (FtpWebRequest)WebRequest.Create($"{Config.FtpPath}/{dir}");
+                FtpWebRequest request = (FtpWebRequest)WebRequest.Create(getPath(service, dir));
                 request.Method = WebRequestMethods.Ftp.RemoveDirectory;
 
-                request.Credentials = new NetworkCredential(Config.FtpUsername, Config.FtpPassword);
+                request.Credentials = new NetworkCredential(Config.Instance.Ftp.Username, Config.Instance.Ftp.Password);
                 FtpWebResponse response = (FtpWebResponse)request.GetResponse();
                 var code = response.StatusCode;
                 response.Close();
@@ -78,9 +101,9 @@ namespace FileExchanger.Services
 
         private static FtpStatusCode mkdir(string dir)
         {
-            WebRequest request = WebRequest.Create($"{Config.FtpPath}/{dir}");
+            WebRequest request = WebRequest.Create(dir);
             request.Method = WebRequestMethods.Ftp.MakeDirectory;
-            request.Credentials = new NetworkCredential(Config.FtpUsername, Config.FtpPassword);
+            request.Credentials = new NetworkCredential(Config.Instance.Ftp.Username, Config.Instance.Ftp.Password);
             using (var resp = (FtpWebResponse)request.GetResponse())
             {
                 return resp.StatusCode;

@@ -20,14 +20,14 @@ namespace FileExchanger.Models
         /// </summary>
         Limited
     }
-    public class FileModel : IFile
+    public class ExchangeFileModel : IFile
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public long Size { get; set; }
         public DateTime CreateDate { get; set; }
         public FileAccessMode AccessMode { get; set; } = FileAccessMode.Private;
-        public string DownloadKey { get; set; }
+        public string Key { get; set; }
         public string Password { get; set; }
         public double SaveTime { get; set; } = TimeSpan.FromHours(1).Seconds;
         public int DownloadCount { get; set; } = 0;

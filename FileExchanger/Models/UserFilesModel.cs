@@ -9,6 +9,6 @@ namespace FileExchanger.Models
     {
         public int Id { get; set; }
         public UserModel User { get; set; }
-        public FileModel File { get; set; }
+        public ExchangeFileModel File { get; set; }
     }
 }

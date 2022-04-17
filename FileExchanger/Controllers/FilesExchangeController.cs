@@ -1,6 +1,8 @@
-﻿using FileExchanger.Helpers;
+﻿using FileExchanger.Configs;
+using FileExchanger.Helpers;
 using FileExchanger.Models;
 using FileExchanger.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -10,9 +12,10 @@ using System.Threading.Tasks;
 
 namespace FileExchanger.Controllers
 {
-    [Route("api/[controller]")]
+    [Authorize(Policy = "AuthExchanger")]
+    [Route("api/files/e")]
     [ApiController]
-    public class FilesController : ControllerBase
+    public class FilesExchangeController : ControllerBase
     {
         private UserModel getUser => db.Users.FirstOrDefault(p => p.Key == HttpContext.Request.Cookies["u_key"]);
         private UserInWorkingGroupModel getUserWorkingGroup
@@ -34,7 +37,7 @@ namespace FileExchanger.Controllers
             }
         }
         private DbApp db;
-        public FilesController(DbApp db)
+        public FilesExchangeController(DbApp db)
         {
             this.db = db;
             Cleaner.ClearFiles(db);
@@ -56,11 +59,11 @@ namespace FileExchanger.Controllers
 
             if (m != FileAccessMode.Limited)
                 p = null;
-            var fileModel = new FileModel()
+            var fileModel = new ExchangeFileModel()
             {
                 Name = file.FileName,
                 Size = file.Length,
-                DownloadKey = "".RandomString(96),
+                Key = "".RandomString(96),
                 CreateDate = DateTime.Now,
                 AccessMode = m,
                 Password = p
@@ -78,8 +81,8 @@ namespace FileExchanger.Controllers
             fileModel.DownloadCount = 0;
             fileModel.MaxDownloadCount = dc;
 
-            FtpService.Upload(file.OpenReadStream(), fileModel);
-            db.Files.Add(fileModel);
+            FtpService.Upload(file.OpenReadStream(), fileModel, DefaultService.FileExchanger);
+            db.ExchangeFiles.Add(fileModel);
             db.UserFiles.Add(new UserFilesModel()
             {
                 File = fileModel,
@@ -94,7 +97,7 @@ namespace FileExchanger.Controllers
         {
             if (getUser == null)
                 return NotFound("User not found!");
-            var file = db.Files.FirstOrDefault(p => p.DownloadKey == key && p.Name == name);
+            var file = db.ExchangeFiles.FirstOrDefault(p => p.Key == key && p.Name == name);
             if (file == null)
                 return NotFound("File not found!");
             var fileOwner = db.UserFiles.FirstOrDefault(p => p.File == file);
@@ -105,18 +108,18 @@ namespace FileExchanger.Controllers
 
             if (file.IsDeleteFile)
             {
-                FtpService.DeleteFile(file);
-                FtpService.DeleteDir(file.DownloadKey);
+                FtpService.DeleteFile(file, DefaultService.FileExchanger);
+                FtpService.DeleteDir(file.Key, DefaultService.FileExchanger);
 
                 db.UserFiles.Remove(db.UserFiles.FirstOrDefault(p => p.File == file && p.User == getUser));
-                db.Files.Remove(file);
+                db.ExchangeFiles.Remove(file);
                 db.SaveChanges();
                 return NotFound("File not found!");
             }
 
             file.DownloadCount++;
             db.SaveChanges();
-            return File(FtpService.Download(file), "application/octet-stream", file.Name);
+            return File(FtpService.Download(file, DefaultService.FileExchanger), "application/octet-stream", file.Name);
         }
 
         [HttpPost("delete/{key}/{name}")]
@@ -124,7 +127,7 @@ namespace FileExchanger.Controllers
         {
             if (getUser == null)
                 return NotFound("User not found!");
-            var file = db.Files.FirstOrDefault(p => p.DownloadKey == key && p.Name == name);
+            var file = db.ExchangeFiles.FirstOrDefault(p => p.Key == key && p.Name == name);
             if (file == null)
                 return NotFound("File not found!");
             db.Users.ToList();
@@ -137,11 +140,11 @@ namespace FileExchanger.Controllers
                     return Unauthorized("Access denied!");
             }
 
-            FtpService.DeleteFile(file);
-            FtpService.DeleteDir(file.DownloadKey);
+            FtpService.DeleteFile(file, DefaultService.FileExchanger);
+            FtpService.DeleteDir(file.Key, DefaultService.FileExchanger);
 
             db.UserFiles.Remove(db.UserFiles.FirstOrDefault(p => p.File == file));
-            db.Files.Remove(file);
+            db.ExchangeFiles.Remove(file);
             db.SaveChanges();
             return Ok();
         }
@@ -151,17 +154,17 @@ namespace FileExchanger.Controllers
         {
             if (getUser == null)
                 return NotFound("User not found!");
-            var file = db.Files.FirstOrDefault(p => p.DownloadKey == key && p.Name == name);
+            var file = db.ExchangeFiles.FirstOrDefault(p => p.Key == key && p.Name == name);
             if (file == null)
                 return NotFound("File not found!");
 
             if (file.IsDeleteFile)
             {
-                FtpService.DeleteFile(file);
-                FtpService.DeleteDir(file.DownloadKey);
+                FtpService.DeleteFile(file, DefaultService.FileExchanger);
+                FtpService.DeleteDir(file.Key, DefaultService.FileExchanger);
 
                 db.UserFiles.Remove(db.UserFiles.FirstOrDefault(p => p.File == file && p.User == getUser));
-                db.Files.Remove(file);
+                db.ExchangeFiles.Remove(file);
                 db.SaveChanges();
                 return NotFound("File not found!");
             }
@@ -169,7 +172,7 @@ namespace FileExchanger.Controllers
             return Ok(new
             {
                 name = file.Name,
-                key = file.DownloadKey,
+                key = file.Key,
                 access = file.AccessMode,
                 size = file.Size,
                 file.DownloadCount
@@ -181,7 +184,7 @@ namespace FileExchanger.Controllers
         {
             if (getUser == null)
                 return NotFound("User not found!");
-            var file = db.Files.FirstOrDefault(p => p.DownloadKey == key && p.Name == name);
+            var file = db.ExchangeFiles.FirstOrDefault(p => p.Key == key && p.Name == name);
             if (file == null)
                 return NotFound("File not found!");
             if (file.AccessMode == FileAccessMode.Limited && file.Password != p)
@@ -207,7 +210,7 @@ namespace FileExchanger.Controllers
         {
             if(getUser == null)
                 return NotFound("User not found!");
-            db.Files.ToList();
+            db.ExchangeFiles.ToList();
             db.UserInWorkingGroups.ToList();
             var files = from f in db.UserFiles.Where(p => p.User == getUser).Select(p => p.File)
                         select new
@@ -218,7 +221,7 @@ namespace FileExchanger.Controllers
                             f.AccessMode,
                             f.CreateDate,
                             f.DownloadCount,
-                            f.DownloadKey,
+                            f.Key,
                             f.MaxDownloadCount,
                             f.SaveTime
                         };
@@ -235,7 +238,7 @@ namespace FileExchanger.Controllers
                                     f.AccessMode,
                                     f.CreateDate,
                                     f.DownloadCount,
-                                    f.DownloadKey,
+                                    f.Key,
                                     f.MaxDownloadCount,
                                     f.SaveTime
                                 };

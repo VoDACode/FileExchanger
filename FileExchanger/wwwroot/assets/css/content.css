@@ -1,0 +1,72 @@
+.contect-box {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+.position-absolute,
+.relative,
+.center,
+.center-vertical,
+.center-horizontal {
+  position: absolute;
+}
+.text-center {
+  text-align: center;
+}
+.center {
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+}
+.center-horizontal {
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+.center-vertical {
+  top: 50%;
+  transform: translate(0, -50%);
+}
+.grid {
+  display: grid;
+}
+/* Positions */
+.top-50 {
+  top: 50%;
+}
+.top-25 {
+  top: 25%;
+}
+.top-15 {
+  top: 15%;
+}
+.top-0 {
+  top: 0%;
+}
+.bottom-50 {
+  bottom: 50%;
+}
+.bottom-25 {
+  bottom: 25%;
+}
+.bottom-0 {
+  bottom: 0%;
+}
+.left-50 {
+  left: 50%;
+}
+.left-25 {
+  left: 25%;
+}
+.left-0 {
+  left: 0%;
+}
+.right-50 {
+  right: 50%;
+}
+.right-25 {
+  right: 25%;
+}
+.right-0 {
+  right: 0%;
+}

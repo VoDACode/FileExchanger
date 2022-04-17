@@ -13,8 +13,8 @@ namespace FileExchanger.Models
         public string Host { get; set; }
         public DateTime LastActive { get; set; }
         public DateTime RegistrationDate { get; set; }
-        public double MaxFileSize { get; set; } = Config.MaxSaveSize;
-        public int MaxFileCount { get; set; } = Config.MaxUploadCount;
-        public double MaxSaveFileTime { get; set; } = Config.MaxSaveTime;
+        public double MaxFileSize { get; set; } = Config.Instance.Services.FileExchanger.MaxSaveSize;
+        public int MaxFileCount { get; set; } = Config.Instance.Services.FileExchanger.MaxUploadCount;
+        public double MaxSaveFileTime { get; set; } = Config.Instance.Services.FileExchanger.MaxSaveTime;
     }
 }

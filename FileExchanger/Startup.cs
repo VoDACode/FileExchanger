@@ -1,3 +1,6 @@
+using FileExchanger.Attributes;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Features;
@@ -7,6 +10,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Logging;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,9 +32,25 @@ namespace FileExchanger
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DbApp>(options =>
-                options.UseSqlServer(Config.DbConnect));
+                options.UseSqlServer(Config.Instance.DbConnect));
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                    .AddJwtBearer(options =>
+                    {
+                        options.RequireHttpsMetadata = true;
+                        options.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidateIssuer = true,
+                            ValidIssuer = Config.Instance.Auth.Issuer,
+
+                            ValidateAudience = true,
+                            ValidAudience = Config.Instance.Auth.Audience,
+                            ValidateLifetime = true,
+
+                            IssuerSigningKey = Config.Instance.Auth.GetSymmetricSecurityKey,
+                            ValidateIssuerSigningKey = true
+                        };
+                    });
             services.AddControllers();
-            services.AddControllersWithViews();
             services.Configure<FormOptions>(x =>
             {
                 x.ValueLengthLimit = int.MaxValue;
@@ -39,6 +60,14 @@ namespace FileExchanger
             {
                 configuration.RootPath = "wwwroot";
             });
+            services.AddTransient<IAuthorizationHandler, AuthHandler>();
+            services.AddAuthorization(opts => {
+                opts.AddPolicy("AuthStorage",
+                    policy => policy.Requirements.Add(new AuthRequirement(Configs.DefaultService.FileStorage)));
+                opts.AddPolicy("AuthExchanger",
+                    policy => policy.Requirements.Add(new AuthRequirement(Configs.DefaultService.FileExchanger)));
+            });
+            services.AddMemoryCache();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

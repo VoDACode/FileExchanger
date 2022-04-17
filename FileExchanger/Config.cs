@@ -1,38 +1,77 @@
-﻿using FileExchanger.Helpers;
+﻿using FileExchanger.Models.UIModels;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+using FileExchanger.Configs;
+using System;
 
 namespace FileExchanger
 {
-    public static class Config
+    public enum PermissionMode { Always, Never, Optionally }
+    public class Config
     {
-        public static string ConfigFileName => @"appsettings.json";
-        public static dynamic ConfigFile => JsonConvert.DeserializeObject(File.ReadAllText(ConfigFileName));
+        private FTPConfig ftp = new FTPConfig();
+        private AuthConfig auth = new AuthConfig();
+        private EmailConfig email = new EmailConfig();
+        private SecurityConfig security = new SecurityConfig();
+        private ServicesConfig services = new ServicesConfig();
 
-        public static string DbConnect => $"Data Source={ConfigFile["Db"]["Host"]},{ConfigFile["Db"]["Port"]};" +
-                $"Initial Catalog={ConfigFile["Db"]["DbName"]};" +
+        private static Config instance;
+
+        private DateTime lastUpdaat;
+
+        private dynamic configFile;
+        private string dbConnect;
+        private List<SavePatternModel> savePatterns = new List<SavePatternModel>();
+        public static Config Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new Config();
+                    Reload();
+                    instance.lastUpdaat = File.GetLastWriteTime(instance.ConfigFileName);
+                }
+                else if(instance.lastUpdaat != File.GetLastWriteTime(instance.ConfigFileName))
+                {
+                    Reload();
+                    instance.lastUpdaat = File.GetLastWriteTime(instance.ConfigFileName);
+                }
+                
+                return instance;
+            }
+        }
+        public static void Reload()
+        {
+            if(instance == null)
+                instance = new Config();
+            instance.configFile = JsonConvert.DeserializeObject(File.ReadAllText(instance.ConfigFileName));
+            instance.dbConnect = $"Data Source={instance.ConfigFile["Db"]["Host"]},{instance.ConfigFile["Db"]["Port"]};" +
+                $"Initial Catalog={instance.ConfigFile["Db"]["DbName"]};" +
                 $"Persist Security Info=True;" +
-                $"User ID={ConfigFile["Db"]["UserId"]};" +
-                $"Password={ConfigFile["Db"]["Password"]}";
-
-        #region FTP
-        public static string FtpUsername => (string)ConfigFile["FTP"]["Username"];
-        public static string FtpPassword => (string)ConfigFile["FTP"]["Password"];
-        public static int FtpPort => (int)ConfigFile["FTP"]["Port"];
-        public static string FtpHost => (string)ConfigFile["FTP"]["Host"];
-        public static string FtpPath => $"{(bool.Parse((string)ConfigFile["FTP"]["EnableSFTP"]) ? "s" : "")}ftp://{FtpHost}:{FtpPort}/{(string)ConfigFile["FTP"]["RootPath"]}";
-        #endregion
-
-        #region FileStorage
-        public static double MaxSaveSize => SizeHelper.SizeParser((string)ConfigFile["FileStorage"]["MaxSaveSize"]);
-        public static double MaxSaveTime => (double)ConfigFile["FileStorage"]["MaxSaveTime"];
-        public static int MaxUploadCount => (int)ConfigFile["FileStorage"]["MaxUploadCount"];
-        #endregion
-
-        public static bool IsFirstStart => (string)ConfigFile["FirstStart"] == "True";
+                $"User ID={instance.ConfigFile["Db"]["UserId"]};" +
+                $"Password={instance.ConfigFile["Db"]["Password"]}";
+            {
+                foreach (var item in instance.ConfigFile["UI"]["SaveTimePatterns"])
+                {
+                    instance.savePatterns.Add(new SavePatternModel()
+                    {
+                        Value = item.Value,
+                        Unit = item.Unit,
+                    });
+                }
+            }
+        }
+        public string ConfigFileName => @"appsettings.json";
+        public dynamic ConfigFile => configFile;
+        public string DbConnect => dbConnect;
+        public FTPConfig Ftp => ftp;
+        public AuthConfig Auth => auth;
+        public EmailConfig Email => email;
+        public SecurityConfig Security => security;
+        public ServicesConfig Services => services;
+        public bool IsFirstStart => (string)Instance.ConfigFile["FirstStart"] == "True";
+        public List<SavePatternModel> SavePatterns => savePatterns;
     }
 }
