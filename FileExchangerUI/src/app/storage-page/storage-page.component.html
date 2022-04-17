@@ -1,0 +1,15 @@
+<div class="box">
+    <div class="tree">
+        <app-storage-tree [name]="'/'" [key]="'root'" [childrens]="folders"></app-storage-tree>
+    </div>
+    <div>
+        <div class="bg" (drop)="dropHandler($event)" (dragover)="dragOverHandler($event)" (contextmenu)="openContextMenu($event)"></div>
+        <div class="content">
+            <app-obj-in-storage *ngFor="let item of dirContent" [name]="item.name" [key]="item.key" [type]="item.type"
+                [isRenamed]="item.isRenamed" (onopencontextmenu)="onOpenContextMenuInFile($event)" (onrename)="renameEvent($event)"></app-obj-in-storage>
+        </div>
+    </div>
+</div>
+<app-storage-context-menu *ngIf="contextMenu.isView" [x]="contextMenu.pos.x" [y]="contextMenu.pos.y"
+    [items]="contextMenu.items" (close)="onCloseContextMenu()">
+</app-storage-context-menu>

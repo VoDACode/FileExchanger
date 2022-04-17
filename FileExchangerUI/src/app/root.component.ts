@@ -5,17 +5,20 @@ import * as $ from 'jquery';
 import {environment} from "../environments/environment";
 import {CookieService} from "ngx-cookie-service";
 import { filter } from 'rxjs/operators';
+import { AuthService } from 'src/services/auth';
 
 declare const gtag: Function;
 
 @Component({
   selector: 'app-root',
-  templateUrl: 'root.component.html'
+  templateUrl: 'root.component.html',
+  styleUrls: ['./root.component.css']
 })
 export class RootComponent implements OnInit {
   public getLocales(): string[]{
     return environment.locales;
   }
+  isViewAuth = false;
   selectLocale: string = environment.defaultLocale;
   constructor(private translateService: TranslateService, private cookie: CookieService, private router: Router) {
     $.ajax({
@@ -36,6 +39,16 @@ export class RootComponent implements OnInit {
     })
   }
   ngOnInit(): void {
+    $.ajax({
+      method: 'GET',
+      url: 'api/ui/auth/accounts/enable',
+      success: (data) => {
+        this.isViewAuth = data;
+      }
+    })
+    if(AuthService.isAuth()){
+      this.isViewAuth = false;
+    }
     this.selectLocale = this.cookie.get('locale');
     if(!this.selectLocale){
       this.selectLocale = environment.defaultLocale;

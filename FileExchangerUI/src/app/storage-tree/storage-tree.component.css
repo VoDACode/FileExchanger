@@ -1,0 +1,12 @@
+.box {
+    margin-left: 10px;
+}
+.button-box:hover{
+    border: 1px solid #979797;
+    cursor: pointer;
+}
+.button-box {
+    border-radius: 5px;
+    display: grid;
+    grid-template-columns: 10% 90%;
+}

@@ -1,0 +1,6 @@
+<div class="bg" (click)="closeEvent()" (contextmenu)="closeEvent()"></div>
+<div class="box" [style.left]="x+'px'" [style.top]="y+'px'">
+    <div class="item" *ngFor="let item of items" (click)="selectItem(item, $event)">
+        <span>{{item.text}}</span>
+    </div>
+</div>

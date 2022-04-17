@@ -1,0 +1,27 @@
+.box{
+    position: relative;
+    height: 140px;
+    width: max-content;
+    padding: 10px;
+    display: inline-block;
+    margin: 10px;
+    border-radius: 10px;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+}
+.box:hover{
+    background-color: rgb(184, 184, 184);
+    cursor: pointer;
+}
+.text{
+    position: relative;
+}
+.text input,
+.text span{
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+    text-align: center;
+    max-width: 125px;
+}

@@ -1,0 +1,20 @@
+.or-text{
+    position: relative;
+    height: 40px;
+}
+.or-text span{
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+.horizontal-center{
+    margin-left: 50%;
+    transform: translate(-50%, 0);
+}
+button.big{
+    width: 100%
+}
+span.or{
+    font-size: 24px;
+    font-weight: bold;
+}

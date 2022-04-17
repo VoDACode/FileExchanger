@@ -1,0 +1,7 @@
+<div class="box" (contextmenu)="openContextMenu($event)" (click)="open()">
+    <img [src]="path">
+    <div class="text">
+        <span *ngIf="!isRenamed">{{name}}</span>
+        <input (focusout)="unselect()" focus="true" type="text"(keydown)="unselect($event)" *ngIf="isRenamed" [(ngModel)]="name">
+    </div>
+</div>

@@ -1,0 +1,7 @@
+.horizontal-center{
+    margin-left: 50%;
+    transform: translate(-50%, 0);
+}
+button.big{
+    width: 100%
+}

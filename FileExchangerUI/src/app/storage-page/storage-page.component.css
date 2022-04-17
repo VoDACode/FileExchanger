@@ -1,0 +1,19 @@
+.box{
+    display: grid;
+    grid-template-columns: 20% 80%;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+.box > div{
+    border: 1px solid rgb(151, 151, 151);
+    position: relative;
+}
+.tree{
+    margin-left: 5px;
+}
+.bg{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}

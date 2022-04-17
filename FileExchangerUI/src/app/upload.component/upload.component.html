@@ -28,15 +28,12 @@
         <div class="input-group mb-3">
           <select class="form-select" id="saveTime" aria-label="Save time" [(ngModel)]="SaveTime">
             <option selected value="0">{{ 'Upload.SaveTime.Title' | translate }}</option>
-            <option value="1">1{{ 'Upload.SaveTime.H' | translate }}</option>
-            <option value="2">2{{ 'Upload.SaveTime.H' | translate }}</option>
-            <option value="3">3{{ 'Upload.SaveTime.H' | translate }}</option>
-            <option value="6">6{{ 'Upload.SaveTime.H' | translate }}</option>
-            <option value="8">8{{ 'Upload.SaveTime.H' | translate }}</option>
-            <option value="10">10{{ 'Upload.SaveTime.H' | translate }}</option>
-            <option value="12">12{{ 'Upload.SaveTime.H' | translate }}</option>
-            <option value="20">20{{ 'Upload.SaveTime.H' | translate }}</option>
-            <option value="24">24{{ 'Upload.SaveTime.H' | translate }}</option>
+            <option value="-1">
+              <label>Castom:</label>
+              <input type="number" value="0"><label> days </label>
+              <input type="time">
+            </option>
+            <option *ngFor="let item of saveTimePatterns" [value]="item.toSecond()">{{item.value}}{{GetSavePatternUnit(item)}}</option>
           </select>
         </div>
       </div>

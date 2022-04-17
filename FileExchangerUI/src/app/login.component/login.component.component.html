@@ -1,0 +1,23 @@
+<div>
+    <div class="input-group mb-3">
+        <span class="input-group-text" id="inputGroup-sizing-default">Email</span>
+        <input type="email" class="form-control" aria-label="Sizing example input"
+            aria-describedby="inputGroup-sizing-default" [(ngModel)]="email">
+    </div>
+    <div class="input-group mb-3">
+        <span class="input-group-text" id="inputGroup-sizing-default">Password</span>
+        <input type="password" class="form-control" aria-label="Sizing example input"
+            aria-describedby="inputGroup-sizing-default" [(ngModel)]="password">
+    </div>
+    <button type="button" class="horizontal-center btn btn-primary big" (click)="onLogin()">Login</button>
+</div>
+<div class="or-text" *ngIf="isViewTelegram">
+    <span class="or">OR</span>
+</div>
+<div *ngIf="isViewTelegram">
+    <button type="button" class="horizontal-center btn btn-primary">Login in Telegram</button>
+</div>
+<hr *ngIf="isViewRegin">
+<div *ngIf="isViewRegin">
+    <button type="button" class="horizontal-center btn btn-warning big" [routerLink]="['/auth/regin']">Registarstion</button>
+</div>

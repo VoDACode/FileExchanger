@@ -1,0 +1,15 @@
+<div class="box">
+    <div class="button-box">
+        <div (click)="viewTree()">
+            <span>{{!isHaveFolders ? ' ' : isOpen ? 'V' : '>'}} </span>
+        </div>
+        <div (click)="onOpen()">
+            <span>{{name}}</span>
+        </div>
+    </div>
+    <div>
+        <div *ngFor="let item of _childrens">
+            <app-storage-tree [key]="item.key" [name]="item.name" [isHaveFolders]="item.isHaveFolders"></app-storage-tree>
+        </div>
+    </div>
+</div>

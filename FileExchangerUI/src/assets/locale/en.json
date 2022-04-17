@@ -7,7 +7,10 @@
     },
     "SaveTime": {
       "Title": "Save time",
-      "H": "h"
+      "D": "d",
+      "H": "h",
+      "M": "m",
+      "S": "s"
     },
     "SelectFile": "Select file",
     "Upload": "Upload"

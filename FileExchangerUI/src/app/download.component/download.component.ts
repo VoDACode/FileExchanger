@@ -40,12 +40,12 @@ export class DownloadComponent{
       success: (data: any) => {
         this.size = data.size
         if(data.access == 1){
-          this.downloadPath = `/api/files/download/${this.key}/${this.name}`;
+          this.downloadPath = `/api/files/e/download/${this.key}/${this.name}`;
           this.isLocked = false
           //this.download(this.key, this.name);
         }else {
           this.isLocked = true;
-          this.downloadPath = `/api/files/download/${this.key}/${this.name}?p=`
+          this.downloadPath = `/api/files/e/download/${this.key}/${this.name}?p=`
         }
       },
       error: (jqXHR: any) => {
@@ -56,7 +56,7 @@ export class DownloadComponent{
 
   private existFile(res: any): void{
     $.ajax({
-      url: `api/files/info/${this.key}/${this.name}`,
+      url: `api/files/e/info/${this.key}/${this.name}`,
       method: 'GET',
       success: data => {
         if(res !== undefined)
@@ -75,7 +75,7 @@ export class DownloadComponent{
 
   public downloadLockedFile(): void{
     $.ajax({
-      url: `api/files/check/pin/${this.key}/${this.name}?p=${this.pinHash()}`,
+      url: `api/files/e/check/pin/${this.key}/${this.name}?p=${this.pinHash()}`,
       method: 'GET',
       success: data => {
         // this.isLocked = false;
@@ -103,7 +103,7 @@ export class DownloadComponent{
 
   private download(key: string, name: string, password: string = ""): void{
     $.ajax({
-      url: `/api/files/download/${key}/${name}${password == ""?"":`?p=${password}`}`,
+      url: `/api/files/e/download/${key}/${name}${password == ""?"":`?p=${password}`}`,
       method: 'GET',
       xhrFields: {
         responseType: 'blob'

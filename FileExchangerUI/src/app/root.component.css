@@ -1,0 +1,9 @@
+header > div{
+    position: relative;
+    margin: 5px;
+    display: inline-block;
+}
+header > div.right{
+    position: absolute;
+    right: 0;
+}

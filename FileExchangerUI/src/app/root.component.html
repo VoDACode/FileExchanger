@@ -1,5 +1,12 @@
-<select [(ngModel)]="selectLocale" (change)="onChangeLocal()">
-  <option *ngFor="let l of getLocales()">{{l}}</option>
-</select>
+<header>
+  <div>
+    <select [(ngModel)]="selectLocale" (change)="onChangeLocal()">
+      <option *ngFor="let l of getLocales()">{{l}}</option>
+    </select>
+  </div>
+  <div class="right" *ngIf="isViewAuth">
+    <a [routerLink]="['/auth']">Auth</a>
+  </div>
+</header>
 <router-outlet></router-outlet>
 <app-footer></app-footer>

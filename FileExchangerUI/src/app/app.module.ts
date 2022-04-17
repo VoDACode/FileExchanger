@@ -19,6 +19,16 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { CookieService } from "ngx-cookie-service";
 import { ModalUserList } from "./modals/modal/modal.user.list";
 import { DragDropModule } from "@angular/cdk/drag-drop";
+import { AuthComponent } from './auth/auth.component';
+import { LoginComponent } from './login.component/login.component.component';
+import { ReginComponent } from './regin/regin.component';
+import { ConfirmEmailComponent } from './confirm.email/confirm.email.component';
+import { HomePageComponent } from './home-page/home-page.component';
+import { StartPageComponent } from './start-page/start-page.component';
+import { StoragePageComponent } from './storage-page/storage-page.component';
+import { StorageTreeComponent } from './storage-tree/storage-tree.component';
+import { StorageContextMenuComponent } from './storage-context-menu/storage-context-menu.component';
+import { ObjInStorageComponent } from './obj-in-storage/obj-in-storage.component';
 
 export function HttpLoaderFactory(http: HttpClient): TranslateLoader {
   return new TranslateHttpLoader(http, './assets/locale/', '.json');
@@ -28,15 +38,25 @@ const appRoutes: Routes = [
   {
     path: '',
     children: [
-      { path: '', component: UploadComponent },
+      { path: '', component: StartPageComponent},
       { path: 'd/:key/:name', component: DownloadComponent },
+      { path: 'auth', component: AuthComponent , children: [
+        { path: '', component: LoginComponent},
+        { path: 'login', component: LoginComponent},
+        { path: 'regin', component: ReginComponent}
+      ]},
       {
         path: 'join',
         children: [
           { path: ':key', component: JoinWorkingGroupComponent },
           { path: '', component: JoinWorkingGroupComponent }
         ]
-      }
+      },
+      {path: 'my', component: HomePageComponent, children: [
+        {path: 'e', component: UploadComponent},
+        {path: 's', component: StoragePageComponent},
+        {path: 's/:dir', component: StoragePageComponent}
+      ]}
     ]
   }
 ]
@@ -44,7 +64,14 @@ const appRoutes: Routes = [
 @NgModule({
   declarations: [
     RootComponent, UploadComponent, DownloadComponent, FooterComponent,
-    WorkingGroupComponent, ModalJoinInfo, ModalWorkingGroup, JoinWorkingGroupComponent, ModalUserList
+    WorkingGroupComponent, ModalJoinInfo, ModalWorkingGroup, JoinWorkingGroupComponent, ModalUserList, AuthComponent, LoginComponent, ReginComponent,
+    ConfirmEmailComponent,
+    HomePageComponent,
+    StartPageComponent,
+    StoragePageComponent,
+    StorageTreeComponent,
+    StorageContextMenuComponent,
+    ObjInStorageComponent
   ],
   imports: [
     TranslateModule.forRoot({
@@ -68,4 +95,4 @@ const appRoutes: Routes = [
   providers: [CookieService],
   bootstrap: [RootComponent]
 })
-export class AppModule {}
+export class AppModule { }
