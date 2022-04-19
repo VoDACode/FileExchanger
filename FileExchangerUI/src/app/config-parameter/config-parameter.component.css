@@ -1,5 +1,9 @@
 .box{
-    margin-left: 10px
+    margin-left: 10px;
+    border-radius: 10px;
+    border-color: #3a3cd5;
+    border-style: solid;
+    border-width: 0;
 }
 .item{
     margin-left:5px;

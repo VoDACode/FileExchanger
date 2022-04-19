@@ -1,4 +1,4 @@
-<div class="box">
+<div class="box" #box>
     <span *ngIf="isObject" (click)="setShow()" class="set-show">{{show ? '-' : '+'}}</span>
 
     <label class="{{!isObject ? 'marn' : ''}} param">"{{parameter}}" : 

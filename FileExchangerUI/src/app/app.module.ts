@@ -59,7 +59,10 @@ const appRoutes: Routes = [
         {path: 's', component: StoragePageComponent},
         {path: 's/:dir', component: StoragePageComponent},
       ]},
-      {path: 'config', component: ConfigEditorComponent}
+      {path: 'config', children: [
+        {path: '', component: ConfigEditorComponent},
+        {path: ':key', component: ConfigEditorComponent}
+      ]}
     ]
   }
 ]
