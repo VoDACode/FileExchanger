@@ -61,11 +61,14 @@ namespace FileExchanger
                 configuration.RootPath = "wwwroot";
             });
             services.AddTransient<IAuthorizationHandler, AuthHandler>();
+            services.AddTransient<IAuthorizationHandler, AdminHandler>();
             services.AddAuthorization(opts => {
                 opts.AddPolicy("AuthStorage",
                     policy => policy.Requirements.Add(new AuthRequirement(Configs.DefaultService.FileStorage)));
                 opts.AddPolicy("AuthExchanger",
                     policy => policy.Requirements.Add(new AuthRequirement(Configs.DefaultService.FileExchanger)));
+                opts.AddPolicy("Admin",
+                    policy => policy.Requirements.Add(new AdminRequirement()));
             });
             services.AddMemoryCache();
         }

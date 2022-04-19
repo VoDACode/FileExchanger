@@ -15,6 +15,7 @@ namespace FileExchanger.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
+        private AuthClientModel? authClient => db.AuthClients.SingleOrDefault(p => p.Email == User.Identity.Name);
         private UserModel getUser => db.Users.FirstOrDefault(p => p.Key == HttpContext.Request.Cookies["u_key"]);
         private DbApp db;
         public UserController(DbApp db)
@@ -64,6 +65,11 @@ namespace FileExchanger.Controllers
                 id = getUser.Id,
                 registrationDate = getUser.RegistrationDate
             });
+        }
+        [HttpGet("is-admin")]
+        public IActionResult GetIsAdmin()
+        {
+            return Ok(db.Admins.Any(p => p.AuthClient == authClient));
         }
     }
 }

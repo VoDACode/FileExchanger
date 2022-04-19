@@ -18,6 +18,7 @@ namespace FileExchanger
         public DbSet<WorkingGroupModel> WorkingGroups { get; set; }
         public DbSet<UserInWorkingGroupModel> UserInWorkingGroups { get; set; }
         public DbSet<AuthClientModel> AuthClients { get; set; }
+        public DbSet<AdminModel> Admins { get; set; }
         public DbSet<DirectoryModel> Directory { get; set; }
         public DbSet<StorageFileModel> StorageFiles { get; set; }
         public DbApp(DbContextOptions<DbApp> options):base(options)
@@ -47,6 +48,7 @@ namespace FileExchanger
                 Password = PasswordHelper.GetHash("admin"),
                 Name = "admin"
             }).Entity;
+            Admins.Add(new AdminModel() { AuthClient = admin });
             Directory.Add(new DirectoryModel()
             {
                 CreateDate = DateTime.Now,
