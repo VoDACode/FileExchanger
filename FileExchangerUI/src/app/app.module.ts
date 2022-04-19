@@ -31,6 +31,7 @@ import { StorageContextMenuComponent } from './storage-context-menu/storage-cont
 import { ObjInStorageComponent } from './obj-in-storage/obj-in-storage.component';
 import { ConfigEditorComponent } from './config-editor/config-editor.component';
 import { ConfigParameterComponent } from './config-parameter/config-parameter.component';
+import { SettingsWindowComponent } from './settings-window/settings-window.component';
 
 export function HttpLoaderFactory(http: HttpClient): TranslateLoader {
   return new TranslateHttpLoader(http, './assets/locale/', '.json');
@@ -79,7 +80,8 @@ const appRoutes: Routes = [
     StorageContextMenuComponent,
     ObjInStorageComponent,
     ConfigEditorComponent,
-    ConfigParameterComponent
+    ConfigParameterComponent,
+    SettingsWindowComponent
   ],
   imports: [
     TranslateModule.forRoot({

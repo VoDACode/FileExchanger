@@ -1,0 +1,18 @@
+<div>
+    <span (click)="open()" class="sb">Settings</span>
+</div>
+<div *ngIf="isOpened">
+    <div class="content">
+        <div (click)="close()">
+            <div class="item" *ngIf="isEnabledStorage">
+                <span [routerLink]="['/my/s']">File storage</span>
+            </div>
+            <div class="item" *ngIf="isEnabledExchanger">
+                <span [routerLink]="['/my/e']">File exchanger</span>
+            </div>
+            <div class="item" *ngIf="isAdmin">
+                <span [routerLink]="['/config']">Edit config</span>
+            </div>
+        </div>
+    </div>
+</div>

@@ -4,9 +4,11 @@
       <option *ngFor="let l of getLocales()">{{l}}</option>
     </select>
   </div>
-  <div class="right" *ngIf="isViewAuth">
-    <a [routerLink]="['/auth']">Auth</a>
+  <div class="right">
+    <a [routerLink]="['/auth']" *ngIf="isViewAuth">Auth</a>
   </div>
+  <app-settings-window></app-settings-window>
 </header>
 <router-outlet></router-outlet>
 <app-footer></app-footer>
+<div class="bg" (click)="clickToBg()" *ngIf="showBg"></div>

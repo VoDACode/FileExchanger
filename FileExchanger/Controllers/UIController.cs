@@ -14,6 +14,13 @@ namespace FileExchanger.Controllers
             return Ok(Config.Instance.SavePatterns.Where(p => p.ToSecond() <= Config.Instance.Services.FileExchanger.MaxSaveTime));
         }
 
+        [HttpGet("service/storage/enabled")]
+        public IActionResult GetEnableStorage() =>
+            Ok(Config.Instance.Services.FileStorage.Enable);
+        [HttpGet("service/exchaner/enabled")]
+        public IActionResult GetEnableExchanger() =>
+            Ok(Config.Instance.Services.FileExchanger.Enable);
+
         #region Storage auth
         [HttpGet("auth/storage/use")]
         public IActionResult GetStorageUseAuth() => Ok(Config.Instance.Services.FileStorage.UseAuth);

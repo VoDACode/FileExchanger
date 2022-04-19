@@ -7,3 +7,8 @@ header > div.right{
     position: absolute;
     right: 0;
 }
+.bg{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+}

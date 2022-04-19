@@ -20,7 +20,7 @@ export class ConfigEditorComponent implements OnInit {
   constructor(private router: Router) { }
 
   ngOnInit(): void {
-    if (!AuthService.isAdmni) {
+    if (!AuthService.isAdmin) {
       this.router.navigate(['/']);
       return;
     }

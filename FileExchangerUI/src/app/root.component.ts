@@ -1,5 +1,5 @@
 import { Router, NavigationEnd } from '@angular/router';
-import {Component, OnInit} from "@angular/core";
+import {AfterViewInit, Component, EventEmitter, OnInit, Output} from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
 import * as $ from 'jquery';
 import {environment} from "../environments/environment";
@@ -14,11 +14,12 @@ declare const gtag: Function;
   templateUrl: 'root.component.html',
   styleUrls: ['./root.component.css']
 })
-export class RootComponent implements OnInit {
+export class RootComponent implements OnInit, AfterViewInit {
   public getLocales(): string[]{
     return environment.locales;
   }
   isViewAuth = false;
+  showBg = false;
   selectLocale: string = environment.defaultLocale;
   constructor(private translateService: TranslateService, private cookie: CookieService, private router: Router) {
     $.ajax({
@@ -37,6 +38,12 @@ export class RootComponent implements OnInit {
       })
       /** END */
     })
+  }
+  ngAfterViewInit(): void {
+    //@ts-ignore
+    document.showBg = (() => {
+      this.showBg = true;
+    }).bind(this);
   }
   ngOnInit(): void {
     $.ajax({
@@ -60,5 +67,13 @@ export class RootComponent implements OnInit {
   onChangeLocal(): void{
     this.translateService.use(this.selectLocale);
     this.cookie.set('locale', this.selectLocale);
+  }
+
+  clickToBg(): void{
+    //@ts-ignore
+    if(document.onclickToBg)
+    //@ts-ignore
+      document.onclickToBg();
+      this.showBg = false;
   }
 }

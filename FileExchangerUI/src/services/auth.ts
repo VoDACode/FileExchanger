@@ -34,7 +34,7 @@ export class AuthService {
         //@ts-ignore
         return data.responseText;
     }
-    public static get isAdmni(): boolean {
+    public static get isAdmin(): boolean {
         let data = $.ajax({
             method: 'GET',
             url: '/api/user/is-admin',
