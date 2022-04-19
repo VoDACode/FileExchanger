@@ -1,0 +1,33 @@
+.box{
+    margin-left: 10px
+}
+.item{
+    margin-left:5px;
+}
+.set-show{
+    font-size:24px;
+    width: 18px;
+    display: inline-block;
+}
+.set-show:hover{
+    color: rgb(105, 105, 105);
+    cursor: pointer;
+}
+.marn{
+    margin-left: 18px;
+}
+.param,.bool,.text,.number{
+    font-weight: 600;
+}
+.param{
+    color: #916517;
+}
+.bool{
+    color: #3b38c4;
+}
+.text{
+    color: #dc9000;
+}
+.number{
+    color: rgb(85, 171, 68);
+}

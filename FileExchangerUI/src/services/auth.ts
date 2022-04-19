@@ -34,4 +34,16 @@ export class AuthService {
         //@ts-ignore
         return data.responseText;
     }
+    public static get isAdmni(): boolean {
+        let data = $.ajax({
+            method: 'GET',
+            url: '/api/user/is-admin',
+            async: false,
+            headers: {
+                Accept: 'application/json',
+                Authorization: 'Bearer ' + this.token
+            }
+        });
+        return data.status === 200 && data.responseText === 'true';
+    }
 }

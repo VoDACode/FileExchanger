@@ -1,0 +1,13 @@
+<div class="box">
+    <app-config-parameter *ngFor="let item of childrens" [childrens]="item.childrens" [value]="item.value"
+        [parameter]="item.parameter" (onchangeParameter)="changetEvent($event)"></app-config-parameter>
+</div>
+<div *ngIf="isModified" class="save-panel center-horizontal">
+    <div class="text-box">
+        <span class="center">Save changes?</span>
+    </div>
+    <div class="button-group">
+        <button type="button" class="horizontal-center btn btn-success" (click)="saveChanges()">Save</button>
+        <button type="button" class="horizontal-center btn btn-danger" (click)="canselChanged()">Cancel</button>
+    </div>
+</div>

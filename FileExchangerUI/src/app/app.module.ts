@@ -29,6 +29,8 @@ import { StoragePageComponent } from './storage-page/storage-page.component';
 import { StorageTreeComponent } from './storage-tree/storage-tree.component';
 import { StorageContextMenuComponent } from './storage-context-menu/storage-context-menu.component';
 import { ObjInStorageComponent } from './obj-in-storage/obj-in-storage.component';
+import { ConfigEditorComponent } from './config-editor/config-editor.component';
+import { ConfigParameterComponent } from './config-parameter/config-parameter.component';
 
 export function HttpLoaderFactory(http: HttpClient): TranslateLoader {
   return new TranslateHttpLoader(http, './assets/locale/', '.json');
@@ -55,8 +57,9 @@ const appRoutes: Routes = [
       {path: 'my', component: HomePageComponent, children: [
         {path: 'e', component: UploadComponent},
         {path: 's', component: StoragePageComponent},
-        {path: 's/:dir', component: StoragePageComponent}
-      ]}
+        {path: 's/:dir', component: StoragePageComponent},
+      ]},
+      {path: 'config', component: ConfigEditorComponent}
     ]
   }
 ]
@@ -71,7 +74,9 @@ const appRoutes: Routes = [
     StoragePageComponent,
     StorageTreeComponent,
     StorageContextMenuComponent,
-    ObjInStorageComponent
+    ObjInStorageComponent,
+    ConfigEditorComponent,
+    ConfigParameterComponent
   ],
   imports: [
     TranslateModule.forRoot({

@@ -1,0 +1,18 @@
+<div class="box">
+    <span *ngIf="isObject" (click)="setShow()" class="set-show">{{show ? '-' : '+'}}</span>
+
+    <label class="{{!isObject ? 'marn' : ''}} param">"{{parameter}}" : 
+        <select class="{{_type}}" *ngIf="!isObject && _type == 'bool'" (change)="changeEvent($event)">
+            <option value="true" [selected]="value">true</option>
+            <option value="false" [selected]="!value">false</option>
+        </select>
+        <input [type]="_type" *ngIf="!isObject && _type !== 'bool'" class="{{_type}}" (change)="changeEvent($event)" [(ngModel)]="value">
+    </label>
+    <span *ngIf="isObject">{{ '{' }}</span>
+    <span *ngIf="isObject && !show" (click)="setShow()" style="cursor: pointer;">...</span>
+    <div *ngIf="isObject && show" clss="item">
+        <app-config-parameter *ngFor="let item of childrens" [childrens]="item.childrens" [parameter]="item.parameter"
+            [value]="item.value" [root]="this" (onchangeParameter)="change($event)"></app-config-parameter>
+    </div>
+    <span class="{{show ? 'marn' : ''}}" *ngIf="isObject">{{ '},' }}</span>
+</div>

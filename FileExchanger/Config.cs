@@ -21,6 +21,7 @@ namespace FileExchanger
         private DateTime lastUpdaat;
 
         private dynamic configFile;
+        private string configText;
         private string dbConnect;
         private List<SavePatternModel> savePatterns = new List<SavePatternModel>();
         public static Config Instance
@@ -46,7 +47,8 @@ namespace FileExchanger
         {
             if(instance == null)
                 instance = new Config();
-            instance.configFile = JsonConvert.DeserializeObject(File.ReadAllText(instance.ConfigFileName));
+            instance.configText = File.ReadAllText(instance.ConfigFileName);
+            instance.configFile = JsonConvert.DeserializeObject(instance.configText);
             instance.dbConnect = $"Data Source={instance.ConfigFile["Db"]["Host"]},{instance.ConfigFile["Db"]["Port"]};" +
                 $"Initial Catalog={instance.ConfigFile["Db"]["DbName"]};" +
                 $"Persist Security Info=True;" +
@@ -57,14 +59,20 @@ namespace FileExchanger
                 {
                     instance.savePatterns.Add(new SavePatternModel()
                     {
-                        Value = item.Value,
-                        Unit = item.Unit,
+                        Value = (float)item["Value"],
+                        Unit = (string)item["Unit"],
                     });
                 }
             }
         }
+        public static void Rewrite()
+        {
+            if (Instance == null)
+                return;
+            File.WriteAllText(Instance.ConfigFileName, JsonConvert.SerializeObject(Instance.ConfigFile));
+        }
         public string ConfigFileName => @"appsettings.json";
-        public dynamic ConfigFile => configFile;
+        public Newtonsoft.Json.Linq.JObject ConfigFile => configFile;
         public string DbConnect => dbConnect;
         public FTPConfig Ftp => ftp;
         public AuthConfig Auth => auth;
@@ -73,5 +81,9 @@ namespace FileExchanger
         public ServicesConfig Services => services;
         public bool IsFirstStart => (string)Instance.ConfigFile["FirstStart"] == "True";
         public List<SavePatternModel> SavePatterns => savePatterns;
+        public override string ToString()
+        {
+            return configText;
+        }
     }
 }
