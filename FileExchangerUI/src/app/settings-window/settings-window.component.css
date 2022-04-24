@@ -9,7 +9,7 @@
     cursor: pointer;
 }
 .sb{
-    position:fixed;
+    position:absolute;
     right:50px;
     top:0;
 }

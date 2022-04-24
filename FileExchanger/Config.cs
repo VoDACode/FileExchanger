@@ -43,6 +43,7 @@ namespace FileExchanger
                 return instance;
             }
         }
+        public event Action OnUpdata;
         public static void Reload()
         {
             if(instance == null)
@@ -64,12 +65,14 @@ namespace FileExchanger
                     });
                 }
             }
+            instance.OnUpdata?.Invoke();
         }
         public static void Rewrite()
         {
             if (Instance == null)
                 return;
-            File.WriteAllText(Instance.ConfigFileName, JsonConvert.SerializeObject(Instance.ConfigFile));
+            File.WriteAllText(instance.ConfigFileName, JsonConvert.SerializeObject(instance.ConfigFile));
+            Instance.OnUpdata?.Invoke();
         }
         public string ConfigFileName => @"appsettings.json";
         public Newtonsoft.Json.Linq.JObject ConfigFile => configFile;
@@ -80,6 +83,7 @@ namespace FileExchanger
         public SecurityConfig Security => security;
         public ServicesConfig Services => services;
         public bool IsFirstStart => (string)Instance.ConfigFile["FirstStart"] == "True";
+        public string MainHost => (string)ConfigFile["MainHost"];
         public List<SavePatternModel> SavePatterns => savePatterns;
         public override string ToString()
         {

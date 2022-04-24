@@ -15,7 +15,7 @@
     <span class="or">OR</span>
 </div>
 <div *ngIf="isViewTelegram">
-    <button type="button" class="horizontal-center btn btn-primary">Login in Telegram</button>
+    <button type="button" class="horizontal-center btn btn-primary" [routerLink]="['/auth/telegram']">Login in Telegram</button>
 </div>
 <hr *ngIf="isViewRegin">
 <div *ngIf="isViewRegin">

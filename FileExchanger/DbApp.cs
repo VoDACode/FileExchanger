@@ -21,6 +21,7 @@ namespace FileExchanger
         public DbSet<AdminModel> Admins { get; set; }
         public DbSet<DirectoryModel> Directory { get; set; }
         public DbSet<StorageFileModel> StorageFiles { get; set; }
+        public DbSet<TelegramUserModel> TelegramUsers { get; set; }
         public DbApp(DbContextOptions<DbApp> options):base(options)
         {
             configurationDb();

@@ -1,0 +1,20 @@
+<div *ngIf="isNone">
+    <div class="input-group mb-3">
+        <span class="input-group-text" id="inputGroup-sizing-default">Email</span>
+        <input type="email" class="form-control" aria-label="Sizing example input"
+            aria-describedby="inputGroup-sizing-default" [(ngModel)]="email">
+    </div>
+    <button type="button" class="horizontal-center btn btn-primary big" (click)="onLogin()">Login</button>
+    <div class="or-text">
+        <span class="or">OR</span>
+    </div>
+    <div>
+        <button type="button" class="horizontal-center btn btn-warning big" [routerLink]="['/auth']">Back</button>
+    </div>
+</div>
+<div *ngIf="isWaiting">
+    <p>Waiting for Telegram answer...</p>
+</div>
+<div *ngIf="isError">
+    <p>{{error}}</p>
+</div>

@@ -1,9 +1,13 @@
 ﻿using FileExchanger.Helpers;
 using FileExchanger.Models;
+using FileExchanger.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using System;
+using System.Linq;
+using Telegram.Bot;
 
 namespace FileExchanger.Controllers
 {
@@ -13,6 +17,7 @@ namespace FileExchanger.Controllers
     {
         DbApp db;
         IMemoryCache cache;
+        AuthClientModel authClient => db.AuthClients.SingleOrDefault(p => p.Email == User.Identity.Name);
         public ConfirmController(DbApp db, IMemoryCache memoryCache)
         {
             this.db = db;
@@ -39,6 +44,23 @@ namespace FileExchanger.Controllers
             db.SaveChanges();
             Response.Cookies.Append(Config.Instance.Auth.CookiesName, JwtHelper.CreateToken(authClient.Email, authClient.Password));
             return Redirect("/");
+        }
+
+        [Authorize]
+        [HttpGet("telegram")]
+        public IActionResult ConfirmTelegram(string code)
+        {
+            if (string.IsNullOrEmpty(code))
+                return NotFound();
+            var tgClient = db.TelegramUsers.SingleOrDefault(p => p.AuthKey == code && !p.IsAuth);
+            if (tgClient == null)
+                return NotFound();
+            tgClient.AuthClient = authClient;
+            tgClient.IsAuth = true;
+            tgClient.AuthKey = null;
+            db.SaveChanges();
+            TelegramBotService.Instance.Bot.SendTextMessageAsync(tgClient.ChatId, "Done!");
+            return Ok();
         }
     }
 }

@@ -32,6 +32,9 @@ import { ObjInStorageComponent } from './obj-in-storage/obj-in-storage.component
 import { ConfigEditorComponent } from './config-editor/config-editor.component';
 import { ConfigParameterComponent } from './config-parameter/config-parameter.component';
 import { SettingsWindowComponent } from './settings-window/settings-window.component';
+import { UserSettingsComponent } from './user-settings/user-settings.component';
+import {ConfirmTelegramComponent} from './confirm-telegram/confirm-telegram.component';
+import { LoginViaTelegramComponent } from './login-via-telegram/login-via-telegram.component';
 
 export function HttpLoaderFactory(http: HttpClient): TranslateLoader {
   return new TranslateHttpLoader(http, './assets/locale/', '.json');
@@ -46,10 +49,10 @@ const appRoutes: Routes = [
       { path: 'auth', component: AuthComponent , children: [
         { path: '', component: LoginComponent},
         { path: 'login', component: LoginComponent},
-        { path: 'regin', component: ReginComponent}
+        { path: 'regin', component: ReginComponent},
+        {path: 'telegram', component: LoginViaTelegramComponent}
       ]},
-      {
-        path: 'join',
+      {path: 'join',
         children: [
           { path: ':key', component: JoinWorkingGroupComponent },
           { path: '', component: JoinWorkingGroupComponent }
@@ -59,10 +62,14 @@ const appRoutes: Routes = [
         {path: 'e', component: UploadComponent},
         {path: 's', component: StoragePageComponent},
         {path: 's/:dir', component: StoragePageComponent},
+        {path: 'user', component: UserSettingsComponent}
       ]},
       {path: 'config', children: [
         {path: '', component: ConfigEditorComponent},
         {path: ':key', component: ConfigEditorComponent}
+      ]},
+      {path: 'c', children: [
+        {path: 'telegram', component: ConfirmTelegramComponent}
       ]}
     ]
   }
@@ -81,7 +88,10 @@ const appRoutes: Routes = [
     ObjInStorageComponent,
     ConfigEditorComponent,
     ConfigParameterComponent,
-    SettingsWindowComponent
+    SettingsWindowComponent,
+    UserSettingsComponent,
+    ConfirmTelegramComponent,
+    LoginViaTelegramComponent
   ],
   imports: [
     TranslateModule.forRoot({

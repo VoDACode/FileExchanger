@@ -11,7 +11,8 @@ namespace FileExchanger
             ConfigureService configureService = new ConfigureService();
             if (!configureService.Configure(args))
                 return;
-
+            if(Config.Instance.Security.Telegram.Enable)
+                TelegramBotService.Instance.Start();
             CreateHostBuilder(args).Build().Run();
         }
 
