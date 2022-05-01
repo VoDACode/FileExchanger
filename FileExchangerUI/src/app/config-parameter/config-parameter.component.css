@@ -5,6 +5,13 @@
     border-style: solid;
     border-width: 0;
 }
+section{
+    display: contents;
+}
+.top-bar > div,
+.top-bar{
+    display: contents;
+}
 .item{
     margin-left:5px;
 }

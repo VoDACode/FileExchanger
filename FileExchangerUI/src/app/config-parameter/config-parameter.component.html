@@ -1,18 +1,45 @@
 <div class="box" #box>
-    <span *ngIf="isObject" (click)="setShow()" class="set-show">{{show ? '-' : '+'}}</span>
-
-    <label class="{{!isObject ? 'marn' : ''}} param">"{{parameter}}" : 
-        <select class="{{_type}}" *ngIf="!isObject && _type == 'bool'" (change)="changeEvent($event)">
+    <span *ngIf="isObject || isArray" (click)="setShow()" class="set-show">{{show ? '-' : '+'}}</span>
+    <div class="top-bar">
+        <div>
+            <label class="param">"{{parameter}}" : </label>
+        </div>
+        <div *ngIf="isRemove">
+            <button type="button" class="btn btn-danger" (click)="deleteObj()">Remove</button>
+        </div>
+    </div>
+    <!--object-->
+    <section *ngIf="isObject">
+        <span>{{ '{' }}</span>
+        <span *ngIf="!show" (click)="setShow()" style="cursor: pointer;">...</span>
+        <div *ngIf="show" clss="item">
+            <app-config-parameter *ngFor="let item of childrens" [childrens]="item.childrens"
+                [parameter]="item.parameter" [value]="item.value" [root]="this" [type]="item.type"
+                (onchangeParameter)="change($event)"></app-config-parameter>
+        </div>
+        <span class="{{show ? 'marn' : ''}}">{{ '},' }}</span>
+    </section>
+    <!--Array-->
+    <section *ngIf="!isObject && !isArray">
+        <select class="{{type}}" *ngIf="type == 'bool'" (change)="changeEvent($event)">
             <option value="true" [selected]="value">true</option>
             <option value="false" [selected]="!value">false</option>
         </select>
-        <input [type]="_type" *ngIf="!isObject && _type !== 'bool'" class="{{_type}}" (change)="changeEvent($event)" [(ngModel)]="value">
-    </label>
-    <span *ngIf="isObject">{{ '{' }}</span>
-    <span *ngIf="isObject && !show" (click)="setShow()" style="cursor: pointer;">...</span>
-    <div *ngIf="isObject && show" clss="item">
-        <app-config-parameter *ngFor="let item of childrens" [childrens]="item.childrens" [parameter]="item.parameter"
-            [value]="item.value" [root]="this" (onchangeParameter)="change($event)"></app-config-parameter>
-    </div>
-    <span class="{{show ? 'marn' : ''}}" *ngIf="isObject">{{ '},' }}</span>
+        <input [type]="type" *ngIf="type !== 'bool'" class="{{type}}" (change)="changeEvent($event)"
+            [(ngModel)]="value">
+    </section>
+    <section *ngIf="isArray">
+        <span>[</span>
+        <span *ngIf="!show" (click)="setShow()" style="cursor: pointer;">...</span>
+        <div>
+            <button type="button" class="btn btn-success" (click)="addNewObj()">Add</button>
+        </div>
+        <div *ngIf="show" clss="item">
+            <app-config-parameter *ngFor="let item of childrens" [childrens]="item.childrens"
+                [parameter]="item.parameter" [value]="item.value" [root]="this" [type]="item.type" [isRemove]="true"
+                (onchangeParameter)="change($event)">
+            </app-config-parameter>
+        </div>
+        <span class="{{show ? 'marn' : ''}}">]</span>
+    </section>
 </div>

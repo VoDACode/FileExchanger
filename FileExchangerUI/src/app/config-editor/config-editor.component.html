@@ -1,6 +1,6 @@
-<div class="box">
+<div class="box" #box>
     <app-config-parameter *ngFor="let item of childrens" [childrens]="item.childrens" [value]="item.value"
-        [parameter]="item.parameter" (onchangeParameter)="changetEvent($event)"></app-config-parameter>
+        [parameter]="item.parameter" [type]="item.type" (onchangeParameter)="changetEvent($event)"></app-config-parameter>
 </div>
 <div *ngIf="isModified" class="save-panel center-horizontal">
     <div class="text-box">
