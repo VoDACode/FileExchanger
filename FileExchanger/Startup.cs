@@ -1,3 +1,4 @@
+using Core;
 using FileExchanger.Attributes;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;

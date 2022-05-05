@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FileExchanger.Models
+namespace Core.Models
 {
     public class UserModel
     {
@@ -13,8 +13,8 @@ namespace FileExchanger.Models
         public string Host { get; set; }
         public DateTime LastActive { get; set; }
         public DateTime RegistrationDate { get; set; }
-        public double MaxFileSize { get; set; } = Config.Instance.Services.FileExchanger.MaxSaveSize;
-        public int MaxFileCount { get; set; } = Config.Instance.Services.FileExchanger.MaxUploadCount;
-        public double MaxSaveFileTime { get; set; } = Config.Instance.Services.FileExchanger.MaxSaveTime;
+        public double MaxFileSize { get; set; }
+        public int MaxFileCount { get; set; }
+        public double MaxSaveFileTime { get; set; }
     }
 }

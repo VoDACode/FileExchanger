@@ -1,4 +1,6 @@
-﻿using FileExchanger.Models;
+﻿using Core;
+using Core.Models;
+using FileExchanger.Models;
 using FileExchanger.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

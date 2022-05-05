@@ -1,4 +1,4 @@
-﻿namespace FileExchanger.Models
+﻿namespace Core.Models
 {
     public class TelegramUserModel
     {

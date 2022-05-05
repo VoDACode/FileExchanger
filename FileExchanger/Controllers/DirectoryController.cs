@@ -5,6 +5,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
+using FileExchanger.Services;
+using System.Collections.Generic;
+using Core;
+using Core.Models;
+using Core.Zip;
 
 namespace FileExchanger.Controllers
 {
@@ -66,7 +71,13 @@ namespace FileExchanger.Controllers
             var fromDir = db.Directory.SingleOrDefault(p => p.Key == dir);
             if (fromDir == null || fromDir.Owner != authClient)
                 return BadRequest();
-            db.StorageFiles.RemoveRange(db.StorageFiles.Where(p => p.Directory == fromDir));
+            var files = db.StorageFiles.Where(p => p.Directory == fromDir).ToList();
+            for(int i = 0; i < files.Count(); i++)
+            {
+                db.StorageFiles.Remove(files[i]);
+                FtpService.Instance.DeleteFile(files[i], Configs.DefaultService.FileStorage);
+                FtpService.Instance.DeleteDir(files[i].Key, Configs.DefaultService.FileStorage);
+            }
             var dirs = db.Directory.Where(p => p.Root == fromDir).ToList();
             for (int i = 0; i < dirs.Count(); i++)
             {
@@ -89,6 +100,59 @@ namespace FileExchanger.Controllers
             fromDir.UpdateDate = DateTime.Now;
             db.SaveChanges();
             return Ok();
+        }
+
+        [HttpGet("{dir}/download")]
+        public IActionResult Download(string dir)
+        {
+            var fromDir = db.Directory.SingleOrDefault(p => p.Key == dir);
+            if (fromDir == null || fromDir.Owner != authClient)
+                return NotFound();
+            var zip = new ZipService();
+            var content = getContentInDir(dir);
+            zip.Create().Wait();
+            zip.SetName(fromDir.Name).Wait();
+            zip.AddRage(content).Wait();
+            zip.Pack().Wait();
+            return Ok($"https://{Config.Instance.Services.ZipServer.Host}:{Config.Instance.Services.ZipServer.Port}/api/zip/download/{zip.Key}");
+        }
+
+        private List<ZipItem> getContentInDir(string dirKey)
+        {
+            List<ZipItem> result = new List<ZipItem>();
+            void fun(string d, string path)
+            {
+                var dir = db.Directory.SingleOrDefault(p => p.Key == d);
+                if (dir == null)
+                    return;
+                var files = db.StorageFiles.Where(p => p.Directory == dir).ToList();
+                var dirs = db.Directory.Where(p => p.Root == dir).ToList();
+                foreach (var file in files)
+                {
+                    result.Add(new ZipItem()
+                    {
+                        Key = file.Key,
+                        Size = file.Size,
+                        Name = file.Name,
+                        Type = ContentType.File,
+                        Path = path
+                    });
+                }
+                foreach (var folder in dirs)
+                {
+                    result.Add(new ZipItem()
+                    {
+                        Key=folder.Key,
+                        Name = folder.Name,
+                        Size = 0,
+                        Path = path,
+                        Type = ContentType.Folder
+                    });
+                    fun(folder.Key, $"{path}{folder.Name}/");
+                }
+            }
+            fun(dirKey, "/");
+            return result;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using FileExchanger.Configs;
+﻿using Core;
+using FileExchanger.Configs;
 using System;
 using System.Linq;
 using System.Threading;
@@ -20,8 +21,8 @@ namespace FileExchanger.Services
                 db.UserFiles.RemoveRange(userFiles);
                 foreach (var file in files)
                 {
-                    FtpService.DeleteFile(file, DefaultService.FileExchanger);
-                    FtpService.DeleteDir(file.Key, DefaultService.FileExchanger);
+                    FtpService.Instance.DeleteFile(file, DefaultService.FileExchanger);
+                    FtpService.Instance.DeleteDir(file.Key, DefaultService.FileExchanger);
                 }
                 db.ExchangeFiles.RemoveRange(files);
                 db.SaveChanges();
@@ -64,8 +65,8 @@ namespace FileExchanger.Services
 
             foreach (var file in files)
             {
-                FtpService.DeleteFile(file, DefaultService.FileExchanger);
-                FtpService.DeleteDir(file.Key, DefaultService.FileExchanger);
+                FtpService.Instance.DeleteFile(file, DefaultService.FileExchanger);
+                FtpService.Instance.DeleteDir(file.Key, DefaultService.FileExchanger);
             }
 
             db.ExchangeFiles.RemoveRange(files);

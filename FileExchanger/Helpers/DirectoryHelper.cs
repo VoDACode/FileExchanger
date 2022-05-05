@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography;
 using System.Text;
+using Core.Models;
 using FileExchanger.Models;
 
 namespace FileExchanger.Helpers

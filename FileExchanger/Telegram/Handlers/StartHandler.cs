@@ -5,6 +5,7 @@ using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Extensions;
 using Telegram.Bot.Types.ReplyMarkups;
+using Core.Models;
 
 namespace FileExchanger.Telegram.Handlers
 {
@@ -19,7 +20,7 @@ namespace FileExchanger.Telegram.Handlers
                 var user = db.TelegramUsers.SingleOrDefault(p => p.TelegramId == UserId);
                 if (user == null)
                 {
-                    user = db.TelegramUsers.Add(new Models.TelegramUserModel()
+                    user = db.TelegramUsers.Add(new TelegramUserModel()
                     {
                         AuthKey = "".RandomString(128),
                         TelegramId = UserId,

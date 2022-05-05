@@ -42,15 +42,37 @@ export class StoragePageComponent implements OnInit {
   ngOnInit(): void {
     this.contextMenuItems.push([
       new ContextMenuModel("Create new dir", this.onCreateFolder.bind(this), true),
-      new ContextMenuModel("Propertis", this.onClickContextMenu)
+      new ContextMenuModel("Download", this.onDownloadThisFolder.bind(this), true),
+      new ContextMenuModel("Propertis", this.onClickContextMenu.bind(this), true),
     ]);
     this.contextMenuItems.push([
       new ContextMenuModel("Rename", this.onRename.bind(this), true),
+      new ContextMenuModel("Download", this.onDownloadSelectFolder.bind(this), true),
       new ContextMenuModel("Delete", this.onDeleteObj.bind(this), true),
-      new ContextMenuModel("Propertis", this.onClickContextMenu)
+      new ContextMenuModel("Propertis", this.onClickContextMenu.bind(this), true)
     ]);
   }
 
+  onDownloadSelectFolder(event: Event, item: ContextMenuModel): void {
+    //@ts-ignore
+    this.onDownloadFolder(this.selectItem?.key);
+  }
+  onDownloadThisFolder(event: Event, item: ContextMenuModel): void {
+    this.onDownloadFolder(this.rootKey);
+  }
+
+  private onDownloadFolder(key: string): void {
+    $.ajax({
+      method: "GET",
+      url: `api/dir/s/${key}/download`,   
+      headers:{
+        Authorization: "Bearer " + AuthService.token
+      },
+      success: (data) => {
+        document.location.replace(data);
+      }
+    });
+  }
   
   dragOverHandler(ev: any): void {
     console.log('File(s) in drop zone');

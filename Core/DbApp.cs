@@ -1,6 +1,5 @@
-﻿using FileExchanger.Helpers;
-using FileExchanger.Models;
-using FileExchanger.Services;
+﻿using Core.Helpers;
+using Core.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
@@ -8,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FileExchanger
+namespace Core
 {
     public class DbApp : DbContext
     {

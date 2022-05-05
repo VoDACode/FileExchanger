@@ -7,9 +7,11 @@ namespace FileExchanger.Configs
     {
         private FileExchangerConfig exchanger = new FileExchangerConfig();
         private FileStorageConfig storage = new FileStorageConfig();
+        private ZipServerConfig zipServerConfig = new ZipServerConfig();
         protected override dynamic ConfigSection => Config.Instance.ConfigFile["Services"];
         public FileStorageConfig FileStorage => storage;
         public FileExchangerConfig FileExchanger => exchanger;
+        public ZipServerConfig ZipServer => zipServerConfig;
         public DefaultService DefaultService => ParseEnum<DefaultService>(ConfigSection["DefaultService"]);
     }
     public class FileExchangerConfig : Configurations
@@ -27,5 +29,12 @@ namespace FileExchanger.Configs
         public bool UseAuth => ParseBool(ConfigSection["UseAuth"]);
         public double MaxUploadSize => SizeHelper.SizeParser((string)ConfigSection["MaxUploadSize"]);
         protected override dynamic ConfigSection => Config.Instance.ConfigFile["Services"]["FileStorage"];
+    }
+    public class ZipServerConfig : Configurations
+    {
+        public string Host => (string)ConfigSection["Host"];
+        public int Port => (int)ConfigSection["Port"];
+        public string Token => (string)ConfigSection["Token"];
+        protected override dynamic ConfigSection => Config.Instance.ConfigFile["Services"]["ZipServer"];
     }
 }

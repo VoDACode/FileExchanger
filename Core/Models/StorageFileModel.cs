@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FileExchanger.Models
+namespace Core.Models
 {
     public class StorageFileModel : IFile
     {

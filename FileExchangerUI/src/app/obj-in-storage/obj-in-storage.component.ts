@@ -29,6 +29,11 @@ export class ObjInStorageComponent {
       return "./assets/icons8-folder-100.svg";
     return '';
   }
+  get shortName(): string{
+    if(this.name.length >= 16)
+      return this.name.substring(0, 13) + '...';
+    return this.name;
+  }
 
   constructor(private router: Router) {
   }

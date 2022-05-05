@@ -1,4 +1,6 @@
-﻿using FileExchanger.Models;
+﻿using Core;
+using Core.Models;
+using FileExchanger.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

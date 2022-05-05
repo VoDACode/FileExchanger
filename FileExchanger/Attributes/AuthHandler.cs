@@ -1,4 +1,5 @@
-﻿using FileExchanger.Helpers;
+﻿using Core;
+using FileExchanger.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using System.Linq;
 using System.Threading.Tasks;

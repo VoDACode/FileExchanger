@@ -1,0 +1,21 @@
+{
+  "Db": {
+    "Host": "127.0.0.1",
+    "Port": 1433,
+    "DbName": "FileExchanger",
+    "UserId": "",
+    "Password": ""
+  },
+  "FTP": {
+    "EnableSFTP": "False",
+    "Username": "",
+    "Password": "",
+    "Host": "127.0.0.1",
+    "Port": 21,
+    "RootPath": ""
+  },
+  "Token": "",
+  "Cors": [
+    "https://127.0.0.1"
+  ]
+}

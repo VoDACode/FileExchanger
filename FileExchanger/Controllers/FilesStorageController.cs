@@ -1,4 +1,6 @@
-﻿using FileExchanger.Configs;
+﻿using Core;
+using Core.Models;
+using FileExchanger.Configs;
 using FileExchanger.Helpers;
 using FileExchanger.Models;
 using FileExchanger.Services;
@@ -87,8 +89,8 @@ namespace FileExchanger.Controllers
             var fileModel = db.StorageFiles.SingleOrDefault(p => p.Key == file);
             if (fileModel == null || fileModel.Owner != authClient)
                 return NotFound();
-            FtpService.DeleteFile(fileModel, DefaultService.FileStorage);
-            FtpService.DeleteDir(fileModel.Key, DefaultService.FileStorage);
+            FtpService.Instance.DeleteFile(fileModel, DefaultService.FileStorage);
+            FtpService.Instance.DeleteDir(fileModel.Key, DefaultService.FileStorage);
             db.StorageFiles.Remove(fileModel);
             db.SaveChanges();
             return Ok();
@@ -116,7 +118,7 @@ namespace FileExchanger.Controllers
                 Name = file.FileName,
                 Owner = authClient,
             };
-            FtpService.Upload(file.OpenReadStream(), fileModel, DefaultService.FileStorage);
+            FtpService.Instance.Upload(file.OpenReadStream(), fileModel, DefaultService.FileStorage);
             db.StorageFiles.Add(fileModel);
             db.SaveChanges();
             return Ok(new
@@ -136,7 +138,7 @@ namespace FileExchanger.Controllers
             if (fileModel == null || fileModel.Owner != authClient)
                 return NotFound();
             
-            return File(FtpService.Download(fileModel, DefaultService.FileStorage), "application/octet-stream", fileModel.Name);
+            return File(FtpService.Instance.Download(fileModel, DefaultService.FileStorage), "application/octet-stream", fileModel.Name, true);
         }
         [HttpPost("{dir}/{file}/rename")]
         public IActionResult Rename(string dir, string file, string name)

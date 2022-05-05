@@ -1,4 +1,6 @@
-﻿using FileExchanger.Configs;
+﻿using Core;
+using Core.Models;
+using FileExchanger.Configs;
 using FileExchanger.Helpers;
 using FileExchanger.Models;
 using FileExchanger.Services;
@@ -81,7 +83,7 @@ namespace FileExchanger.Controllers
             fileModel.DownloadCount = 0;
             fileModel.MaxDownloadCount = dc;
 
-            FtpService.Upload(file.OpenReadStream(), fileModel, DefaultService.FileExchanger);
+            FtpService.Instance.Upload(file.OpenReadStream(), fileModel, DefaultService.FileExchanger);
             db.ExchangeFiles.Add(fileModel);
             db.UserFiles.Add(new UserFilesModel()
             {
@@ -108,8 +110,8 @@ namespace FileExchanger.Controllers
 
             if (file.IsDeleteFile)
             {
-                FtpService.DeleteFile(file, DefaultService.FileExchanger);
-                FtpService.DeleteDir(file.Key, DefaultService.FileExchanger);
+                FtpService.Instance.DeleteFile(file, DefaultService.FileExchanger);
+                FtpService.Instance.DeleteDir(file.Key, DefaultService.FileExchanger);
 
                 db.UserFiles.Remove(db.UserFiles.FirstOrDefault(p => p.File == file && p.User == getUser));
                 db.ExchangeFiles.Remove(file);
@@ -119,7 +121,7 @@ namespace FileExchanger.Controllers
 
             file.DownloadCount++;
             db.SaveChanges();
-            return File(FtpService.Download(file, DefaultService.FileExchanger), "application/octet-stream", file.Name);
+            return File(FtpService.Instance.Download(file, DefaultService.FileExchanger), "application/octet-stream", file.Name, true);
         }
 
         [HttpPost("delete/{key}/{name}")]
@@ -140,8 +142,8 @@ namespace FileExchanger.Controllers
                     return Unauthorized("Access denied!");
             }
 
-            FtpService.DeleteFile(file, DefaultService.FileExchanger);
-            FtpService.DeleteDir(file.Key, DefaultService.FileExchanger);
+            FtpService.Instance.DeleteFile(file, DefaultService.FileExchanger);
+            FtpService.Instance.DeleteDir(file.Key, DefaultService.FileExchanger);
 
             db.UserFiles.Remove(db.UserFiles.FirstOrDefault(p => p.File == file));
             db.ExchangeFiles.Remove(file);
@@ -160,8 +162,8 @@ namespace FileExchanger.Controllers
 
             if (file.IsDeleteFile)
             {
-                FtpService.DeleteFile(file, DefaultService.FileExchanger);
-                FtpService.DeleteDir(file.Key, DefaultService.FileExchanger);
+                FtpService.Instance.DeleteFile(file, DefaultService.FileExchanger);
+                FtpService.Instance.DeleteDir(file.Key, DefaultService.FileExchanger);
 
                 db.UserFiles.Remove(db.UserFiles.FirstOrDefault(p => p.File == file && p.User == getUser));
                 db.ExchangeFiles.Remove(file);

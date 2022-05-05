@@ -2,7 +2,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace FileExchanger.Helpers
+namespace Core.Helpers
 {
     public static class PasswordHelper
     {

@@ -1,5 +1,5 @@
 ﻿using FileExchanger.Helpers;
-using FileExchanger.Models;
+using Core.Helpers;
 using FileExchanger.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -13,6 +13,8 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using Core;
+using Core.Models;
 
 namespace FileExchanger.Controllers
 {

@@ -1,4 +1,5 @@
-﻿using FileExchanger.Models;
+﻿using Core.Models;
+using FileExchanger.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

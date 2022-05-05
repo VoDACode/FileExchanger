@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using FileExchanger.Services;
+using System;
 
 namespace FileExchanger
 {
@@ -9,8 +10,11 @@ namespace FileExchanger
         public static void Main(string[] args)
         {
             ConfigureService configureService = new ConfigureService();
-            if (!configureService.Configure(args))
+            if (Config.Instance.IsFirstStart && !configureService.Configure(args))
+            {
+                Console.ReadLine();
                 return;
+            }
             if(Config.Instance.Security.Telegram.Enable)
                 TelegramBotService.Instance.Start();
             CreateHostBuilder(args).Build().Run();
@@ -22,6 +26,7 @@ namespace FileExchanger
                 {
                     webBuilder.UseStartup<Startup>()
                     .UseIISIntegration();
+                    webBuilder.UseUrls("https://*:5005");
                 });
     }
 }
