@@ -2,7 +2,6 @@
 using Core.Models;
 using FileExchanger.Configs;
 using FileExchanger.Models;
-using FileExchanger.Models.Ftp;
 using System;
 using System.Collections.Generic;
 using System.IO;
