@@ -26,6 +26,12 @@ namespace FileExchanger.Controllers
             db.AuthClients.ToList();
         }
 
+        [HttpGet("get-root")]
+        public IActionResult GetRootKey()
+        {
+            return Ok(db.Directory.Single(p => p.Owner == authClient && p.Name == "/" && p.Root == null).Key);
+        }
+
         [HttpGet("{dir}/info")]
         public IActionResult GetInfo(string dir)
         {

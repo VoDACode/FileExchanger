@@ -54,7 +54,7 @@ namespace Core
                 CreateDate = DateTime.Now,
                 UpdateDate = DateTime.Now,
                 Name = "/",
-                Key = "root",
+                Key = "".RandomString(96),
                 Owner = admin,
                 Root = null
             });

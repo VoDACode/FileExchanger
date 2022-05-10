@@ -40,7 +40,7 @@ namespace FileExchanger.Controllers
                 CreateDate = DateTime.Now,
                 UpdateDate = DateTime.Now,
                 Name = "/",
-                Key = "root",
+                Key = "".RandomString(96),
                 Owner = authClient
             });
             db.SaveChanges();

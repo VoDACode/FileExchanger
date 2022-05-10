@@ -18,11 +18,11 @@ export class StoragePageComponent implements OnInit {
   folders: [] = [];
   dirContent: ObjInStorageModel[] = [];
   selectItem: ObjInStorageComponent | undefined;
-  rootKey: string = "root";
+  rootKey: string = DirectoryService.getRootKey;
   constructor(private router: Router, private activatedRoute: ActivatedRoute) {
     this.activatedRoute.params.subscribe(params => {
       if (params.dir === undefined) {
-        this.rootKey = "root";
+        this.rootKey = DirectoryService.getRootKey;
       } else{
         this.rootKey = params.dir;
       }
@@ -47,15 +47,21 @@ export class StoragePageComponent implements OnInit {
     ]);
     this.contextMenuItems.push([
       new ContextMenuModel("Rename", this.onRename.bind(this), true),
-      new ContextMenuModel("Download", this.onDownloadSelectFolder.bind(this), true),
+      new ContextMenuModel("Download", this.onDownloadSelectItem.bind(this), true),
       new ContextMenuModel("Delete", this.onDeleteObj.bind(this), true),
       new ContextMenuModel("Propertis", this.onClickContextMenu.bind(this), true)
     ]);
   }
 
-  onDownloadSelectFolder(event: Event, item: ContextMenuModel): void {
-    //@ts-ignore
-    this.onDownloadFolder(this.selectItem?.key);
+  onDownloadSelectItem(event: Event, item: ContextMenuModel): void {
+    if (this.selectItem?.type === 'FOLDER'){
+      //@ts-ignore
+      this.onDownloadFolder(this.selectItem?.key);
+      return;
+    }else if (this.selectItem?.type === 'FILE'){
+      this.onDownloadFile();
+      return;
+    }
   }
   onDownloadThisFolder(event: Event, item: ContextMenuModel): void {
     this.onDownloadFolder(this.rootKey);
@@ -74,6 +80,18 @@ export class StoragePageComponent implements OnInit {
     });
   }
   
+  private onDownloadFile(): void {
+    $.ajax({
+      method: "POST",
+      url: `api/files/s/${this.rootKey}/${this.selectItem?.key}/download`,
+      headers:{
+        Authorization: "Bearer " + AuthService.token
+      },
+      // TO DO
+      processData: false,
+    });
+  }
+
   dragOverHandler(ev: any): void {
     console.log('File(s) in drop zone');
   
