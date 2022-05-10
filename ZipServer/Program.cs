@@ -15,10 +15,14 @@ namespace ZipServer
     {
         public static void Main(string[] args)
         {
+            // create token if config field 'Token' is emptu.
             if (string.IsNullOrWhiteSpace((string)Config.Instance.Token))
-            {
                 Config.Instance.ConfigFile["Token"] = "".RandomString(256);
-            }
+
+            // clear temp folder
+            foreach(var item in Directory.EnumerateDirectories(FileManager.Instance.TempPath))
+                Directory.Delete(item, true);
+
             CreateHostBuilder(args).Build().Run();
         }
 
