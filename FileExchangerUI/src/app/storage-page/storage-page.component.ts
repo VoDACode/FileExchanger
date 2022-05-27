@@ -165,7 +165,7 @@ export class StoragePageComponent implements OnInit {
   }
 
   onCreateFolder(event: Event, item: ContextMenuModel): void {
-    this.dirContent.push(new ObjInStorageModel("#new_folder", "New Folder", true, 'FOLDER'));
+    this.dirContent.push(new ObjInStorageModel("#new_folder", "New Folder", true, 'FOLDER', this.rootKey));
   }
 
   renameEvent(event: ObjInStorageComponent): void {
@@ -199,7 +199,7 @@ export class StoragePageComponent implements OnInit {
     let list = DirectoryService.list(dir);
     this.dirContent = [];
     for (let i = 0; i < list.length; i++) {
-      this.dirContent.push(new ObjInStorageModel(list[i].key, list[i].name, false, list[i].isFile ? 'FILE' : 'FOLDER'));
+      this.dirContent.push(new ObjInStorageModel(list[i].key, list[i].name, false, list[i].isFile ? 'FILE' : 'FOLDER', this.rootKey));
     }
   }
 
@@ -210,7 +210,7 @@ export class StoragePageComponent implements OnInit {
   }
 
   onClickContextMenu(event: Event, item: ContextMenuModel): void {
-    console.log(item);
+    
   }
 
   openContextMenu(event: any): boolean {
@@ -236,15 +236,17 @@ export class StoragePageComponent implements OnInit {
   }
 }
 
-class ObjInStorageModel {
+export class ObjInStorageModel {
   key: string = "";
   name: string = "";
   type: 'FILE' | 'FOLDER' = "FILE";
   isRenamed: boolean = false;
-  constructor(key: string, name: string, isRenamed: boolean, type: 'FILE' | 'FOLDER') {
+  rootKey: string = "";
+  constructor(key: string, name: string, isRenamed: boolean, type: 'FILE' | 'FOLDER', rootKey: string) {
     this.isRenamed = isRenamed;
     this.key = key;
     this.name = name;
     this.type = type;
+    this.rootKey = rootKey;
   }
 }

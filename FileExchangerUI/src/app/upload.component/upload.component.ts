@@ -14,6 +14,7 @@ import { AES } from "../../helpers/AES";
 import { SaveTimePattern } from "src/models/SaveTimePatternModel";
 import { AuthService } from "src/services/auth";
 import { Router } from "@angular/router";
+import { ChildHelper } from "src/helpers/ChildHelper";
 
 @Component({
   selector: 'app-upload',
@@ -56,6 +57,9 @@ export class UploadComponent {
       $.ajax({
         url: 'api/files/e/list',
         method: 'GET',
+        headers:{
+          Authorization: 'Bearer ' + AuthService.token
+        },
         success: data => {
           for (const dataKey in data) {
             let obj = data[dataKey];
@@ -84,18 +88,7 @@ export class UploadComponent {
   }
 
   onCopyLink(obj: FileModel): void {
-    let link = `${location.protocol}//${location.host}/d/${obj.downloadKey}/${obj.name}`;
-    const selBox = document.createElement('textarea');
-    selBox.style.position = 'fixed';
-    selBox.style.left = '0';
-    selBox.style.top = '0';
-    selBox.style.opacity = '0';
-    selBox.value = link;
-    document.body.appendChild(selBox);
-    selBox.focus();
-    selBox.select();
-    document.execCommand('copy');
-    document.body.removeChild(selBox);
+    ChildHelper.copy(`${location.protocol}//${location.host}/d/${obj.downloadKey}/${obj.name}`);
   }
 
   onUpload(): void {
@@ -127,7 +120,8 @@ export class UploadComponent {
       type: 'POST',
       data: fd,
       headers: {
-        Accept: 'application/json'
+        Accept: 'application/json',
+        Authorization: 'Bearer ' + AuthService.token
       },
       contentType: false,
       processData: false,
@@ -190,6 +184,9 @@ export class UploadComponent {
     $.ajax({
       url: url,
       method: 'POST',
+      headers:{
+        Authorization: 'Bearer ' + AuthService.token
+      },
       success: data => {
         const index = this.files.indexOf(obj);
         if (index > -1) {

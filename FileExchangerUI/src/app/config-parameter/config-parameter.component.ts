@@ -4,6 +4,7 @@ import { ConfigModule } from 'src/models/configModel';
 import { EventModificationConfigParameter } from 'src/models/eventModificationConfigParameter';
 import * as $ from 'jquery';
 import { AuthService } from 'src/services/auth';
+import { ChildHelper } from 'src/helpers/ChildHelper';
 
 @Component({
   selector: 'app-config-parameter',
@@ -175,6 +176,10 @@ export class ConfigParameterComponent implements OnInit, AfterViewInit, ConfigMo
 
   setShow(): void {
     this.show = !this.show;
+  }
+
+  copyPathName(): void {
+    ChildHelper.copy(this._path);
   }
 
   blink(): void {

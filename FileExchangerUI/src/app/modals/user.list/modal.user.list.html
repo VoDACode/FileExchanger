@@ -1,0 +1,43 @@
+<div class="modal-header">
+  <h5 class="modal-title" id="exampleModalLabel">{{ 'GroupSettings.ModelUserList.Title' | translate }}</h5>
+  <button type="button" class="btn-close" aria-label="Close" (click)="modalRef.close()"></button>
+</div>
+<div class="modal-body" style="overflow-x: auto">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">{{ 'GroupSettings.ModelUserList.Table.Titles.SessionName' | translate }}</th>
+        <th scope="col">{{ 'GroupSettings.ModelUserList.Table.Titles.JoinDate' | translate }}</th>
+        <th scope="col">{{ 'GroupSettings.ModelUserList.Table.Titles.LastActive' | translate }}</th>
+        <th scope="col">{{ 'GroupSettings.ModelUserList.Table.Titles.Settings' | translate }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users; index as i">
+        <td>{{i + 1}}</td>
+        <td *ngIf="!user.lockData" [innerText]="user.title"></td>
+        <td *ngIf="user.lockData" [innerText]="'You('+user.title+')'"></td>
+        <td>{{user.joinDate}}</td>
+        <td>{{user.lastActive}}</td>
+        <td>
+          <div class="btn-group" role="group">
+            <input type="checkbox" class="btn-check" id="btncheck_user{{i}}" [disabled]="user.lockData"
+              (change)="changePermissionAddUser($event, user, i)" [checked]="user.isPermissionAddUser"
+              autocomplete="{{user.isPermissionAddUser ? 'on' : 'off'}}">
+            <label class="btn btn-outline-primary" for="btncheck_user{{i}}">{{
+              'GroupSettings.ModelUserList.Table.Buttons.AddUser' | translate }}</label>
+
+            <button type="button" (click)="kikUser(user)" [disabled]="user.lockData" class="btn btn-outline-primary">{{
+              'GroupSettings.ModelUserList.Table.Buttons.Kik' | translate }}</button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" (click)="modalRef.close()">
+    {{ 'GroupSettings.ModelUserList.Close' | translate }}
+  </button>
+</div>

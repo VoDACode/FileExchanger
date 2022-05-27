@@ -6,19 +6,13 @@ namespace FileExchanger.Services
 {
     public static class EmailService
     {
-        public static Task SendAsyn(string to, string subject, string text)
-        {
-            return Task.Factory.StartNew(() => {
-                using (SmtpClient client = Connect())
-                using (MailMessage message = new MailMessage(Config.Instance.Email.Address, to, subject, text))
-                    client.Send(message);
-            });
-        }
         public static void Send(string to, string subject, string text)
         {
             using (SmtpClient client = Connect())
-            using (MailMessage message = new MailMessage(Config.Instance.Email.Address, to, subject, text))
-                client.Send(message);
+            {
+                using (MailMessage message = new MailMessage(Config.Instance.Email.Address, to, subject, text))
+                    client.Send(message);
+            }
         }
         private static SmtpClient Connect()
         {

@@ -39,6 +39,11 @@ namespace FileExchanger.Controllers
                 HttpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
                 HttpContext.Response.WriteAsync("INCORRECT_PASSWORD_OR_EMAIL");
             }
+            if (string.IsNullOrWhiteSpace(p) || string.IsNullOrWhiteSpace(e))
+            {
+                incorrect();
+                return;
+            }
             if (db.AuthClients.Any(o => o.Email == e && o.Password == p))
             {
                 incorrect();
@@ -59,7 +64,7 @@ namespace FileExchanger.Controllers
         [HttpPost("regin")]
         public void Regin(string e, string p, string n)
         {
-            if (string.IsNullOrWhiteSpace(e) || string.IsNullOrWhiteSpace(p) || string.IsNullOrWhiteSpace(n) || n.Length < 4 || p.Length < 8)
+            if (string.IsNullOrWhiteSpace(e) || string.IsNullOrWhiteSpace(p) || string.IsNullOrWhiteSpace(n) || n.Length < 4)
             {
                 Response.StatusCode = StatusCodes.Status400BadRequest;
                 Response.WriteAsync("BAD_REQUEST");
@@ -80,7 +85,7 @@ namespace FileExchanger.Controllers
             string confirmKey = "".RandomString(64);
             var host = HttpContext.Request.Host;
             cache.Set($"EMAIL_CONFIRM_{confirmKey}", user, DateTime.Now.AddHours(1));
-            EmailService.SendAsyn(e, "Confirm email!", $"https://{host.Host}:{host.Port}/c/e/{confirmKey}");
+            EmailService.Send(e, "Confirm email!", $"https://{host.Host}:{host.Port}/api/c/e/{confirmKey}");
 
             Response.StatusCode = StatusCodes.Status200OK;
             Response.WriteAsync("OK");

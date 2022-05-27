@@ -7,6 +7,7 @@ import {ModalJoinInfo} from "../modals/modal/modal.join-info";
 import {TranslateService} from "@ngx-translate/core";
 import {ModalUserList} from "../modals/modal/modal.user.list";
 import {CookieService} from "ngx-cookie-service";
+import { AuthService } from "src/services/auth";
 
 @Component({
   selector:'working-group',
@@ -39,6 +40,9 @@ export class WorkingGroupComponent{
     $.ajax({
       url: 'api/group/info',
       method: 'GET',
+      headers: {
+        Authorization: 'Bearer ' + AuthService.token
+      },
       success: data => {
         if(data.group.key !== undefined) {
           this.joinKey = data.group.key
@@ -68,7 +72,10 @@ export class WorkingGroupComponent{
     }
     $.ajax({
       url:`api/group/set/session-name?n=${this.sessionName}`,
-      method: 'POST'
+      method: 'POST',
+      headers: {
+        Authorization: 'Bearer ' + AuthService.token
+      }
     });
     this.cookieService.set('sessionName', this.sessionName);
   }
@@ -86,6 +93,9 @@ export class WorkingGroupComponent{
     $.ajax({
       url: url,
       method: 'POST',
+      headers: {
+        Authorization: 'Bearer ' + AuthService.token
+      },
       error: jqXHR => {
         this.alerts.push({
           type: 'danger',
@@ -109,6 +119,9 @@ export class WorkingGroupComponent{
     $.ajax({
       url: 'api/group/remove',
       method: 'POST',
+      headers: {
+        Authorization: 'Bearer ' + AuthService.token
+      },
       error: jqXHR => {
         this.alerts.push({
           message: jqXHR.responseText,
@@ -130,6 +143,9 @@ export class WorkingGroupComponent{
     $.ajax({
       url: url,
       method: 'POST',
+      headers: {
+        Authorization: 'Bearer ' + AuthService.token
+      },
       success: data => {
         this.getInfo();
         // @ts-ignore

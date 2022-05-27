@@ -3,6 +3,7 @@
     <div class="top-bar">
         <div>
             <label class="param">"{{parameter}}" : </label>
+            <img src="./assets/img/copy.png" class="img-copy-param-path" (click)="copyPathName()">
         </div>
         <div *ngIf="isRemove">
             <button type="button" class="btn btn-danger" (click)="deleteObj()">Remove</button>

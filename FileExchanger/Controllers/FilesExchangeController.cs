@@ -94,6 +94,7 @@ namespace FileExchanger.Controllers
             return Ok(fileModel);
         }
 
+        [AllowAnonymous]
         [HttpGet("download/{key}/{name}")]
         public IActionResult Download(string key, string name, string p)
         {
@@ -151,6 +152,7 @@ namespace FileExchanger.Controllers
             return Ok();
         }
 
+        [AllowAnonymous]
         [HttpGet("info/{key}/{name}")]
         public IActionResult Info(string key, string name)
         {
@@ -181,6 +183,7 @@ namespace FileExchanger.Controllers
             });
         }
 
+        [AllowAnonymous]
         [HttpGet("check/pin/{key}/{name}")]
         public IActionResult CkeckPin(string key, string name, string p)
         {

@@ -25,6 +25,9 @@ export class RootComponent implements OnInit, AfterViewInit {
     $.ajax({
       url: 'api/user/create',
       method: 'POST',
+      headers: {
+        Authorization: 'Bearer ' + AuthService.token
+      },
       async: false
     })
     this.router.events.pipe(

@@ -1,44 +1,63 @@
-.box{
+.box {
     margin-left: 10px;
     border-radius: 10px;
     border-color: #3a3cd5;
     border-style: solid;
     border-width: 0;
 }
-section{
+
+section {
     display: contents;
 }
-.top-bar > div,
-.top-bar{
+
+.top-bar>div,
+.top-bar {
     display: contents;
 }
-.item{
-    margin-left:5px;
+
+.item {
+    margin-left: 5px;
 }
-.set-show{
-    font-size:24px;
+
+.set-show {
+    font-size: 24px;
     width: 18px;
     display: inline-block;
 }
-.set-show:hover{
+
+.set-show:hover {
     color: rgb(105, 105, 105);
     cursor: pointer;
 }
-.marn{
+
+.marn {
     margin-left: 18px;
 }
-.param,.bool,.text,.number{
+
+.param,
+.bool,
+.text,
+.number {
     font-weight: 600;
 }
-.param{
+
+.param {
     color: #916517;
 }
-.bool{
+
+.bool {
     color: #3b38c4;
 }
-.text{
+
+.text {
     color: #dc9000;
 }
-.number{
+
+.number {
     color: rgb(85, 171, 68);
+}
+
+.img-copy-param-path:hover {
+    opacity: 0.5;
+    cursor: pointer;
 }
