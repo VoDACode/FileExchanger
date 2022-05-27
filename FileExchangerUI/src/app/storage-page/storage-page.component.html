@@ -6,7 +6,8 @@
         <div class="bg" (drop)="dropHandler($event)" (dragover)="dragOverHandler($event)" (contextmenu)="openContextMenu($event)"></div>
         <div class="content">
             <app-obj-in-storage *ngFor="let item of dirContent" [name]="item.name" [key]="item.key" [type]="item.type"
-                [isRenamed]="item.isRenamed" (onopencontextmenu)="onOpenContextMenuInFile($event)" (onrename)="renameEvent($event)"></app-obj-in-storage>
+                [isRenamed]="item.isRenamed" 
+                (onopencontextmenu)="onOpenContextMenuInFile($event)" (onrename)="renameEvent($event)" (onopen)="onOpen($event)"></app-obj-in-storage>
         </div>
     </div>
 </div>

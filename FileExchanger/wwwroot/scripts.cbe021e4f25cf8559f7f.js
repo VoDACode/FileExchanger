@@ -1,0 +1,1 @@
+function DownloadFile(e){document.getElementById("fileDownload").src=e}

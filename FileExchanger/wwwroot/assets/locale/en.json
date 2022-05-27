@@ -76,5 +76,20 @@
   },
   "Warnings": {
     "Password": "Encryption and decryption of the file is performed on the client side, ie the larger the file, the longer the encryption and decryption!"
+  },
+  "FileStorage": {
+    "ObjectProperties": {
+      "Name": "Name",
+      "Size": "Size",
+      "CreateDate": "Create date",
+      "Update": "Update",
+      "Title": "Properties",
+      "Close": "Close"
+    },
+    "OpenFile": {
+      "Title": "Open file",
+      "Close": "Close",
+      "Download": "Download"
+    }
   }
 }

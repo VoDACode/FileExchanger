@@ -6,6 +6,9 @@ import { FileTreeModel } from 'src/models/fileInTreeModel';
 import { DirectoryService } from 'src/services/directory';
 import { ContextMenuModel } from 'src/models/ContextMenuModel';
 import { ObjInStorageComponent } from '../obj-in-storage/obj-in-storage.component';
+import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
+import { ModalStorageObjectProperties } from '../modals/modal.storageObjectProperties/modal.storageObjectProperties';
+import { OpenFileModelComponent } from '../modals/model.open.file/model.open.file';
 
 @Component({
   selector: 'app-storage-page',
@@ -18,8 +21,11 @@ export class StoragePageComponent implements OnInit {
   folders: [] = [];
   dirContent: ObjInStorageModel[] = [];
   selectItem: ObjInStorageComponent | undefined;
+
+  public modalRef: MdbModalRef<ModalStorageObjectProperties> | undefined;
+
   rootKey: string = DirectoryService.getRootKey;
-  constructor(private router: Router, private activatedRoute: ActivatedRoute) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private modalService: MdbModalService) {
     this.activatedRoute.params.subscribe(params => {
       if (params.dir === undefined) {
         this.rootKey = DirectoryService.getRootKey;
@@ -210,7 +216,18 @@ export class StoragePageComponent implements OnInit {
   }
 
   onClickContextMenu(event: Event, item: ContextMenuModel): void {
-    
+    console.log(event, item, );
+    this.modalRef = this.modalService.open(ModalStorageObjectProperties, { data: {
+      item: this.dirContent.find(p => p.key == this.selectItem?.key) 
+    }});
+  }
+
+  onOpen(event: ObjInStorageComponent): void {
+    if(event.type == 'FILE'){
+      this.modalRef = this.modalService.open(OpenFileModelComponent, { data: {
+        item: this.dirContent.find(p => p.key == event.key) 
+      }});
+    }
   }
 
   openContextMenu(event: any): boolean {

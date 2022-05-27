@@ -35,6 +35,9 @@ import { SettingsWindowComponent } from './settings-window/settings-window.compo
 import { UserSettingsComponent } from './user-settings/user-settings.component';
 import {ConfirmTelegramComponent} from './confirm-telegram/confirm-telegram.component';
 import { LoginViaTelegramComponent } from './login-via-telegram/login-via-telegram.component';
+import { OpenFileModelComponent } from './modals/model.open.file/model.open.file';
+import { ModalStorageObjectProperties } from './modals/modal.storageObjectProperties/modal.storageObjectProperties';
+import { StorageObjectPropertiesComponentComponent } from './storage-object-properties-component/storage-object-properties-component.component';
 
 export function HttpLoaderFactory(http: HttpClient): TranslateLoader {
   return new TranslateHttpLoader(http, './assets/locale/', '.json');
@@ -91,7 +94,10 @@ const appRoutes: Routes = [
     SettingsWindowComponent,
     UserSettingsComponent,
     ConfirmTelegramComponent,
-    LoginViaTelegramComponent
+    LoginViaTelegramComponent,
+    OpenFileModelComponent,
+    ModalStorageObjectProperties,
+    StorageObjectPropertiesComponentComponent
   ],
   imports: [
     TranslateModule.forRoot({
