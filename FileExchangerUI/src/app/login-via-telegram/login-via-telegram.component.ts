@@ -34,6 +34,7 @@ export class LoginViaTelegramComponent implements OnInit {
             CookieService.set('auth_token', data.data);
             this.mode = 'ok';
             this.router.navigate(['/my']);
+            document.location.reload();
             return;
           }else if(data.type === "error"){
             this.mode = 'fail';

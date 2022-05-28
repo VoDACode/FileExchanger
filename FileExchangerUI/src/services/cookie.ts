@@ -14,4 +14,7 @@ export class CookieService {
     public static set(name: string, value: string): void {
         document.cookie = `${name}=${value}`;
     }
+    public static delete(name: string): void {
+        document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:01 GMT";
+    }
 }

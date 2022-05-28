@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, EventEmitter, HostBinding, HostListener, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from 'src/services/auth';
 import { UIServise } from 'src/services/ui';
@@ -20,8 +21,11 @@ export class SettingsWindowComponent implements OnInit, AfterViewInit {
   public get isEnabledExchanger(): boolean {
     return UIServise.isEnabledExchanger;
   }
+  public get logined(): boolean {
+    return AuthService.isAuth();
+  }
 
-  constructor(private translateService: TranslateService) { }
+  constructor(private translateService: TranslateService, private router: Router) { }
   ngAfterViewInit(): void {
     //@ts-ignore
     document.onclickToBg = this.close.bind(this);
@@ -39,5 +43,11 @@ export class SettingsWindowComponent implements OnInit, AfterViewInit {
   close(): void {
     this.isOpened = false;
     console.log(this);
+  }
+
+  onLogout(): void {
+    AuthService.logout();
+    this.router.navigate(['/']);
+    document.location.reload();
   }
 }

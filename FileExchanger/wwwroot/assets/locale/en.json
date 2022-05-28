@@ -116,7 +116,8 @@
     "Title": "Settings",
     "Items":{
       "EditConfig": "Edit config",
-      "UserSettings": "User settings"
+      "UserSettings": "User settings",
+      "Logout": "Log out"
     }
   },
   "Registration": {

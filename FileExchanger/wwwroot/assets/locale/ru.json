@@ -92,7 +92,7 @@
     },
     "UserSettings": {
       "Name": "Имя",
-      "Email": "Эмэил",
+      "Email": "Электронная почта",
       "OldPassword": "Старый пароль",
       "NewPassword": "Новый пароль",
       "ConnectYourTelegram": "Подключить Ваш Telegram",
@@ -115,8 +115,9 @@
   "SettingsWindow":{
     "Title": "Настройки",
     "Items":{
-      "EditConfig": "Конфинурирование",
-      "UserSettings": "Настройка пользователя"
+      "EditConfig": "Конфигурирование",
+      "UserSettings": "Настройка пользователя",
+      "Logout": "Выход"
     }
   },
   "Registration": {
@@ -131,7 +132,7 @@
     "Password": "Пароль",
     "Login": "Вход",
     "Or": "Или",
-    "LoginTelegram": "Ввойти чарез Telegram",
+    "LoginTelegram": "Войти чарез Telegram",
     "Registration" : "Регистрация"
   },
   "LoginViaTelegram": {

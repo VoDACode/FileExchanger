@@ -16,6 +16,9 @@
             <div class="item">
                 <span [routerLink]="['/my/user']">{{"SettingsWindow.Items.UserSettings" | translate}}</span>
             </div>
+            <div class="item" *ngIf="logined">
+                <span (click)="onLogout()">{{"SettingsWindow.Items.Logout" | translate}}</span>
+            </div>
         </div>
     </div>
 </div>

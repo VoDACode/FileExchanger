@@ -116,7 +116,8 @@
     "Title": "Налаштування",
     "Items":{
       "EditConfig": "Конфігурування",
-      "UserSettings": "Налаштування користувача"
+      "UserSettings": "Налаштування користувача",
+      "Logout": "Вихід"
     }
   },
   "Registration": {

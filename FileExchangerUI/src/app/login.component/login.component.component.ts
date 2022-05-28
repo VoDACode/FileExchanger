@@ -50,6 +50,7 @@ export class LoginComponent implements OnInit {
       },
       success: (data) => {
         this.router.navigate(['/my']);
+        document.location.reload();
       }
     })
   }

@@ -5,6 +5,11 @@ export class AuthService {
     public static get token(): string | undefined {
         return CookieService.get("auth_token");
     }
+    public static logout(): void {
+        CookieService.delete("auth_token");
+        CookieService.delete("u_key");
+    }
+
     public static isAuth(): boolean {
         let data = $.ajax({
             method: 'GET',

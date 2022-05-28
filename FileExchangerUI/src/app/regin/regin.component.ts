@@ -15,7 +15,7 @@ export class ReginComponent implements OnInit {
   constructor(private router: Router) { }
 
   ngOnInit(): void {
-    if(AuthService.isAuth()){
+    if (AuthService.isAuth()) {
       this.router.navigate(['/my']);
       return;
     }
@@ -23,7 +23,7 @@ export class ReginComponent implements OnInit {
       method: 'GET',
       url: '/api/ui/auth/accounts/enable',
       success: (data) => {
-        if(!data){ 
+        if (!data) {
           this.router.navigate(['/']);
         }
       }
@@ -32,21 +32,21 @@ export class ReginComponent implements OnInit {
       method: 'GET',
       url: '/api/ui/auth/accounts/enable-registration',
       success: (data) => {
-        if(!data)
+        if (!data)
           this.router.navigate(['/']);
       }
     });
   }
   onRegister(): void {
-   $.ajax({
-     method: 'POST',
-     url: `/api/auth/regin?e=${this.email}&p=${this.password}&n=${this.username}`,
-     success: (data) => {
-      this.router.navigate(['/confirm']);
-     },
-     error: (data) => {
-      alert(data.responseText);
-     }
-   }) 
+    $.ajax({
+      method: 'POST',
+      url: `/api/auth/regin?e=${this.email}&p=${this.password}&n=${this.username}`,
+      success: (data) => {
+        this.router.navigate(['/confirm']);
+      },
+      error: (data) => {
+        alert(data.responseText);
+      }
+    })
   }
 }
