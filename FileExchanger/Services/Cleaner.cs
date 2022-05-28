@@ -14,8 +14,12 @@ namespace FileExchanger.Services
             long nT = DateTime.Now.Ticks;
             var users = db.Users.ToList().Where(p => p.LastActive.Ticks + TimeSpan.FromDays(30).Ticks <= nT);
             db.ExchangeFiles.ToList();
+            if(Config.Instance.Services.FileExchanger.UseAuth)
+                db.AuthClients.ToList();
             foreach (var user in users)
             {
+                if (db.AuthClients.Any(p => p.ExchangerUser == user))
+                    continue;
                 var userFiles = db.UserFiles.Where(p => p.User == user);
                 var files = userFiles.Select(p => p.File);
                 db.UserFiles.RemoveRange(userFiles);
@@ -49,8 +53,8 @@ namespace FileExchanger.Services
                         db.UserInWorkingGroups.Remove(group);
                     }
                 }
+                db.Users.Remove(user);
             }
-            db.Users.RemoveRange(users);
             db.SaveChanges();
         }
 
