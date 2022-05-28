@@ -3,9 +3,9 @@ import * as $ from 'jquery';
 import {UserModel} from "../../models/UserModel";
 import {Alert} from "../../models/Alert";
 import { MdbModalRef, MdbModalService } from "mdb-angular-ui-kit/modal";
-import {ModalJoinInfo} from "../modals/modal/modal.join-info";
+import {ModalJoinInfo} from "../modals/join-info/modal.join-info";
 import {TranslateService} from "@ngx-translate/core";
-import {ModalUserList} from "../modals/modal/modal.user.list";
+import {ModalUserList} from "../modals/user.list/modal.user.list";
 import {CookieService} from "ngx-cookie-service";
 import { AuthService } from "src/services/auth";
 

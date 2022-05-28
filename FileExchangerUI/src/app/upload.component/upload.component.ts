@@ -5,8 +5,8 @@ import { document } from "ngx-bootstrap/utils";
 import { ConvertHelper } from "../../helpers/ConvertHelper";
 import { Alert } from "src/models/Alert";
 import { MdbModalRef, MdbModalService } from "mdb-angular-ui-kit/modal";
-import { ModalJoinInfo } from "../modals/modal/modal.join-info";
-import { ModalWorkingGroup } from "../modals/modal/modal.working-group";
+import { ModalJoinInfo } from "../modals/join-info/modal.join-info";
+import { ModalWorkingGroup } from "../modals/working-group/modal.working-group";
 import { TranslateService } from "@ngx-translate/core";
 import { Md5 } from 'ts-md5/dist/md5';
 import * as CryptoJS from 'crypto-js';
@@ -32,7 +32,7 @@ export class UploadComponent {
   public downloadPath: string = "";
   public saveTimePatterns: SaveTimePattern[] = [];
   public GetSavePatternUnit(item : SaveTimePattern): string{
-    return this.translateService.instant(`Upload.SaveTime.${item.unit}`);
+    return this.translateService.instant(`FileExchanger.Upload.SaveTime.${item.unit}`);
   }
   public UploadProgress(): number {
     return document.UploadProgress;
@@ -167,7 +167,10 @@ export class UploadComponent {
     let res = $.ajax({
       url: url,
       async: false,
-      method: 'GET'
+      method: 'GET',
+      headers: {
+        Authorization: 'Bearer ' + AuthService.token
+      }
     });
     if (res.status !== 200) {
       this.alerts.push({

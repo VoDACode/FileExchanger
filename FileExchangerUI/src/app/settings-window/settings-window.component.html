@@ -1,5 +1,5 @@
 <div>
-    <span (click)="open()" class="sb">Settings</span>
+    <span (click)="open()" class="sb">{{"SettingsWindow.Title" | translate}}</span>
 </div>
 <div *ngIf="isOpened">
     <div class="content">
@@ -11,10 +11,10 @@
                 <span [routerLink]="['/my/e']">File exchanger</span>
             </div>
             <div class="item" *ngIf="isAdmin">
-                <span [routerLink]="['/config']">Edit config</span>
+                <span [routerLink]="['/config']">{{"SettingsWindow.Items.EditConfig" | translate}}</span>
             </div>
             <div class="item">
-                <span [routerLink]="['/my/user']">User settings</span>
+                <span [routerLink]="['/my/user']">{{"SettingsWindow.Items.UserSettings" | translate}}</span>
             </div>
         </div>
     </div>

@@ -1,81 +1,80 @@
 {
-  "Upload": {
-    "Password": "Password",
-    "MaxCountDownload": {
-      "Title": "Max count download",
-      "Unlimited": "Unlimited"
-    },
-    "SaveTime": {
-      "Title": "Save time",
-      "D": "d",
-      "H": "h",
-      "M": "m",
-      "S": "s"
-    },
-    "SelectFile": "Select file",
-    "Upload": "Upload"
-  },
-  "GroupSettings": {
-    "Title": "Group settings",
-    "Key": "Key",
-    "SessionName": "Session name",
-    "Buttons": {
-      "ViewJoinInfo": "Join info",
-      "UserList": "User list",
-      "Leave": {
-        "Leave": "Leave",
-        "Remove": "Remove"
+  "FileExchanger": {
+    "Upload": {
+      "Password": "Password",
+      "MaxCountDownload": {
+        "Title": "Max count download",
+        "Unlimited": "Unlimited"
       },
-      "Join": "Join",
-      "Create": "Create group"
+      "SaveTime": {
+        "Title": "Save time",
+        "D": "d",
+        "H": "h",
+        "M": "m",
+        "S": "s"
+      },
+      "SelectFile": "Select file",
+      "Upload": "Upload"
     },
-    "ModelJoinLink": {
-      "Title": "Join link",
-      "Copy": "Copy",
-      "Close": "Close"
+    "FileList": {
+      "Name": "Name",
+      "Size": "Size",
+      "UploadDate": "Upload date",
+      "DownloadCount": "Download count",
+      "RemovalTime": "Removal time",
+      "Link": "Link",
+      "Delete": "Delete",
+      "Download": "Download",
+      "CopyLink": "Copy link"
     },
-    "ModelUserList": {
-      "Title": "User list",
-      "Close": "Close",
-      "Table": {
-        "Titles": {
-          "SessionName": "Session name",
-          "JoinDate": "Join date",
-          "LastActive": "Last active",
-          "AddUsers": "Add users",
-          "Settings": "Settings"
+    "GroupSettings": {
+      "Title": "Group settings",
+      "Key": "Key",
+      "SessionName": "Session name",
+      "Buttons": {
+        "ViewJoinInfo": "Join info",
+        "UserList": "User list",
+        "Leave": {
+          "Leave": "Leave",
+          "Remove": "Remove"
         },
-        "Buttons": {
-          "AddUser": "Add users",
-          "Kik": "Kik"
+        "Join": "Join",
+        "Create": "Create group"
+      },
+      "ModelJoinLink": {
+        "Title": "Join link",
+        "Copy": "Copy",
+        "Close": "Close"
+      },
+      "ModelUserList": {
+        "Title": "User list",
+        "Close": "Close",
+        "Table": {
+          "Titles": {
+            "SessionName": "Session name",
+            "JoinDate": "Join date",
+            "LastActive": "Last active",
+            "AddUsers": "Add users",
+            "Settings": "Settings"
+          },
+          "Buttons": {
+            "AddUser": "Add users",
+            "Kik": "Kik"
+          }
         }
+      },
+      "Alerts": {
+        "Member": "You are a member of the working group!",
+        "Leave": ""
       }
     },
-    "Alerts": {
-      "Member": "You are a member of the working group!",
-      "Leave": ""
+    "Download": {
+      "Download": "Download",
+      "Thanks": "Thanks for using \uD83D\uDE0A"
+    },
+    "Warnings": {
+      "Password": "Encryption and decryption of the file is performed on the client side, ie the larger the file, the longer the encryption and decryption!"
     }
-  },
-  "FileList": {
-    "Name": "Name",
-    "Size": "Size",
-    "UploadDate": "Upload date",
-    "DownloadCount": "Download count",
-    "RemovalTime": "Removal time",
-    "Link": "Link",
-    "Delete": "Delete",
-    "Download": "Download",
-    "CopyLink": "Copy link"
-  },
-  "Footer": {
-    "Donation": "Donation"
-  },
-  "Download": {
-    "Download": "Download",
-    "Thanks": "Thanks for using \uD83D\uDE0A"
-  },
-  "Warnings": {
-    "Password": "Encryption and decryption of the file is performed on the client side, ie the larger the file, the longer the encryption and decryption!"
   },
   "FileStorage": {
     "ObjectProperties": {
@@ -90,6 +89,56 @@
       "Title": "Open file",
       "Close": "Close",
       "Download": "Download"
+    },
+    "UserSettings": {
+      "Name": "Name",
+      "Email": "Email",
+      "OldPassword": "Old password",
+      "NewPassword": "New password",
+      "ConnectYourTelegram": "Connect your Telegram",
+      "DeleteYourTelegram": "Delete your Telegram"
     }
+  },
+  "Config":{
+    "Parameter":{
+      "Add": "Add"
+    },
+    "Editor": {
+      "SaveChanges": "Save changes",
+      "Save": "Save",
+      "Cancel": "Cancel"
+    }
+  },
+  "Footer": {
+    "Donation": "Donation"
+  },
+  "SettingsWindow":{
+    "Title": "Settings",
+    "Items":{
+      "EditConfig": "Edit config",
+      "UserSettings": "User settings"
+    }
+  },
+  "Registration": {
+    "Username": "Username",
+    "Email": "Email",
+    "Password": "Password",
+    "Registration": "Registration",
+    "Login": "Login"
+  },
+  "Login":{
+    "Email": "Email",
+    "Password": "Password",
+    "Login": "Login",
+    "Or": "Or",
+    "LoginTelegram": "Login via Telegram",
+    "Registration" : "Registration"
+  },
+  "LoginViaTelegram": {
+    "Email": "Email",
+    "Login": "Login",
+    "Or": "Or",
+    "Back": "Back",
+    "Waiting": "Waiting for Telegram answer..."
   }
 }

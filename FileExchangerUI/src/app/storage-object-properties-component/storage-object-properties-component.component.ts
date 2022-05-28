@@ -15,7 +15,7 @@ export class StorageObjectPropertiesComponentComponent implements AfterViewInit{
   size = 0;
   createDate = "";
   updateDate = "";
-  colSize = 4;
+  colSize = 5;
   public get sizeString(): string {
     return SizeHelper.toString(this.size);
   }

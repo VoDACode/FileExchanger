@@ -4,9 +4,9 @@
 
 <div class="d-grid main position-absolute">
   <div class="d-grid left-main">
-    <button type="button" class="btn btn-info open-group-menu" (click)="openGroupMenu()">{{ 'GroupSettings.Title' | translate }}</button>
+    <button type="button" class="btn btn-info open-group-menu" (click)="openGroupMenu()">{{ 'FileExchanger.GroupSettings.Title' | translate }}</button>
     <div id="upload">
-      <label class="form-label">{{ 'Upload.Password' | translate }}</label>
+      <label class="form-label">{{ 'FileExchanger.Upload.Password' | translate }}</label>
       <div class="input-group mb-3">
         <div class="input-group-text">
           <input class="form-check-input mt-0" type="checkbox" (click)="onSelectPassword($event)" [(ngModel)]="isLimited">
@@ -15,34 +15,29 @@
       </div>
       <div class="input-group mb-3">
           <select class="form-select" aria-label="Default select example" [(ngModel)]="MaxCountDownload">
-            <option selected value="0">{{ 'Upload.MaxCountDownload.Title' | translate }}</option>
+            <option selected value="0">{{ 'FileExchanger.Upload.MaxCountDownload.Title' | translate }}</option>
             <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
             <option value="5">5</option>
             <option value="10">10</option>
-            <option value="-1">{{ 'Upload.MaxCountDownload.Unlimited' | translate }}</option>
+            <option value="-1">{{ 'FileExchanger.Upload.MaxCountDownload.Unlimited' | translate }}</option>
           </select>
       </div>
       <div class="input-group mb-3">
         <div class="input-group mb-3">
           <select class="form-select" id="saveTime" aria-label="Save time" [(ngModel)]="SaveTime">
-            <option selected value="0">{{ 'Upload.SaveTime.Title' | translate }}</option>
-            <option value="-1">
-              <label>Castom:</label>
-              <input type="number" value="0"><label> days </label>
-              <input type="time">
-            </option>
+            <option selected value="0">{{ 'FileExchanger.Upload.SaveTime.Title' | translate }}</option>
             <option *ngFor="let item of saveTimePatterns" [value]="item.toSecond()">{{item.value}}{{GetSavePatternUnit(item)}}</option>
           </select>
         </div>
       </div>
       <div>
-        <label for="selectFile" class="form-label">{{ 'Upload.SelectFile' | translate }}</label>
+        <label for="selectFile" class="form-label">{{ 'FileExchanger.Upload.SelectFile' | translate }}</label>
         <input class="form-control form-control-lg" id="selectFile"  type="file">
       </div>
       <div>
-        <button type="button" class="btn btn-primary" (click)="onUpload()">{{ 'Upload.Upload' | translate }}</button>
+        <button type="button" class="btn btn-primary" (click)="onUpload()">{{ 'FileExchanger.Upload.Upload' | translate }}</button>
       </div>
       <div>
         <ngb-progressbar class="uploadBar" [max]="100" [value]="UploadProgress()" type="info">{{UploadProgress()}}%</ngb-progressbar>
@@ -55,12 +50,12 @@
       <thead>
       <tr>
         <th scope="col">#</th>
-        <th scope="col">{{ 'FileList.Name' | translate }}</th>
-        <th scope="col">{{ 'FileList.Size' | translate }}</th>
-        <th scope="col">{{ 'FileList.UploadDate' | translate }}</th>
-        <th scope="col">{{ 'FileList.DownloadCount' | translate }}</th>
-        <th scope="col">{{ 'FileList.RemovalTime' | translate }}</th>
-        <th scope="col">{{ 'FileList.Link' | translate }}</th>
+        <th scope="col">{{ 'FileExchanger.FileList.Name' | translate }}</th>
+        <th scope="col">{{ 'FileExchanger.FileList.Size' | translate }}</th>
+        <th scope="col">{{ 'FileExchanger.FileList.UploadDate' | translate }}</th>
+        <th scope="col">{{ 'FileExchanger.FileList.DownloadCount' | translate }}</th>
+        <th scope="col">{{ 'FileExchanger.FileList.RemovalTime' | translate }}</th>
+        <th scope="col">{{ 'FileExchanger.FileList.Link' | translate }}</th>
         <th scope="col"></th>
         <th scope="col"></th>
       </tr>
@@ -73,13 +68,13 @@
         <td title="{{obj.createDate}}">{{getTime(obj.createDate)}}</td>
         <td>{{obj.downloadCount}}/{{obj.maxDownloadCount}}</td>
         <td>{{viewDeleteTime(obj)}}</td>
-        <td (click)="onCopyLink(obj)" style="cursor: pointer">{{ 'FileList.CopyLink' | translate }}</td>
+        <td (click)="onCopyLink(obj)" style="cursor: pointer">{{ 'FileExchanger.FileList.CopyLink' | translate }}</td>
         <td><button type="button" class="btn btn-dark" (click)="onDelete(obj)">{{ 'FileList.Delete' | translate }}</button></td>
         <td>
           <form *ngIf="obj.accessMode != '2'" method="get" id="downloadForm_{{obj.id}}" action="/api/files/download/{{obj.downloadKey}}/{{obj.name}}">
-            <button type="button" class="btn btn-info" (click)="onDownload(obj)">{{ 'FileList.Download' | translate }}</button>
+            <button type="button" class="btn btn-info" (click)="onDownload(obj)">{{ 'FileExchanger.FileList.Download' | translate }}</button>
           </form>
-            <button *ngIf="obj.accessMode == '2'" type="button" class="btn btn-info" [routerLink]="['d',obj.downloadKey, obj.name]">{{ 'FileList.Download' | translate }}</button>
+            <button *ngIf="obj.accessMode == '2'" type="button" class="btn btn-info" [routerLink]="['d',obj.downloadKey, obj.name]">{{ 'FileExchanger.FileList.Download' | translate }}</button>
         </td>
       </tr>
       </tbody>

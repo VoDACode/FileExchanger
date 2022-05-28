@@ -1,81 +1,80 @@
 {
-  "Upload": {
-    "Password": "Пароль",
-    "MaxCountDownload": {
-      "Title": "Макс. кількість завантажень",
-      "Unlimited": "Безмежна"
-    },
-    "SaveTime": {
-      "Title": "Час зберігання",
-      "D": "дн.",
-      "H": "год.",
-      "M": "хв.",
-      "S": "сек."
-    },
-    "SelectFile": "Вибір файла",
-    "Upload": "Завантажити"
-  },
-  "GroupSettings": {
-    "Title": "Налаштування груп",
-    "Key": "Ключ",
-    "SessionName": "Назва сесії",
-    "Buttons": {
-      "ViewJoinInfo": "Інформація для приєднання",
-      "UserList": "Список користувачів",
-      "Leave": {
-        "Leave": "Вийти з групи",
-        "Remove": "Видалити групу"
+  "FileExchanger":{
+    "Upload": {
+      "Password": "Пароль",
+      "MaxCountDownload": {
+        "Title": "Макс. кількість завантажень",
+        "Unlimited": "Безмежна"
       },
-      "Join": "Приєднатися",
-      "Create": "Створити групу"
+      "SaveTime": {
+        "Title": "Час зберігання",
+        "D": "дн.",
+        "H": "год.",
+        "M": "хв.",
+        "S": "сек."
+      },
+      "SelectFile": "Вибір файла",
+      "Upload": "Завантажити"
     },
-    "ModelJoinLink": {
-      "Title": "Інформація для приєднання",
-      "Copy": "Клпіювати",
-      "Close": "Закрити"
-    },
-    "ModelUserList": {
-      "Title": "Список користувачів",
-      "Close": "Закрити",
-      "Table": {
-        "Titles": {
-          "SessionName": "Назва сесії",
-          "JoinDate": "Дата приєднання",
-          "LastActive": "Остання активність",
-          "AddUsers": "Додавати користувачів",
-          "Settings": "Налаштування"
+    "GroupSettings": {
+      "Title": "Налаштування груп",
+      "Key": "Ключ",
+      "SessionName": "Назва сесії",
+      "Buttons": {
+        "ViewJoinInfo": "Інформація для приєднання",
+        "UserList": "Список користувачів",
+        "Leave": {
+          "Leave": "Вийти з групи",
+          "Remove": "Видалити групу"
         },
-        "Buttons": {
-          "AddUser": "Додавати користувачів",
-          "Kik": "Від'єднати"
+        "Join": "Приєднатися",
+        "Create": "Створити групу"
+      },
+      "ModelJoinLink": {
+        "Title": "Інформація для приєднання",
+        "Copy": "Клпіювати",
+        "Close": "Закрити"
+      },
+      "ModelUserList": {
+        "Title": "Список користувачів",
+        "Close": "Закрити",
+        "Table": {
+          "Titles": {
+            "SessionName": "Назва сесії",
+            "JoinDate": "Дата приєднання",
+            "LastActive": "Остання активність",
+            "AddUsers": "Додавати користувачів",
+            "Settings": "Налаштування"
+          },
+          "Buttons": {
+            "AddUser": "Додавати користувачів",
+            "Kik": "Від'єднати"
+          }
         }
+      },
+      "Alerts": {
+        "Member": "Ви є членом групи!",
+        "Leave": ""
       }
     },
-    "Alerts": {
-      "Member": "Ви є членом групи!",
-      "Leave": ""
+    "FileList": {
+      "Name": "Им'я",
+      "Size": "Розмір",
+      "UploadDate": "Дата завантаження",
+      "DownloadCount": "Кількість завантажень",
+      "RemovalTime": "Дата видалення",
+      "Link": "Посилання",
+      "Delete": "Видалити",
+      "Download": "Завантажити",
+      "CopyLink": "Копіювати посилання"
+    },
+    "Download": {
+      "Download": "Завантажити",
+      "Thanks": "Дякую за використання \uD83D\uDE0A"
+    },
+    "Warnings": {
+      "Password": "Шифрування та дешифрування файлу виконується на стороні клієнта, тобто чим більше файл, тим довше шифрування та розшифрування!"
     }
-  },
-  "FileList": {
-    "Name": "Им'я",
-    "Size": "Розмір",
-    "UploadDate": "Дата завантаження",
-    "DownloadCount": "Кількість завантажень",
-    "RemovalTime": "Дата видалення",
-    "Link": "Посилання",
-    "Delete": "Видалити",
-    "Download": "Завантажити",
-    "CopyLink": "Копіювати посилання"
-  },
-  "Footer": {
-    "Donation": "Пожертвування"
-  },
-  "Download": {
-    "Download": "Завантажити",
-    "Thanks": "Дякую за використання \uD83D\uDE0A"
-  },
-  "Warnings": {
-    "Password": "Шифрування та дешифрування файлу виконується на стороні клієнта, тобто чим більше файл, тим довше шифрування та розшифрування!"
   },
   "FileStorage": {
     "ObjectProperties": {
@@ -90,6 +89,56 @@
       "Title": "Файл",
       "Close": "Закрити",
       "Download": "Завантажити"
+    },
+    "UserSettings": {
+      "Name": "Ім'я користувача",
+      "Email": "Електронна пошта",
+      "OldPassword": "Старий пароль",
+      "NewPassword": "Новий пароль",
+      "ConnectYourTelegram": "Додати Ваш Telegram",
+      "DeleteYourTelegram": "Від'єднати Ваш Telegram"
     }
+  },
+  "Config":{
+    "Parameter":{
+      "Add": "Додати"
+    },
+    "Editor": {
+      "SaveChanges": "Зберегти зміни",
+      "Save": "Так",
+      "Cancel": "Ні"
+    }
+  },
+  "Footer": {
+    "Donation": "Пожертвування"
+  },
+  "SettingsWindow":{
+    "Title": "Налаштування",
+    "Items":{
+      "EditConfig": "Конфігурування",
+      "UserSettings": "Налаштування користувача"
+    }
+  },
+  "Registration": {
+    "Username": "Ім'я користувача",
+    "Email": "Електронна пошта",
+    "Password": "Пароль",
+    "Registration": "Зареєструватись",
+    "Login": "Увійти"
+  },
+  "Login":{
+    "Email": "Електронна пошта",
+    "Password": "Пароль",
+    "Login": "Увійти",
+    "Or": "Або",
+    "LoginTelegram": "Увійти чарез Telegram",
+    "Registration" : "Зареєструватись"
+  },
+  "LoginViaTelegram": {
+    "Email": "Електронна пошта",
+    "Login": "Увійти",
+    "Or": "Або",
+    "Back": "Назад",
+    "Waiting": "Очикування відповіді від Telegram..."
   }
 }

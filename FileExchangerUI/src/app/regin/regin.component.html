@@ -1,22 +1,22 @@
 <div>
     <div class="input-group mb-3">
-        <span class="input-group-text" id="inputGroup-sizing-default">Username</span>
+        <span class="input-group-text" id="inputGroup-sizing-default">{{"Registration.Username" | translate}}</span>
         <input type="text" class="form-control" aria-label="Sizing example input"
             aria-describedby="inputGroup-sizing-default" [(ngModel)]="username">
     </div>
     <div class="input-group mb-3">
-        <span class="input-group-text" id="inputGroup-sizing-default">Email</span>
+        <span class="input-group-text" id="inputGroup-sizing-default">{{"Registration.Email" | translate}}</span>
         <input type="email" class="form-control" aria-label="Sizing example input"
             aria-describedby="inputGroup-sizing-default" [(ngModel)]="email">
     </div>
     <div class="input-group mb-3">
-        <span class="input-group-text" id="inputGroup-sizing-default">Password</span>
+        <span class="input-group-text" id="inputGroup-sizing-default">{{"Registration.Password" | translate}}</span>
         <input type="password" class="form-control" aria-label="Sizing example input"
             aria-describedby="inputGroup-sizing-default" [(ngModel)]="password">
     </div>
-    <button type="button" class="horizontal-center btn btn-warning big" (click)="onRegister()">Reistration</button>
+    <button type="button" class="horizontal-center btn btn-warning big" (click)="onRegister()">{{"Registration.Registration" | translate}}</button>
 </div>
 <hr>
 <div>
-    <button type="button" class="horizontal-center btn btn-primary big" [routerLink]="['/auth/login']">Login</button>
+    <button type="button" class="horizontal-center btn btn-primary big" [routerLink]="['/auth/login']">{{"Registration.Login" | translate}}</button>
 </div>

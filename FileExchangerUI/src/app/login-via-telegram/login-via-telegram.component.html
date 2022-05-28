@@ -1,19 +1,19 @@
 <div *ngIf="isNone">
     <div class="input-group mb-3">
-        <span class="input-group-text" id="inputGroup-sizing-default">Email</span>
+        <span class="input-group-text" id="inputGroup-sizing-default">{{"LoginViaTelegram.Email" | translate}}</span>
         <input type="email" class="form-control" aria-label="Sizing example input"
             aria-describedby="inputGroup-sizing-default" [(ngModel)]="email">
     </div>
-    <button type="button" class="horizontal-center btn btn-primary big" (click)="onLogin()">Login</button>
+    <button type="button" class="horizontal-center btn btn-primary big" (click)="onLogin()">{{"LoginViaTelegram.Login" | translate}}</button>
     <div class="or-text">
-        <span class="or">OR</span>
+        <span class="or">{{"LoginViaTelegram.Or" | translate}}</span>
     </div>
     <div>
-        <button type="button" class="horizontal-center btn btn-warning big" [routerLink]="['/auth']">Back</button>
+        <button type="button" class="horizontal-center btn btn-warning big" [routerLink]="['/auth']">{{"LoginViaTelegram.Back" | translate}}</button>
     </div>
 </div>
 <div *ngIf="isWaiting">
-    <p>Waiting for Telegram answer...</p>
+    <p>{{"LoginViaTelegram.Waiting" | translate}}</p>
 </div>
 <div *ngIf="isError">
     <p>{{error}}</p>

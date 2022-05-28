@@ -1,23 +1,23 @@
 <div class="content">
     <div>
-        <label for="user-name" class="form-label">Name</label>
+        <label for="user-name" class="form-label">{{"FileStorage.UserSettings.Name" | translate}}</label>
         <input class="form-control form-control-lg" id="user-name"  type="text">
     </div>
     <div>
-        <label for="user-email" class="form-label">Email</label>
+        <label for="user-email" class="form-label">{{"FileStorage.UserSettings.Email" | translate}}</label>
         <input class="form-control form-control-lg" id="user-email" type="email">
     </div>
     <div>
-        <label for="user-old-password" class="form-label">Old password</label>
+        <label for="user-old-password" class="form-label">{{"FileStorage.UserSettings.OldPassword" | translate}}</label>
         <input class="form-control form-control-lg" id="user-old-password" type="password">
     </div>
     <div>
-        <label for="user-new-password" class="form-label">New password</label>
+        <label for="user-new-password" class="form-label">{{"FileStorage.UserSettings.NewPassword" | translate}}</label>
         <input class="form-control form-control-lg" id="user-new-password" type="password">
     </div>
     <hr>
     <div>
-        <button type="button" class="btn btn-primary" *ngIf="createdTelegram" (click)="openTg()">Connect your Telegram!</button>
-        <button type="button" class="btn btn-danger" *ngIf="!createdTelegram" (click)="deleteTelegram()">Delete your Telegram.</button>
+        <button type="button" class="btn btn-primary" *ngIf="createdTelegram" (click)="openTg()">{{"FileStorage.UserSettings.ConnectYourTelegram" | translate}}!</button>
+        <button type="button" class="btn btn-danger" *ngIf="!createdTelegram" (click)="deleteTelegram()">{{"FileStorage.UserSettings.DeleteYourTelegram" | translate}}.</button>
     </div>
 </div>

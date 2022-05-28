@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import * as $ from 'jquery'
 import { AuthService } from 'src/services/auth';
 
@@ -11,7 +12,7 @@ export class UserSettingsComponent implements OnInit, AfterViewInit{
 
   public createdTelegram = false;
 
-  constructor() { }
+  constructor(private translate: TranslateService) { }
 
   ngAfterViewInit(): void {
     $.ajax({

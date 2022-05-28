@@ -1,81 +1,80 @@
 {
-  "Upload": {
-    "Password": "Пароль",
-    "MaxCountDownload": {
-      "Title": "Макс. кол-во загрузок",
-      "Unlimited": "Неограничено"
-    },
-    "SaveTime": {
-      "Title": "Время сохранения",
-      "D": "дн.",
-      "H": "ч.",
-      "M": "мин.",
-      "S": "сек."
-    },
-    "SelectFile": "Выбор файла",
-    "Upload": "Загрузить"
-  },
-  "GroupSettings": {
-    "Title": "Настройки группы",
-    "Key": "Ключ",
-    "SessionName": "Название сассии",
-    "Buttons": {
-      "ViewJoinInfo": "Информация для присоединения",
-      "UserList": "Список пользователей",
-      "Leave": {
-        "Leave": "Покинуть группу",
-        "Remove": "Удалить группу"
+  "FileExchanger":{
+    "Upload": {
+      "Password": "Пароль",
+      "MaxCountDownload": {
+        "Title": "Макс. кол-во загрузок",
+        "Unlimited": "Неограничено"
       },
-      "Join": "Присоединиться",
-      "Create": "Создать группу"
+      "SaveTime": {
+        "Title": "Время сохранения",
+        "D": "дн.",
+        "H": "ч.",
+        "M": "мин.",
+        "S": "сек."
+      },
+      "SelectFile": "Выбор файла",
+      "Upload": "Загрузить"
     },
-    "ModelJoinLink": {
-      "Title": "Информация для присоединения",
-      "Copy": "Копировать",
-      "Close": "Закрыть"
-    },
-    "ModelUserList": {
-      "Title": "Список пользователей",
-      "Close": "Закрыть",
-      "Table": {
-        "Titles": {
-          "SessionName": "Название сессии",
-          "JoinDate": "Дата присоединения",
-          "LastActive": "Последняя активность",
-          "AddUsers": "Добавлять пользователей",
-          "Settings": "Настройки"
+    "GroupSettings": {
+      "Title": "Настройки группы",
+      "Key": "Ключ",
+      "SessionName": "Название сассии",
+      "Buttons": {
+        "ViewJoinInfo": "Информация для присоединения",
+        "UserList": "Список пользователей",
+        "Leave": {
+          "Leave": "Покинуть группу",
+          "Remove": "Удалить группу"
         },
-        "Buttons": {
-          "AddUser": "Вкл/Выкл",
-          "Kik": "Отсоединить"
+        "Join": "Присоединиться",
+        "Create": "Создать группу"
+      },
+      "ModelJoinLink": {
+        "Title": "Информация для присоединения",
+        "Copy": "Копировать",
+        "Close": "Закрыть"
+      },
+      "ModelUserList": {
+        "Title": "Список пользователей",
+        "Close": "Закрыть",
+        "Table": {
+          "Titles": {
+            "SessionName": "Название сессии",
+            "JoinDate": "Дата присоединения",
+            "LastActive": "Последняя активность",
+            "AddUsers": "Добавлять пользователей",
+            "Settings": "Настройки"
+          },
+          "Buttons": {
+            "AddUser": "Вкл/Выкл",
+            "Kik": "Отсоединить"
+          }
         }
+      },
+      "Alerts": {
+        "Member": "Вы участник группы!",
+        "Leave": ""
       }
     },
-    "Alerts": {
-      "Member": "Вы участник группы!",
-      "Leave": ""
+    "FileList": {
+      "Name": "Имя",
+      "Size": "Размер",
+      "UploadDate": "Дата загрузки",
+      "DownloadCount": "Кол-во скачиваний",
+      "RemovalTime": "Дата удаления",
+      "Link": "Ссылка",
+      "Delete": "Удалить",
+      "Download": "Скачать",
+      "CopyLink": "Копировать ссилку"
+    },
+    "Download": {
+      "Download": "Скачать",
+      "Thanks": "Спасибо за использование \uD83D\uDE0A"
+    },
+    "Warnings": {
+      "Password": "Шифрование и дешифрование файла выполняется на стороне клиента, т.е. чем больше файл, тем дольше шифрование и дешифрование!"
     }
-  },
-  "FileList": {
-    "Name": "Имя",
-    "Size": "Размер",
-    "UploadDate": "Дата загрузки",
-    "DownloadCount": "Кол-во скачиваний",
-    "RemovalTime": "Дата удаления",
-    "Link": "Ссылка",
-    "Delete": "Удалить",
-    "Download": "Скачать",
-    "CopyLink": "Копировать ссилку"
-  },
-  "Footer": {
-    "Donation": "Пожертвование"
-  },
-  "Download": {
-    "Download": "Скачать",
-    "Thanks": "Спасибо за использование \uD83D\uDE0A"
-  },
-  "Warnings": {
-    "Password": "Шифрование и дешифрование файла выполняется на стороне клиента, т.е. чем больше файл, тем дольше шифрование и дешифрование!"
   },
   "FileStorage": {
     "ObjectProperties": {
@@ -90,6 +89,56 @@
       "Title": "Файл",
       "Close": "Закрыть",
       "Download": "Загрузить"
+    },
+    "UserSettings": {
+      "Name": "Имя",
+      "Email": "Электронная почта",
+      "OldPassword": "Старый пароль",
+      "NewPassword": "Новый пароль",
+      "ConnectYourTelegram": "Подключить Ваш Telegram",
+      "DeleteYourTelegram": "Отключить Telegram"
     }
+  },
+  "Config":{
+    "Parameter":{
+      "Add": "Создать"
+    },
+    "Editor": {
+      "SaveChanges": "Сохранить изменения",
+      "Save": "Сохранить",
+      "Cancel": "Отмена"
+    }
+  },
+  "Footer": {
+    "Donation": "Пожертвование"
+  },
+  "SettingsWindow":{
+    "Title": "Настройки",
+    "Items":{
+      "EditConfig": "Конфигурирование",
+      "UserSettings": "Настройка пользователя"
+    }
+  },
+  "Registration": {
+    "Username": "Имя пользователя",
+    "Email": "Электронная почта",
+    "Password": "Пароль",
+    "Registration": "Регистрация",
+    "Login": "Вход"
+  },
+  "Login":{
+    "Email": "Электронная почта",
+    "Password": "Пароль",
+    "Login": "Вход",
+    "Or": "Или",
+    "LoginTelegram": "Войти чарез Telegram",
+    "Registration" : "Регистрация"
+  },
+  "LoginViaTelegram": {
+    "Email": "Электронная почта",
+    "Login": "Вход",
+    "Or": "Или",
+    "Back": "Назад",
+    "Waiting": "Ожидается ответ от Telegram..."
   }
 }

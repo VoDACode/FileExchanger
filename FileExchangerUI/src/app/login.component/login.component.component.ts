@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import * as $ from "jquery";
 import { CookieService } from 'ngx-cookie-service';
 
@@ -13,7 +14,7 @@ export class LoginComponent implements OnInit {
   password: string = "";
   isViewRegin = false;
   isViewTelegram = false;
-  constructor(private router: Router, private cookie: CookieService) { }
+  constructor(private router: Router, private cookie: CookieService, private translate: TranslateService) { }
   ngOnInit(): void {
     $.ajax({
       method: 'GET',

@@ -33,7 +33,7 @@
         <span>[</span>
         <span *ngIf="!show" (click)="setShow()" style="cursor: pointer;">...</span>
         <div>
-            <button type="button" class="btn btn-success" (click)="addNewObj()">Add</button>
+            <button type="button" class="btn btn-success" (click)="addNewObj()">{{"Config.Parameter.Add" | translate}}</button>
         </div>
         <div *ngIf="show" clss="item">
             <app-config-parameter *ngFor="let item of childrens" [childrens]="item.childrens"

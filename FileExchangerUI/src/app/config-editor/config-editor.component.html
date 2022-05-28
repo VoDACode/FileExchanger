@@ -4,10 +4,10 @@
 </div>
 <div *ngIf="isModified" class="save-panel center-horizontal">
     <div class="text-box">
-        <span class="center">Save changes?</span>
+        <span class="center">{{"Config.Editor.SaveChanges" | translate}}?</span>
     </div>
     <div class="button-group">
-        <button type="button" class="horizontal-center btn btn-success" (click)="saveChanges()">Save</button>
-        <button type="button" class="horizontal-center btn btn-danger" (click)="canselChanged()">Cancel</button>
+        <button type="button" class="horizontal-center btn btn-success" (click)="saveChanges()">{{"Config.Editor.Save" | translate}}</button>
+        <button type="button" class="horizontal-center btn btn-danger" (click)="canselChanged()">{{"Config.Editor.Cancel" | translate}}</button>
     </div>
 </div>

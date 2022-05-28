@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, EventEmitter, HostBinding, HostListener, Input, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from 'src/services/auth';
 import { UIServise } from 'src/services/ui';
 
@@ -20,7 +21,7 @@ export class SettingsWindowComponent implements OnInit, AfterViewInit {
     return UIServise.isEnabledExchanger;
   }
 
-  constructor() { }
+  constructor(private translateService: TranslateService) { }
   ngAfterViewInit(): void {
     //@ts-ignore
     document.onclickToBg = this.close.bind(this);
