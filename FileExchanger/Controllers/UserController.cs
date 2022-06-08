@@ -1,10 +1,12 @@
 ﻿using Core;
+using Core.Helpers;
 using Core.Models;
 using FileExchanger.Models;
 using FileExchanger.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +14,6 @@ using System.Threading.Tasks;
 
 namespace FileExchanger.Controllers
 {
-    [Authorize(Policy = "AuthExchanger")]
     [Route("api/user")]
     [ApiController]
     public class UserController : ControllerBase
@@ -20,12 +21,15 @@ namespace FileExchanger.Controllers
         private AuthClientModel? AuthClient => db.AuthClients.SingleOrDefault(p => p.Email == User.Identity.Name);
         private UserModel GetUser => db.Users.FirstOrDefault(p => p.Key == HttpContext.Request.Cookies["u_key"]);
         private readonly DbApp db;
-        public UserController(DbApp db)
+        private readonly IMemoryCache cache;
+        public UserController(DbApp db, IMemoryCache memoryCache)
         {
             this.db = db;
+            this.cache = memoryCache;
             Cleaner.ClearUsers(db);
         }
 
+        [Authorize(Policy = "AuthExchanger")]
         [HttpPost("create")]
         public IActionResult Create()
         {
@@ -62,6 +66,7 @@ namespace FileExchanger.Controllers
             return Ok(user);
         }
 
+        [Authorize(Policy = "AuthExchanger")]
         [HttpGet("detect")]
         public IActionResult Detect()
         {
@@ -70,22 +75,75 @@ namespace FileExchanger.Controllers
             return BadRequest("User not found!");
         }
 
+        [Authorize(Policy = "AuthExchanger")]
         [HttpGet("my")]
         public IActionResult GetMyInfo()
         {
             if (GetUser == null)
                 return Unauthorized("Are you not authorized!");
+            if(AuthClient == default)
+                return Ok(new
+                {
+                    id = GetUser.Id,
+                    registrationDate = GetUser.RegistrationDate
+                });
             return Ok(new
             {
                 id = GetUser.Id,
-                registrationDate = GetUser.RegistrationDate
+                registrationDate = GetUser.RegistrationDate,
+                authClient = new
+                {
+                    id = AuthClient.Id,
+                    username = AuthClient.Name,
+                    email = AuthClient.Email
+                }
             });
         }
-        
+
+        [Authorize]
         [HttpGet("is-admin")]
         public IActionResult GetIsAdmin()
         {
             return Ok(db.Admins.Any(p => p.AuthClient == AuthClient));
+        }
+
+        [Authorize]
+        [HttpPut("my")]
+        public void SetUser()
+        {
+            string email = Request.Headers["email"];
+            string username = Request.Headers["username"];
+            string oldPassword = Request.Headers["oldPassword"];
+            string newPassword = Request.Headers["newPassword"];
+            bool isSaveChanges = false;
+            if (!string.IsNullOrWhiteSpace(username) && username.Length >= 4 && username != AuthClient.Name)
+            {
+                AuthClient.Name = username;
+                isSaveChanges = true;
+                Response.StatusCode = StatusCodes.Status202Accepted;
+                Response.WriteAsync("Username");
+            }
+            if(!string.IsNullOrWhiteSpace(oldPassword) && !string.IsNullOrWhiteSpace(newPassword) && newPassword != oldPassword)
+            {
+                if(AuthClient.Password == PasswordHelper.GetHash(oldPassword))
+                {
+                    AuthClient.Password = PasswordHelper.GetHash(newPassword);
+                    isSaveChanges = true;
+                }
+                Response.StatusCode = StatusCodes.Status202Accepted;
+                Response.WriteAsync("\nPassword");
+            }
+            if (!string.IsNullOrWhiteSpace(email) && !db.AuthClients.Any(p => p.Email == email))
+            {
+                var key = "".RandomString(96);
+                cache.Set($"CONFIRM_NEW_EMAIL_{key}", $"{AuthClient.Id}|{email}", TimeSpan.FromMinutes(30));
+                var host = HttpContext.Request.Host;
+                EmailService.Send(AuthClient.Email, "Confirm new email!", $"https://{host.Host}:{host.Port}/api/c/n/e/{key}");
+                Response.StatusCode = StatusCodes.Status200OK;
+                Response.WriteAsync("\nEmail");
+            }
+            if(isSaveChanges)
+                db.SaveChanges();
         }
     }
 }

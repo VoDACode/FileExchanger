@@ -72,7 +72,8 @@ const appRoutes: Routes = [
         {path: ':key', component: ConfigEditorComponent}
       ]},
       {path: 'c', children: [
-        {path: 'telegram', component: ConfirmTelegramComponent}
+        {path: 'telegram', component: ConfirmTelegramComponent},
+        {path: 'email', component: ConfirmEmailComponent}
       ]}
     ]
   }

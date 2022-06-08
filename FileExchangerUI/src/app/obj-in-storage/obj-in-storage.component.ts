@@ -55,6 +55,8 @@ export class ObjInStorageComponent {
   }
 
   open(): void {
+    if(this.isRenamed)
+      return;
     if(this.type === 'FOLDER' && this.key != '#new_folder' && !this.isRenamed){
       this.router.navigate(['/my/s', this.key]);
     }

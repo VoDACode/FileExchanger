@@ -1,0 +1,9 @@
+.box h1,
+.box h3{
+    text-align: center;
+}
+.center-horizontal{
+    left: 10%!important;
+    right: 10%!important;
+    transform: none !important;
+}

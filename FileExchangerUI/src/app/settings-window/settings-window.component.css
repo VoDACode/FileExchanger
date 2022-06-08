@@ -12,6 +12,8 @@
     position:absolute;
     right:50px;
     top:0;
+    height: 32px;
+    width: 32px;
 }
 .content{
     position: absolute;

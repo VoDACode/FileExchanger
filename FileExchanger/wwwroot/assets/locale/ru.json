@@ -1,5 +1,5 @@
 {
-  "FileExchanger":{
+  "FileExchanger": {
     "Upload": {
       "Password": "Пароль",
       "MaxCountDownload": {
@@ -96,11 +96,12 @@
       "OldPassword": "Старый пароль",
       "NewPassword": "Новый пароль",
       "ConnectYourTelegram": "Подключить Ваш Telegram",
-      "DeleteYourTelegram": "Отключить Telegram"
+      "DeleteYourTelegram": "Отключить Telegram",
+      "SaveChanges": "Сохранить"
     }
   },
-  "Config":{
-    "Parameter":{
+  "Config": {
+    "Parameter": {
       "Add": "Создать"
     },
     "Editor": {
@@ -112,9 +113,9 @@
   "Footer": {
     "Donation": "Пожертвование"
   },
-  "SettingsWindow":{
+  "SettingsWindow": {
     "Title": "Настройки",
-    "Items":{
+    "Items": {
       "EditConfig": "Конфигурирование",
       "UserSettings": "Настройка пользователя",
       "Logout": "Выход"
@@ -127,13 +128,13 @@
     "Registration": "Регистрация",
     "Login": "Вход"
   },
-  "Login":{
+  "Login": {
     "Email": "Электронная почта",
     "Password": "Пароль",
     "Login": "Вход",
     "Or": "Или",
     "LoginTelegram": "Войти чарез Telegram",
-    "Registration" : "Регистрация"
+    "Registration": "Регистрация"
   },
   "LoginViaTelegram": {
     "Email": "Электронная почта",
@@ -141,5 +142,9 @@
     "Or": "Или",
     "Back": "Назад",
     "Waiting": "Ожидается ответ от Telegram..."
+  },
+  "ConfirmEmail": {
+    "Paragraph1": "Для продолжения, пожалуйста, подтвердите свой адрес электронной почты!",
+    "Paragraph2": "Письмо для подтверждения было отправлено Вам на электронный ящик, ищите во \"Входящие\" или \"Спам\"."
   }
 }

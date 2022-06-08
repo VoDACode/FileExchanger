@@ -35,9 +35,10 @@ export class SettingsWindowComponent implements OnInit, AfterViewInit {
   }
 
   open(): void {
-    this.isOpened = true;
-    //@ts-ignore
-    document.showBg();
+    this.isOpened = !this.isOpened;
+    if (this.isOpened)
+      //@ts-ignore
+      document.showBg();
   }
 
   close(): void {

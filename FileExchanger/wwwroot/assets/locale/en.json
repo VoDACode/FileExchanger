@@ -96,7 +96,8 @@
       "OldPassword": "Old password",
       "NewPassword": "New password",
       "ConnectYourTelegram": "Connect your Telegram",
-      "DeleteYourTelegram": "Delete your Telegram"
+      "DeleteYourTelegram": "Delete your Telegram",
+      "SaveChanges":"Save changes"
     }
   },
   "Config":{
@@ -141,5 +142,9 @@
     "Or": "Or",
     "Back": "Back",
     "Waiting": "Waiting for Telegram answer..."
+  },
+  "ConfirmEmail":{
+    "Paragraph1":"To continue, please confirm your email address!",
+    "Paragraph2":"A confirmation email has been sent to your e-mail address, look for \"Inbox\" or \"Spam\"."
   }
 }

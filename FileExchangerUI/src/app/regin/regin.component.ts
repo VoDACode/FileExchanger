@@ -40,9 +40,15 @@ export class ReginComponent implements OnInit {
   onRegister(): void {
     $.ajax({
       method: 'POST',
-      url: `/api/auth/regin?e=${this.email}&p=${this.password}&n=${this.username}`,
+      url: `/api/auth/regin`,
+      contentType: 'text',
+      data: this.password,
+      headers:{
+        Email: this.email,
+        Username: this.username
+      },
       success: (data) => {
-        this.router.navigate(['/confirm']);
+        this.router.navigate(['/c/email']);
       },
       error: (data) => {
         alert(data.responseText);

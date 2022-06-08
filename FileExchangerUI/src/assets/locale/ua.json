@@ -96,7 +96,8 @@
       "OldPassword": "Старий пароль",
       "NewPassword": "Новий пароль",
       "ConnectYourTelegram": "Додати Ваш Telegram",
-      "DeleteYourTelegram": "Від'єднати Ваш Telegram"
+      "DeleteYourTelegram": "Від'єднати Ваш Telegram",
+      "SaveChanges":"Зберегти"
     }
   },
   "Config":{
@@ -141,5 +142,9 @@
     "Or": "Або",
     "Back": "Назад",
     "Waiting": "Очикування відповіді від Telegram..."
+  },
+  "ConfirmEmail":{
+    "Paragraph1":"Для продовження, будь ласка, підтвердіть свою електронну адресу!",
+    "Paragraph2":"Лист для підтвердження був відправлений Вам на електронну скриньку, шукайте  у \"Вхідні\" аба \"Спам\"."
   }
 }

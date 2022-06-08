@@ -48,6 +48,26 @@ namespace FileExchanger.Controllers
             return Redirect("/");
         }
 
+        [HttpGet("n/e/{key}")]
+        public IActionResult ConfirmNewEmail(string key)
+        {
+            string data = string.Empty;
+            if (!cache.TryGetValue($"CONFIRM_NEW_EMAIL_{key}", out data))
+                return Redirect("/");
+            cache.Remove($"CONFIRM_NEW_EMAIL_{key}");
+            int id = 0;
+            string email = "";
+            {
+                var tmp = data.Split('|');
+                id = int.Parse(tmp[0]);
+                email = tmp[1];
+            }
+            AuthClientModel user = db.AuthClients.SingleOrDefault(p => p.Id == id);
+            user.Email = email;
+            db.SaveChanges();
+            return Redirect("/");
+        }
+
         [Authorize]
         [HttpGet("telegram")]
         public IActionResult ConfirmTelegram(string code)

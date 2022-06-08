@@ -15,6 +15,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Core;
 using Core.Models;
+using System.IO;
 
 namespace FileExchanger.Controllers
 {
@@ -62,8 +63,15 @@ namespace FileExchanger.Controllers
             Console.WriteLine(JwtHelper.Verify(token));
         }
         [HttpPost("regin")]
-        public void Regin(string e, string p, string n)
+        public void Regin()
         {
+            string e = HttpContext.Request.Headers["Email"];
+            string n = HttpContext.Request.Headers["Username"];
+            string p = null;
+            using (var reader = new StreamReader(Request.Body))
+            {
+                p = reader.ReadToEndAsync().Result;
+            }
             if (string.IsNullOrWhiteSpace(e) || string.IsNullOrWhiteSpace(p) || string.IsNullOrWhiteSpace(n) || n.Length < 4)
             {
                 Response.StatusCode = StatusCodes.Status400BadRequest;

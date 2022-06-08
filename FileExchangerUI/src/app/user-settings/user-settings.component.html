@@ -1,19 +1,22 @@
 <div class="content">
     <div>
         <label for="user-name" class="form-label">{{"FileStorage.UserSettings.Name" | translate}}</label>
-        <input class="form-control form-control-lg" id="user-name"  type="text">
+        <input class="form-control form-control-lg" id="user-name"  type="text" [(ngModel)]="username">
     </div>
     <div>
         <label for="user-email" class="form-label">{{"FileStorage.UserSettings.Email" | translate}}</label>
-        <input class="form-control form-control-lg" id="user-email" type="email">
+        <input class="form-control form-control-lg" id="user-email" type="email" [(ngModel)]="email">
     </div>
     <div>
         <label for="user-old-password" class="form-label">{{"FileStorage.UserSettings.OldPassword" | translate}}</label>
-        <input class="form-control form-control-lg" id="user-old-password" type="password">
+        <input class="form-control form-control-lg" id="user-old-password" type="password" [(ngModel)]="oldPassword">
     </div>
     <div>
         <label for="user-new-password" class="form-label">{{"FileStorage.UserSettings.NewPassword" | translate}}</label>
-        <input class="form-control form-control-lg" id="user-new-password" type="password">
+        <input class="form-control form-control-lg" id="user-new-password" type="password" [(ngModel)]="newPassword">
+    </div>
+    <div>
+        <button type="button" class="btn btn-primary" (click)="saveChanges()">{{"FileStorage.UserSettings.SaveChanges" | translate}}</button>
     </div>
     <hr>
     <div>

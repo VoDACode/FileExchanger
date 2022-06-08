@@ -10,6 +10,10 @@ import { AuthService } from 'src/services/auth';
 })
 export class UserSettingsComponent implements OnInit, AfterViewInit{
 
+  public username: string = "";
+  public email: string = "";
+  public oldPassword: string = "";
+  public newPassword: string = "";
   public createdTelegram = false;
 
   constructor(private translate: TranslateService) { }
@@ -24,10 +28,35 @@ export class UserSettingsComponent implements OnInit, AfterViewInit{
       success: data =>{
         this.createdTelegram = !data;
       }
-    })
+    });
+    $.ajax({
+      method: 'GET',
+      url: 'api/user/my',
+      headers: {
+        Authorization: "Bearer " + AuthService.token
+      },
+      success: (data) => {
+        this.username = data.authClient.username;
+        this.email = data.authClient.email;
+      }
+    });
   }
 
   ngOnInit(): void {
+  }
+
+  saveChanges(): void {
+    $.ajax({
+      method: 'PUT',
+      url: 'api/user/my',
+      headers:{
+        Authorization: "Bearer " + AuthService.token,
+        email: this.email,
+        username: this.username,
+        newPassword: this.newPassword,
+        oldPassword: this.oldPassword
+      }
+    })
   }
 
   openTg(): void {
