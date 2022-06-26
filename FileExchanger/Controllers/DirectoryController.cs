@@ -81,7 +81,7 @@ namespace FileExchanger.Controllers
         }
 
         [HttpGet("download")]
-        public async Task<IActionResult> Download(DirectoryRequest directoryRequest)
+        public async Task<IActionResult> Download([FromQuery]DirectoryRequest directoryRequest)
         {
             if (string.IsNullOrWhiteSpace(directoryRequest.Key))
                 return BadRequest(new DirectoryResponse() { Success = false, Error = "The 'key' must not be empty!", ErrorCode = "D_DOWNLOAD4001" });

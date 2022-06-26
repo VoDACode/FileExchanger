@@ -118,9 +118,7 @@ export class StoragePageComponent implements OnInit {
     $.ajax({
       method: "GET",
       url: `api/dir/s/download`,
-      contentType: "application/json",
-      dataType: "json",
-      data: JSON.stringify({ key: key }),
+      data: { Key: key },
       headers: {
         Authorization: "Bearer " + AuthService.token
       },
