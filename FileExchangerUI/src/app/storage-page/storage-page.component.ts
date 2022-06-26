@@ -123,7 +123,9 @@ export class StoragePageComponent implements OnInit {
         Authorization: "Bearer " + AuthService.token
       },
       success: (data) => {
-        document.location.replace(data);
+        console.log(data);
+        //@ts-ignore
+        DownloadFile(data.downloadUrl);
       }
     });
   }

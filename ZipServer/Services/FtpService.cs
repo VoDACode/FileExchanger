@@ -13,10 +13,6 @@ namespace ZipServer.Services
         public static FtpService Instance => instance ?? (instance = new FtpService());
         protected override string Username => Config.Instance.Ftp.Username;
         protected override string Password => Config.Instance.Ftp.Password;
-        protected override string[] SystemFolders => new string[]
-        {
-            $"{Config.Instance.Ftp.Path}tmp"
-        };
         private FtpService() { }
 
         public Stream Download(string file) => download(file);
