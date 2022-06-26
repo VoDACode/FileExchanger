@@ -11,8 +11,7 @@
     "Username": "",
     "Password": "",
     "Host": "127.0.0.1",
-    "Port": 21,
-    "RootPath": ""
+    "Port": 21
   },
   "Token": "",
   "Cors": [

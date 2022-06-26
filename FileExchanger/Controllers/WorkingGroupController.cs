@@ -15,7 +15,7 @@ namespace FileExchanger.Controllers
     [Authorize(Policy = "AuthExchanger")]
     [Route("api/group")]
     [ApiController]
-    public class WorkingGroupController : ControllerBase
+    public class WorkingGroupController : BaseController
     {
         private UserModel getUser => db.Users.FirstOrDefault(p => p.Key == HttpContext.Request.Cookies["u_key"]);
         private UserInWorkingGroupModel getUserWorkingGroup
@@ -36,11 +36,8 @@ namespace FileExchanger.Controllers
                 return uwg.WorkingGroup;
             }
         }
-
-        private DbApp db;
-        public WorkingGroupController(DbApp db)
+        public WorkingGroupController(DbApp db) : base(db)
         {
-            this.db = db;
             Cleaner.ClearUsers(db);
         }
         #region Actions

@@ -1,190 +1,103 @@
-﻿using Core;
-using Core.Models;
-using FileExchanger.Configs;
-using FileExchanger.Helpers;
-using FileExchanger.Models;
-using FileExchanger.Services;
+﻿using FileExchanger.Interfaces;
+using FileExchanger.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
-using System;
-using System.Linq;
+using System.Threading.Tasks;
 
 namespace FileExchanger.Controllers
 {
     [Authorize(Policy = "AuthStorage")]
     [Route("api/files/s")]
     [ApiController]
-    public class FilesStorageController : ControllerBase
+    public class FilesStorageController : BaseController
     {
-        private DbApp db;
-
-        private AuthClientModel authClient => db.AuthClients.SingleOrDefault(p => p.Email == User.Identity.Name);
-        private IMemoryCache cache;
-        public FilesStorageController(DbApp db, IMemoryCache cache)
+        private readonly IStorageFileService storageFileService;
+        public FilesStorageController(IStorageFileService storageFileService)
         {
-            this.db = db;
-            this.cache = cache;
-            db.AuthClients.ToList();
+            this.storageFileService = storageFileService;
         }
 
-        [HttpGet("{dir}/{file}/info")]
-        public IActionResult GetFileInfo(string dir, string file)
+        [HttpGet("info")]
+        public async Task<IActionResult> GetFileInfo([FromQuery] FileInfoRequest request)
         {
-            var fromDir = db.Directory.SingleOrDefault(p => p.Key == dir);
-            if (fromDir == null || fromDir.Owner != authClient)
-                return NotFound();
-            var fileModel = db.StorageFiles.SingleOrDefault(p => p.Key == file);
-            if (fileModel == null || fileModel.Owner != authClient)
-                return NotFound();
-            return Ok(new
-            {
-                key = file,
-                dir = dir,
-                createDate = fileModel.CreateDate,
-                updateDate = fileModel.UpdateDate,
-                name = fileModel.Name,
-                size = fileModel.Size
-            });
+            if (string.IsNullOrWhiteSpace(request.FileKey))
+                return BadRequest("'FileKey' is empty");
+            if (string.IsNullOrWhiteSpace(request.DirectoryKey))
+                return BadRequest("'DirectoryKey' is empty");
+            var response = await storageFileService.GetFileInfo(request, UserID);
+            if (!response.Success)
+                return UnprocessableEntity(response);
+            return Ok(response);
         }
 
         [HttpGet("{dir}/list")]
-        public IActionResult GetFilesList(string dir, string mode)
+        public async Task<IActionResult> GetFilesList(string dir, string mode)
         {
-            var fromDir = db.Directory.SingleOrDefault(p => p.Key == dir);
-            if (fromDir == null)
-                return NotFound();
-            var list = (from d in db.Directory
-                        where d.Root == fromDir && d.Owner == authClient
-                        select new
-                        {
-                            key = d.Key,
-                            name = d.Name,
-                            isHaveFolders = db.Directory.Any(p => p.Root == d),
-                            isDir = true,
-                            isFile = false,
-                            createDate = d.CreateDate,
-                            updateDate = d.UpdateDate
-                        }).ToList();
-            if (mode != "only_dir")
-                list.AddRange((from f in db.StorageFiles
-                               where f.Directory == fromDir && f.Owner == authClient
-                               select new
-                               {
-                                   key = f.Key,
-                                   name = f.Name,
-                                   isHaveFolders = false,
-                                   isDir = false,
-                                   isFile = true,
-                                   createDate = f.CreateDate,
-                                   updateDate = f.UpdateDate
-                               }).ToList());
-
-            return Ok(list);
+            var response = await storageFileService.GetFilesList(dir, UserID, mode);
+            if (!response.Success)
+                return UnprocessableEntity(response);
+            return Ok(response);
         }
 
-        [HttpDelete("{dir}/{file}/delete")]
-        public IActionResult DeleteFile(string dir, string file)
+        [HttpDelete("delete")]
+        public async Task<IActionResult> DeleteFile(FileInfoRequest request)
         {
-            var fromDir = db.Directory.SingleOrDefault(p => p.Key == dir);
-            if (fromDir == null || fromDir.Owner != authClient)
-                return NotFound();
-            var fileModel = db.StorageFiles.SingleOrDefault(p => p.Key == file);
-            if (fileModel == null || fileModel.Owner != authClient)
-                return NotFound();
-            FtpService.Instance.DeleteFile(fileModel, DefaultService.FileStorage);
-            FtpService.Instance.DeleteDir(fileModel.Key, DefaultService.FileStorage);
-            db.StorageFiles.Remove(fileModel);
-            db.SaveChanges();
-            return Ok();
+            if (string.IsNullOrWhiteSpace(request.FileKey))
+                return BadRequest("'FileKey' is empty");
+            if (string.IsNullOrWhiteSpace(request.DirectoryKey))
+                return BadRequest("'DirectoryKey' is empty");
+            var response = await storageFileService.DeleteFile(request, UserID);
+            if (!response.Success)
+                return UnprocessableEntity(response);
+            return Ok(response);
         }
 
-        [RequestSizeLimit(100L * 1024L * 1024L * 1024L)]
-        [RequestFormLimits(MultipartBodyLengthLimit = 100L * 1024L * 1024L * 1024L)]
+        [RequestSizeLimit(16L * 1024L * 1024L * 1024L)]
+        [RequestFormLimits(MultipartBodyLengthLimit = 16L * 1024L * 1024L * 1024L)]
         [HttpPost("{dir}/upload")]
-        public IActionResult UploadFile(string dir, IFormFile file)
+        public async Task<IActionResult> UploadFile(string dir, IFormFile file)
         {
-            if (file == null)
-                return BadRequest("file");
-            if (file.Length > Config.Instance.Services.FileStorage.MaxUploadSize)
-                return BadRequest("len");
-            var fromDir = db.Directory.SingleOrDefault(p => p.Key == dir);
-            if (fromDir == null || fromDir.Owner != authClient)
-                return NotFound();
-            var createDate = DateTime.Now;
-            var fileModel = new StorageFileModel()
-            {
-                CreateDate = createDate,
-                UpdateDate = createDate,
-                Directory = fromDir,
-                Key = FilesHelper.GeneranionKey(fromDir, createDate),
-                Name = file.FileName,
-                Owner = authClient,
-                Size = file.Length
-            };
-            FtpService.Instance.Upload(file.OpenReadStream(), fileModel, DefaultService.FileStorage);
-            db.StorageFiles.Add(fileModel);
-            db.SaveChanges();
-            return Ok(new
-            {
-                key = fileModel.Key,
-                name = fileModel.Name
-            });
+            var response = await storageFileService.UploadFile(dir, file, UserID);
+            if (!response.Success)
+                return UnprocessableEntity(response);
+            return Ok(response);
         }
 
-        [HttpGet("{dir}/{file}/get-disposable-key")]
-        public IActionResult GetDisposableKey(string dir, string file)
+        [HttpGet("get-disposable-key")]
+        public async Task<IActionResult> GetDisposableKey([FromQuery] FileInfoRequest request)
         {
-            var fromDir = db.Directory.SingleOrDefault(p => p.Key == dir);
-            if (fromDir == null || fromDir.Owner != authClient)
-                return NotFound();
-            var fileModel = db.StorageFiles.SingleOrDefault(p => p.Key == file);
-            if (fileModel == null || fileModel.Owner != authClient)
-                return NotFound();
-            string key = "".RandomString(256);
-            cache.CreateEntry($"STRORAGE_FILE_DisposableKey_{key}");
-            cache.Set($"STRORAGE_FILE_DisposableKey_{key}", $"{dir}_{file}", TimeSpan.FromMinutes(1));
-            return Ok(key);
+            if (string.IsNullOrWhiteSpace(request.FileKey))
+                return BadRequest("'FileKey' is empty");
+            if (string.IsNullOrWhiteSpace(request.DirectoryKey))
+                return BadRequest("'DirectoryKey' is empty");
+            var response = await storageFileService.GetDisposableKey(request, UserID);
+            if (!response.Success)
+                return UnprocessableEntity(response);
+            return Ok(response);
         }
 
         [AllowAnonymous]
         [HttpGet("download/{key}")]
-        public IActionResult DownloadFile(string key)
+        public async Task<IActionResult> DownloadFile(string key)
         {
-            if (!cache.TryGetValue($"STRORAGE_FILE_DisposableKey_{key}", out string data))
-                return NotFound();
-            cache.Remove($"STRORAGE_FILE_DisposableKey_{key}");
-            string dir = "", file = "";
-            {
-                string[] tmp = data.Split('_');
-                dir = tmp[0];
-                file = tmp[1];
-            }
-            var fromDir = db.Directory.SingleOrDefault(p => p.Key == dir);
-            if (fromDir == null)
-                return NotFound();
-            var fileModel = db.StorageFiles.SingleOrDefault(p => p.Key == file);
-            if (fileModel == null)
-                return NotFound();
-
-            return File(FtpService.Instance.Download(fileModel, DefaultService.FileStorage), "application/octet-stream", fileModel.Name, true);
+            var response = await storageFileService.DownloadFile(key);
+            if (!response.Success)
+                return NotFound(response);
+            return File(response.Stream, "application/octet-stream", response.FileModel.Name, true);
         }
-        [HttpPost("{dir}/{file}/rename")]
-        public IActionResult Rename(string dir, string file, string name)
+
+        [HttpPost("rename")]
+        public async Task<IActionResult> Rename(FileRenameRequest request)
         {
-            if (string.IsNullOrWhiteSpace(name))
-                return BadRequest();
-            var fromDir = db.Directory.SingleOrDefault(p => p.Key == dir);
-            if (fromDir == null || fromDir.Owner != authClient)
-                return NotFound();
-            var fileModel = db.StorageFiles.SingleOrDefault(p => p.Key == file);
-            if (fileModel == null || fileModel.Owner != authClient)
-                return NotFound();
-            fileModel.Name = name;
-            fileModel.UpdateDate = DateTime.Now;
-            db.SaveChanges();
-            return Ok();
+            if (string.IsNullOrWhiteSpace(request.Key))
+                return BadRequest("'FileKey' is empty");
+            if (string.IsNullOrWhiteSpace(request.DirectoryKey))
+                return BadRequest("'DirectoryKey' is empty");
+            var response = await storageFileService.Rename(request, UserID);
+            if (!response.Success)
+                return UnprocessableEntity(response);
+            return Ok(response);
         }
     }
 }

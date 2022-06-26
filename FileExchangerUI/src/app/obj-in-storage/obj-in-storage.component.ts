@@ -15,6 +15,8 @@ export class ObjInStorageComponent {
   @Input()
   type: 'FILE' | 'FOLDER' = "FILE";
   @Input()
+  shareKey: string = "";
+  @Input()
   isRenamed: boolean = false;
   @Output()
   onopen: EventEmitter<ObjInStorageComponent> = new EventEmitter();

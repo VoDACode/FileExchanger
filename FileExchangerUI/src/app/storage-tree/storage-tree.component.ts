@@ -1,10 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FileTreeModel } from 'src/models/fileInTreeModel';
-import { AuthService } from 'src/services/auth';
-import * as $ from 'jquery';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DirectoryService } from 'src/services/directory';
-import { isTemplateExpression } from 'typescript';
 
 @Component({
   selector: 'app-storage-tree',
@@ -28,6 +25,7 @@ export class StorageTreeComponent{
       return this.childrens;
     return [];
   }
+  
   constructor(private router: Router, private activatedRoute: ActivatedRoute) {
     this.activatedRoute.params.subscribe(params => {
       console.log(params.dir);
@@ -44,6 +42,7 @@ export class StorageTreeComponent{
         item.key = data[i].key;
         item.name = data[i].name;
         item.isHaveFolders = data[i].isHaveFolders;
+        item.root = data[i].dir;
         this.childrens.push(item);
       }
     }

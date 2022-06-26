@@ -2,13 +2,13 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/services/auth';
 import * as $ from 'jquery';
-import { FileTreeModel } from 'src/models/fileInTreeModel';
 import { DirectoryService } from 'src/services/directory';
 import { ContextMenuModel } from 'src/models/ContextMenuModel';
 import { ObjInStorageComponent } from '../obj-in-storage/obj-in-storage.component';
 import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { ModalStorageObjectProperties } from '../modals/modal.storageObjectProperties/modal.storageObjectProperties';
 import { OpenFileModelComponent } from '../modals/model.open.file/model.open.file';
+import { ModalShareSettings } from '../modals/moadl.share.settings/moadl.share.settings';
 
 @Component({
   selector: 'app-storage-page',
@@ -21,15 +21,16 @@ export class StoragePageComponent implements OnInit {
   folders: [] = [];
   dirContent: ObjInStorageModel[] = [];
   selectItem: ObjInStorageComponent | undefined;
-
+  public homeKey: string = "";
   public modalRef: MdbModalRef<ModalStorageObjectProperties> | undefined;
 
   rootKey: string = DirectoryService.getRootKey;
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private modalService: MdbModalService) {
     this.activatedRoute.params.subscribe(params => {
+      this.homeKey = DirectoryService.getRootKey;
       if (params.dir === undefined) {
-        this.rootKey = DirectoryService.getRootKey;
-      } else{
+        this.rootKey = this.homeKey;
+      } else {
         this.rootKey = params.dir;
       }
       this.updateContect(this.rootKey);
@@ -46,29 +47,69 @@ export class StoragePageComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // relative to the selected folder.
     this.contextMenuItems.push([
       new ContextMenuModel("Create new dir", this.onCreateFolder.bind(this), true),
       new ContextMenuModel("Download", this.onDownloadThisFolder.bind(this), true),
       new ContextMenuModel("Propertis", this.onClickContextMenu.bind(this), true),
     ]);
+    // relative to the selected item.
     this.contextMenuItems.push([
       new ContextMenuModel("Rename", this.onRename.bind(this), true),
       new ContextMenuModel("Download", this.onDownloadSelectItem.bind(this), true),
+      new ContextMenuModel("Share", (event: Event, item: ContextMenuModel) => {
+        if (this.selectItem === undefined)
+          return;
+        if(this.selectItem.shareKey === "")
+          this.onShareItem(this.selectItem);
+        else
+          this.onShareGetInfo(this.selectItem);
+      }, true),
       new ContextMenuModel("Delete", this.onDeleteObj.bind(this), true),
       new ContextMenuModel("Propertis", this.onClickContextMenu.bind(this), true)
     ]);
   }
 
+  onShareItem(item: ObjInStorageComponent): void {
+    $.ajax({
+      method: 'POST',
+      url: `/api/share`,
+      contentType: 'application/json',
+      dataType: 'json',
+      data: JSON.stringify({
+        Key: item.key
+      }),
+      headers: {
+        Authorization: "Bearer " + AuthService.token
+      },
+      success: (data) => {
+        item.shareKey = data.shareKey;
+      }
+    })
+  }
+
+  onShareGetInfo(item: ObjInStorageComponent): void {
+    this.modalRef = this.modalService.open(ModalShareSettings, {
+      data: {
+        key: item.shareKey,
+        ondelete: (key: string) => {
+          item.shareKey = "";
+        }
+      }
+    });
+  }
+
   onDownloadSelectItem(event: Event, item: ContextMenuModel): void {
-    if (this.selectItem?.type === 'FOLDER'){
+    if (this.selectItem?.type === 'FOLDER') {
       //@ts-ignore
       this.onDownloadFolder(this.selectItem?.key);
       return;
-    }else if (this.selectItem?.type === 'FILE'){
+    } else if (this.selectItem?.type === 'FILE') {
       this.onDownloadFile();
       return;
     }
   }
+
   onDownloadThisFolder(event: Event, item: ContextMenuModel): void {
     this.onDownloadFolder(this.rootKey);
   }
@@ -76,8 +117,11 @@ export class StoragePageComponent implements OnInit {
   private onDownloadFolder(key: string): void {
     $.ajax({
       method: "GET",
-      url: `api/dir/s/${key}/download`,   
-      headers:{
+      url: `api/dir/s/download`,
+      contentType: "application/json",
+      dataType: "json",
+      data: JSON.stringify({ key: key }),
+      headers: {
         Authorization: "Bearer " + AuthService.token
       },
       success: (data) => {
@@ -85,32 +129,35 @@ export class StoragePageComponent implements OnInit {
       }
     });
   }
-  
+
   private onDownloadFile(): void {
     $.ajax({
-      method: "POST",
-      url: `api/files/s/${this.rootKey}/${this.selectItem?.key}/download`,
-      headers:{
+      method: "GET",
+      data: { DirectoryKey: this.rootKey, FileKey: this.selectItem?.key },
+      url: `api/files/s/get-disposable-key`,
+      headers: {
         Authorization: "Bearer " + AuthService.token
       },
-      // TO DO
-      processData: false,
+      success: (data) => {
+        //@ts-ignore
+        DownloadFile(`${location.origin}api/files/s/download/${data.key}`);
+      }
     });
   }
 
   dragOverHandler(ev: any): void {
     console.log('File(s) in drop zone');
-  
+
     // Prevent default behavior (Prevent file from being opened)
     ev.preventDefault();
   }
-  
+
   dropHandler(ev: any): void {
     console.log('File(s) dropped');
 
     // Prevent default behavior (Prevent file from being opened)
     ev.preventDefault();
-  
+
     if (ev.dataTransfer.items) {
       // Use DataTransferItemList interface to access the file(s)
       for (var i = 0; i < ev.dataTransfer.items.length; i++) {
@@ -133,8 +180,6 @@ export class StoragePageComponent implements OnInit {
   private upload(file: File): void {
     let url = `/api/files/s/${this.rootKey}/upload`;
     const form = new FormData();
-    console.log(file);
-    console.log(form);
     form.append("file", file, file.name);
     $.ajax({
       url: url,
@@ -156,15 +201,18 @@ export class StoragePageComponent implements OnInit {
   }
 
   onDeleteObj(event: Event, item: ContextMenuModel): void {
-    let url = this.selectItem?.type == 'FILE' ? `api/files/s/${this.rootKey}/${this.selectItem?.key}/delete` : 
-    `api/dir/s/${this.selectItem?.key}/delete`;
+    var url = `/api/${this.selectItem?.type == 'FILE' ? 'files' : 'dir'}/s/delete`;
+    let obj = this.selectItem?.type == 'FILE' ? { FileKey: this.selectItem?.key, DirectoryKey: this.rootKey } : { key: this.selectItem?.key };
     $.ajax({
       method: 'DELETE',
       url: url,
+      contentType: 'application/json',
+      dataType: 'json',
+      data: JSON.stringify(obj),
       headers: {
         Authorization: "Bearer " + AuthService.token
       },
-      success: (data) =>{
+      success: (data) => {
         this.updateContect(this.rootKey);
       }
     })
@@ -178,7 +226,10 @@ export class StoragePageComponent implements OnInit {
     if (event.key == '#new_folder') {
       $.ajax({
         method: "POST",
-        url: `api/dir/s/${this.rootKey}/create?name=${event.name}`,
+        url: `api/dir/s/create`,
+        contentType: "application/json",
+        dataType: "json",
+        data: JSON.stringify({ key: this.rootKey, name: event.name }),
         headers: {
           Authorization: "Bearer " + AuthService.token
         },
@@ -186,18 +237,25 @@ export class StoragePageComponent implements OnInit {
           this.updateContect(this.rootKey);
         }
       })
-    }else{
-      let url = (event.type == 'FOLDER' ? `/api/dir/s/${event.key}` : `/api/files/s/${this.rootKey}/${event.key}`) + `/rename?name=${event.name}`;
+    } else {
+      var url = `/api/${event.type == 'FILE' ? 'files' : 'dir'}/s/rename`;
+      let obj: any = { name: event.name, key: event.key };
+      if (event.type == 'FILE') {
+        obj = { name: event.name, key: event.key, directoryKey: this.rootKey };
+      }
       $.ajax({
         method: "POST",
         url: url,
+        contentType: "application/json",
+        dataType: "json",
+        data: JSON.stringify(obj),
         headers: {
           Authorization: "Bearer " + AuthService.token
         },
         success: (data) => {
           this.updateContect(this.rootKey);
         }
-      })
+      });
     }
   }
 
@@ -205,7 +263,7 @@ export class StoragePageComponent implements OnInit {
     let list = DirectoryService.list(dir);
     this.dirContent = [];
     for (let i = 0; i < list.length; i++) {
-      this.dirContent.push(new ObjInStorageModel(list[i].key, list[i].name, false, list[i].isFile ? 'FILE' : 'FOLDER', this.rootKey));
+      this.dirContent.push(new ObjInStorageModel(list[i].key, list[i].name, false, list[i].isFile ? 'FILE' : 'FOLDER', this.rootKey, list[i].shareKey));
     }
   }
 
@@ -216,17 +274,21 @@ export class StoragePageComponent implements OnInit {
   }
 
   onClickContextMenu(event: Event, item: ContextMenuModel): void {
-    console.log(event, item, );
-    this.modalRef = this.modalService.open(ModalStorageObjectProperties, { data: {
-      item: this.dirContent.find(p => p.key == this.selectItem?.key) 
-    }});
+    console.log(event, item,);
+    this.modalRef = this.modalService.open(ModalStorageObjectProperties, {
+      data: {
+        item: this.dirContent.find(p => p.key == this.selectItem?.key)
+      }
+    });
   }
 
   onOpen(event: ObjInStorageComponent): void {
-    if(event.type == 'FILE'){
-      this.modalRef = this.modalService.open(OpenFileModelComponent, { data: {
-        item: this.dirContent.find(p => p.key == event.key) 
-      }});
+    if (event.type == 'FILE') {
+      this.modalRef = this.modalService.open(OpenFileModelComponent, {
+        data: {
+          item: this.dirContent.find(p => p.key == event.key)
+        }
+      });
     }
   }
 
@@ -259,11 +321,13 @@ export class ObjInStorageModel {
   type: 'FILE' | 'FOLDER' = "FILE";
   isRenamed: boolean = false;
   rootKey: string = "";
-  constructor(key: string, name: string, isRenamed: boolean, type: 'FILE' | 'FOLDER', rootKey: string) {
+  shareKey: string = "";
+  constructor(key: string, name: string, isRenamed: boolean, type: 'FILE' | 'FOLDER', rootKey: string, shareKey: string = "") {
     this.isRenamed = isRenamed;
     this.key = key;
     this.name = name;
     this.type = type;
     this.rootKey = rootKey;
+    this.shareKey = shareKey;
   }
 }

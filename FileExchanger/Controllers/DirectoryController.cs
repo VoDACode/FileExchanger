@@ -10,155 +10,85 @@ using System.Collections.Generic;
 using Core;
 using Core.Models;
 using Core.Zip;
+using Core.Enums;
+using FileExchanger.Requests;
+using FileExchanger.Interfaces;
+using FileExchanger.Responses;
+using System.Threading.Tasks;
 
 namespace FileExchanger.Controllers
 {
     [Authorize(Policy = "AuthStorage")]
     [Route("api/dir/s")]
     [ApiController]
-    public class DirectoryController : ControllerBase
+    public class DirectoryController : BaseController
     {
-        DbApp db;
-        AuthClientModel authClient => db.AuthClients.SingleOrDefault(p => p.Email == User.Identity.Name);
-        public DirectoryController(DbApp db)
+        private readonly IDirectoryService directoryService;
+        public DirectoryController(IDirectoryService directoryService)
         {
-            this.db = db;
-            db.AuthClients.ToList();
+            this.directoryService = directoryService;
         }
 
         [HttpGet("get-root")]
-        public IActionResult GetRootKey()
+        public async Task<IActionResult> GetRootKey() => Ok(await directoryService.GetRootKey(UserID));
+
+        [HttpGet("info")]
+        public async Task<IActionResult> GetInfo(DirectoryRequest directoryRequest)
         {
-            return Ok(db.Directory.Single(p => p.Owner == authClient && p.Name == "/" && p.Root == null).Key);
+            if (string.IsNullOrWhiteSpace(directoryRequest.Key))
+                return BadRequest(new DirectoryResponse() { Success = false, Error = "The 'key' must not be empty!", ErrorCode = "D_GI4001" });
+            var response = await directoryService.GetInfo(directoryRequest, UserID);
+            if(!response.Success)
+                return UnprocessableEntity(response);
+            return Ok(response);
         }
 
-        [HttpGet("{dir}/info")]
-        public IActionResult GetInfo(string dir)
+        [HttpPost("create")]
+        public async Task<IActionResult> CreateDir(DirectoryEditRequest directoryRequest)
         {
-            var fromDir = db.Directory.SingleOrDefault(p => p.Key == dir);
-            if (fromDir == null || fromDir.Owner != authClient)
-                return NotFound();
-            return Ok(new
-            {
-                key = fromDir.Key,
-                name = fromDir.Name,
-                createDate = fromDir.CreateDate,
-                updateDate = fromDir.UpdateDate
-            });
+            if (string.IsNullOrWhiteSpace(directoryRequest.Key))
+                return BadRequest(new DirectoryResponse() { Error = "The 'key' must not be empty!", ErrorCode = "D_C4001" });
+            if (string.IsNullOrWhiteSpace(directoryRequest.Name))
+                return BadRequest(new DirectoryResponse() { Error = "The 'name' must not be empty!", ErrorCode = "D_C4002" });
+            var response = await directoryService.CreateDirectory(directoryRequest, UserID);
+            if(!response.Success)
+                return UnprocessableEntity(response);
+            return Ok(response);
         }
 
-        [HttpPost("{dir}/create")]
-        public IActionResult CreateDir(string dir, string name)
+        [HttpDelete("delete")]
+        public async Task<IActionResult> DeleteDir(DirectoryRequest directoryRequest)
         {
-            var fromDir = db.Directory.SingleOrDefault(p => p.Key == dir && p.Owner == authClient);
-            if (fromDir == null || fromDir.Owner != authClient)
-                return BadRequest();
-            var createTime = DateTime.Now;
-            var item = db.Directory.Add(new DirectoryModel()
-            {
-                CreateDate = createTime,
-                UpdateDate = createTime,
-                Name = name,
-                Key = DirectoryHelper.GeneranionKey(fromDir, createTime),
-                Owner = authClient,
-                Root = fromDir
-            }).Entity;
-            db.SaveChanges();
-            return Ok(new
-            {
-                Key = item.Key,
-                Name = item.Name
-            });
+            if (string.IsNullOrWhiteSpace(directoryRequest.Key))
+                return BadRequest(new DirectoryResponse() { Success = false, Error = "The 'key' must not be empty!", ErrorCode = "D_D4001" });
+            var response = await directoryService.DeleteDirectory(directoryRequest, UserID);
+            if (!response.Success)
+                return UnprocessableEntity(response);
+            return Ok(response);
         }
 
-        [HttpDelete("{dir}/delete")]
-        public IActionResult DeleteDir(string dir)
+        [HttpPost("rename")]
+        public async Task<IActionResult> Rename(DirectoryEditRequest directoryRequest)
         {
-            var fromDir = db.Directory.SingleOrDefault(p => p.Key == dir);
-            if (fromDir == null || fromDir.Owner != authClient)
-                return BadRequest();
-            var files = db.StorageFiles.Where(p => p.Directory == fromDir).ToList();
-            for(int i = 0; i < files.Count(); i++)
-            {
-                db.StorageFiles.Remove(files[i]);
-                FtpService.Instance.DeleteFile(files[i], Configs.DefaultService.FileStorage);
-                FtpService.Instance.DeleteDir(files[i].Key, Configs.DefaultService.FileStorage);
-            }
-            var dirs = db.Directory.Where(p => p.Root == fromDir).ToList();
-            for (int i = 0; i < dirs.Count(); i++)
-            {
-                DeleteDir(dirs[i].Key);
-            }
-            db.Directory.Remove(fromDir);
-            db.SaveChanges();
-            return Ok();
+            if (string.IsNullOrWhiteSpace(directoryRequest.Key))
+                return BadRequest(new DirectoryResponse() { Error = "The 'key' must not be empty!", ErrorCode = "D_R4001" });
+            if (string.IsNullOrWhiteSpace(directoryRequest.Name))
+                return BadRequest(new DirectoryResponse() { Error = "The 'name' must not be empty!", ErrorCode = "D_R4002" });
+            var response = await directoryService.RenameDirectory(directoryRequest, UserID);
+            if (!response.Success)
+                return UnprocessableEntity(response);
+            return Ok(response);
         }
 
-        [HttpPost("{dir}/rename")]
-        public IActionResult Rename(string dir, string name)
+        [HttpGet("download")]
+        public async Task<IActionResult> Download(DirectoryRequest directoryRequest)
         {
-            if (string.IsNullOrWhiteSpace(name))
-                return BadRequest();
-            var fromDir = db.Directory.SingleOrDefault(p => p.Key == dir);
-            if (fromDir == null || fromDir.Owner != authClient)
-                return NotFound();
-            fromDir.Name = name;
-            fromDir.UpdateDate = DateTime.Now;
-            db.SaveChanges();
-            return Ok();
-        }
-
-        [HttpGet("{dir}/download")]
-        public IActionResult Download(string dir)
-        {
-            var fromDir = db.Directory.SingleOrDefault(p => p.Key == dir);
-            if (fromDir == null || fromDir.Owner != authClient)
-                return NotFound();
-            var zip = new ZipService();
-            var content = getContentInDir(dir);
-            zip.Create().Wait();
-            zip.SetName(fromDir.Name).Wait();
-            zip.AddRage(content).Wait();
-            zip.Pack().Wait();
-            return Ok($"https://{Config.Instance.Services.ZipServer.Host}:{Config.Instance.Services.ZipServer.Port}/api/zip/download/{zip.Key}");
-        }
-
-        private List<ZipItem> getContentInDir(string dirKey)
-        {
-            List<ZipItem> result = new List<ZipItem>();
-            void fun(string d, string path)
-            {
-                var dir = db.Directory.SingleOrDefault(p => p.Key == d);
-                if (dir == null)
-                    return;
-                var files = db.StorageFiles.Where(p => p.Directory == dir).ToList();
-                var dirs = db.Directory.Where(p => p.Root == dir).ToList();
-                foreach (var file in files)
-                {
-                    result.Add(new ZipItem()
-                    {
-                        Key = file.Key,
-                        Size = file.Size,
-                        Name = file.Name,
-                        Type = ContentType.File,
-                        Path = path
-                    });
-                }
-                foreach (var folder in dirs)
-                {
-                    result.Add(new ZipItem()
-                    {
-                        Key=folder.Key,
-                        Name = folder.Name,
-                        Size = 0,
-                        Path = path,
-                        Type = ContentType.Folder
-                    });
-                    fun(folder.Key, $"{path}{folder.Name}/");
-                }
-            }
-            fun(dirKey, "/");
-            return result;
+            if (string.IsNullOrWhiteSpace(directoryRequest.Key))
+                return BadRequest(new DirectoryResponse() { Success = false, Error = "The 'key' must not be empty!", ErrorCode = "D_DOWNLOAD4001" });
+            var response = await directoryService.DownloadDirectory(directoryRequest, UserID);
+            if (!response.Success)
+                return UnprocessableEntity(response);
+            return Ok(response);
         }
     }
 }

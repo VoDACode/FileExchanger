@@ -33,11 +33,13 @@ import { ConfigEditorComponent } from './config-editor/config-editor.component';
 import { ConfigParameterComponent } from './config-parameter/config-parameter.component';
 import { SettingsWindowComponent } from './settings-window/settings-window.component';
 import { UserSettingsComponent } from './user-settings/user-settings.component';
-import {ConfirmTelegramComponent} from './confirm-telegram/confirm-telegram.component';
+import { ConfirmTelegramComponent } from './confirm-telegram/confirm-telegram.component';
 import { LoginViaTelegramComponent } from './login-via-telegram/login-via-telegram.component';
 import { OpenFileModelComponent } from './modals/model.open.file/model.open.file';
 import { ModalStorageObjectProperties } from './modals/modal.storageObjectProperties/modal.storageObjectProperties';
 import { StorageObjectPropertiesComponentComponent } from './storage-object-properties-component/storage-object-properties-component.component';
+import { ModalShareSettings } from './modals/moadl.share.settings/moadl.share.settings';
+import { DownloadShareComponent } from './download-share-component/download-share-component.component';
 
 export function HttpLoaderFactory(http: HttpClient): TranslateLoader {
   return new TranslateHttpLoader(http, './assets/locale/', '.json');
@@ -47,34 +49,46 @@ const appRoutes: Routes = [
   {
     path: '',
     children: [
-      { path: '', component: StartPageComponent},
+      { path: '', component: StartPageComponent },
       { path: 'd/:key/:name', component: DownloadComponent },
-      { path: 'auth', component: AuthComponent , children: [
-        { path: '', component: LoginComponent},
-        { path: 'login', component: LoginComponent},
-        { path: 'regin', component: ReginComponent},
-        {path: 'telegram', component: LoginViaTelegramComponent}
-      ]},
-      {path: 'join',
+      {
+        path: 'auth', component: AuthComponent, children: [
+          { path: '', component: LoginComponent },
+          { path: 'login', component: LoginComponent },
+          { path: 'regin', component: ReginComponent },
+          { path: 'telegram', component: LoginViaTelegramComponent }
+        ]
+      },
+      {
+        path: 'join',
         children: [
           { path: ':key', component: JoinWorkingGroupComponent },
           { path: '', component: JoinWorkingGroupComponent }
         ]
       },
-      {path: 'my', component: HomePageComponent, children: [
-        {path: 'e', component: UploadComponent},
-        {path: 's', component: StoragePageComponent},
-        {path: 's/:dir', component: StoragePageComponent},
-        {path: 'user', component: UserSettingsComponent}
-      ]},
-      {path: 'config', children: [
-        {path: '', component: ConfigEditorComponent},
-        {path: ':key', component: ConfigEditorComponent}
-      ]},
-      {path: 'c', children: [
-        {path: 'telegram', component: ConfirmTelegramComponent},
-        {path: 'email', component: ConfirmEmailComponent}
-      ]}
+      {
+        path: 'my', component: HomePageComponent, children: [
+          { path: 'e', component: UploadComponent },
+          { path: 's', component: StoragePageComponent },
+          { path: 's/:dir', component: StoragePageComponent },
+          { path: 'user', component: UserSettingsComponent }
+        ]
+      },
+      {
+        path: 'config', children: [
+          { path: '', component: ConfigEditorComponent },
+          { path: ':key', component: ConfigEditorComponent }
+        ]
+      },
+      {
+        path: 'c', children: [
+          { path: 'telegram', component: ConfirmTelegramComponent },
+          { path: 'email', component: ConfirmEmailComponent }
+        ]
+      },
+      { 
+        path: 'share/:key', component: DownloadShareComponent
+      }
     ]
   }
 ]
@@ -98,7 +112,8 @@ const appRoutes: Routes = [
     LoginViaTelegramComponent,
     OpenFileModelComponent,
     ModalStorageObjectProperties,
-    StorageObjectPropertiesComponentComponent
+    StorageObjectPropertiesComponentComponent,
+    ModalShareSettings
   ],
   imports: [
     TranslateModule.forRoot({

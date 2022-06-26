@@ -16,15 +16,12 @@ namespace FileExchanger.Controllers
 {
     [Route("api/user")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UserController : BaseController
     {
-        private AuthClientModel? AuthClient => db.AuthClients.SingleOrDefault(p => p.Email == User.Identity.Name);
         private UserModel GetUser => db.Users.FirstOrDefault(p => p.Key == HttpContext.Request.Cookies["u_key"]);
-        private readonly DbApp db;
         private readonly IMemoryCache cache;
-        public UserController(DbApp db, IMemoryCache memoryCache)
+        public UserController(DbApp db, IMemoryCache memoryCache) : base(db)
         {
-            this.db = db;
             this.cache = memoryCache;
             Cleaner.ClearUsers(db);
         }
@@ -109,7 +106,7 @@ namespace FileExchanger.Controllers
 
         [Authorize]
         [HttpPut("my")]
-        public void SetUser()
+        public async void SetUser()
         {
             string email = Request.Headers["email"];
             string username = Request.Headers["username"];
@@ -121,29 +118,32 @@ namespace FileExchanger.Controllers
                 AuthClient.Name = username;
                 isSaveChanges = true;
                 Response.StatusCode = StatusCodes.Status202Accepted;
-                Response.WriteAsync("Username");
+                await Response.WriteAsync("Username");
             }
             if(!string.IsNullOrWhiteSpace(oldPassword) && !string.IsNullOrWhiteSpace(newPassword) && newPassword != oldPassword)
             {
-                if(AuthClient.Password == PasswordHelper.GetHash(oldPassword))
+                
+                if(AuthClient.Password == PasswordHelper.GetHash(oldPassword, Convert.FromBase64String(AuthClient.PasswordSalt)))
                 {
-                    AuthClient.Password = PasswordHelper.GetHash(newPassword);
+                    var salt = PasswordHelper.GetSecureSalt;
+                    AuthClient.Password = PasswordHelper.GetHash(newPassword, salt);
+                    AuthClient.PasswordSalt = Convert.ToBase64String(salt);
                     isSaveChanges = true;
                 }
                 Response.StatusCode = StatusCodes.Status202Accepted;
-                Response.WriteAsync("\nPassword");
+                await Response.WriteAsync("\nPassword");
             }
             if (!string.IsNullOrWhiteSpace(email) && !db.AuthClients.Any(p => p.Email == email))
             {
                 var key = "".RandomString(96);
                 cache.Set($"CONFIRM_NEW_EMAIL_{key}", $"{AuthClient.Id}|{email}", TimeSpan.FromMinutes(30));
                 var host = HttpContext.Request.Host;
-                EmailService.Send(AuthClient.Email, "Confirm new email!", $"https://{host.Host}:{host.Port}/api/c/n/e/{key}");
+                await EmailService.Send(AuthClient.Email, "Confirm new email!", $"https://{host.Host}:{host.Port}/api/c/n/e/{key}");
                 Response.StatusCode = StatusCodes.Status200OK;
-                Response.WriteAsync("\nEmail");
+                await Response.WriteAsync("\nEmail");
             }
             if(isSaveChanges)
-                db.SaveChanges();
+                await db.SaveChangesAsync();
         }
     }
 }

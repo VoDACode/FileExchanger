@@ -1,4 +1,5 @@
 ﻿using Core;
+using Core.Enums;
 using Core.Models;
 using FileExchanger.Configs;
 using FileExchanger.Helpers;
@@ -17,7 +18,7 @@ namespace FileExchanger.Controllers
     [Authorize(Policy = "AuthExchanger")]
     [Route("api/files/e")]
     [ApiController]
-    public class FilesExchangeController : ControllerBase
+    public class FilesExchangeController : BaseController
     {
         private UserModel getUser => db.Users.FirstOrDefault(p => p.Key == HttpContext.Request.Cookies["u_key"]);
         private UserInWorkingGroupModel getUserWorkingGroup
@@ -38,10 +39,8 @@ namespace FileExchanger.Controllers
                 return uwg.WorkingGroup;
             }
         }
-        private DbApp db;
-        public FilesExchangeController(DbApp db)
+        public FilesExchangeController(DbApp db) : base(db)
         {
-            this.db = db;
             Cleaner.ClearFiles(db);
         }
         [RequestSizeLimit(100L * 1024L * 1024L * 1024L)]

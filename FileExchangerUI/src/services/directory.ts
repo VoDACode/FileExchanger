@@ -11,7 +11,7 @@ export class DirectoryService {
                 Authorization: "Bearer " + AuthService.token
             }
         });
-        return data.responseJSON;
+        return data.responseJSON.content;
     }
     public static get getRootKey(): string {
         let data = $.ajax({

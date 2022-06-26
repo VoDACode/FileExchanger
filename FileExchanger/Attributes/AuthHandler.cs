@@ -1,7 +1,8 @@
 ﻿using Core;
-using FileExchanger.Helpers;
+using Core.Enums;
 using Microsoft.AspNetCore.Authorization;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace FileExchanger.Attributes
@@ -10,16 +11,32 @@ namespace FileExchanger.Attributes
     {
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, AuthRequirement requirement)
         {
-            if ((requirement.Service == Configs.DefaultService.FileExchanger && Config.Instance.Services.FileExchanger.UseAuth) ||
-                (requirement.Service == Configs.DefaultService.FileStorage && Config.Instance.Services.FileStorage.UseAuth))
+            if ((requirement.Service == DefaultService.FileExchanger && Config.Instance.Services.FileExchanger.UseAuth) ||
+                (requirement.Service == DefaultService.FileStorage && Config.Instance.Services.FileStorage.UseAuth))
             {
-                var a = context.Resource;
-                using (DbApp db = new DbApp(Config.Instance.DbConnect))
+                var claim = (context.User.Identity as ClaimsIdentity)?.FindFirst(ClaimTypes.NameIdentifier);
+                if (claim == null)
                 {
-                    if (db.AuthClients.Any(p => p.Email == context.User.Identity.Name))
-                        context.Succeed(requirement);
+                    context.Fail();
+                }
+                else
+                {
+                    int id = -1;
+                    if(int.TryParse(claim.Value, out id))
+                    {
+                        using (DbApp db = new DbApp(Config.Instance.DbConnect))
+                        {
+                            if (db.AuthClients.Any(p => p.Id == id))
+                                context.Succeed(requirement);
+                            else
+                                context.Fail();
+                        }
+                    }
                     else
+                    {
                         context.Fail();
+                    }
+
                 }
             }
             else

@@ -1,5 +1,6 @@
 ﻿using Core;
 using Core.Models;
+using FileExchanger.Helpers;
 using FileExchanger.Models;
 using FileExchanger.Services;
 using Microsoft.AspNetCore.Http;
@@ -18,14 +19,11 @@ namespace FileExchanger.Controllers
 {
     [Route("ws")]
     [ApiController]
-    public class SocketController : ControllerBase
+    public class SocketController : BaseController
     {
-        private DbApp db;
         private IMemoryCache cache;
-        private AuthClientModel? authClient => db.AuthClients.SingleOrDefault(p => p.Email == User.Identity.Name);
-        public SocketController(DbApp db, IMemoryCache memoryCache)
+        public SocketController(DbApp db, IMemoryCache memoryCache) : base(db)
         {
-            this.db = db;
             cache = memoryCache;
         }
 
@@ -66,11 +64,11 @@ namespace FileExchanger.Controllers
             }
             await socket.CloseAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None);
             TelegramBotService.Instance.OnAuth -= OnAuth;
-            void OnAuth(ITelegramBotClient botClient, Update update, bool isAuth, int userId)
+            async void OnAuth(ITelegramBotClient botClient, Update update, bool isAuth, int userId)
             {
                 if (userId != user.Id)
                     return;
-                var token = Helpers.JwtHelper.CreateToken(user.AuthClient.Email, user.AuthClient.Password);
+                var token = await JwtHelper.CreateToken(user.AuthClient.Id);
                 cache.Set($"{c}_tg_auth", isAuth ? token : "-1");
             }
         }

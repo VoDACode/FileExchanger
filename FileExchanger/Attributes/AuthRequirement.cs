@@ -1,4 +1,5 @@
-﻿using FileExchanger.Configs;
+﻿using Core.Enums;
+using FileExchanger.Configs;
 using Microsoft.AspNetCore.Authorization;
 using System;
 

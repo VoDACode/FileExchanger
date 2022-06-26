@@ -1,0 +1,23 @@
+<div class="modal-header">
+  <h5 class="modal-title" id="exampleModalLabel">{{ 'FileExchanger.GroupSettings.ModelJoinLink.Title' | translate }}</h5>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="modalRef.close()"
+  ></button>
+</div>
+<div class="modal-body">
+  <div class="input-group mb-3">
+    <input type="text" disabled [value]="getKey" class="form-control" placeholder="Link" aria-label="Link"  aria-describedby="link">
+    <span class="input-group-text" id="link">
+      <button type="button" class="btn btn-info" (click)="copyKey()">Copy</button>
+    </span>
+  </div>
+  <button type="button" class="btn btn-danger" (click)="deleteShare()">Disabled</button>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" (click)="modalRef.close()">
+    {{ 'FileExchanger.GroupSettings.ModelJoinLink.Close' | translate }}
+  </button>
+</div>

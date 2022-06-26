@@ -1,22 +1,19 @@
 using Core;
+using Core.Enums;
 using FileExchanger.Attributes;
+using FileExchanger.Interfaces;
+using FileExchanger.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Features;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace FileExchanger
 {
@@ -32,25 +29,24 @@ namespace FileExchanger
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSwaggerGen();
             services.AddDbContext<DbApp>(options =>
                 options.UseSqlServer(Config.Instance.DbConnect));
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(options =>
                     {
-                        options.RequireHttpsMetadata = true;
                         options.TokenValidationParameters = new TokenValidationParameters
                         {
                             ValidateIssuer = true,
-                            ValidIssuer = Config.Instance.Auth.Issuer,
-
                             ValidateAudience = true,
-                            ValidAudience = Config.Instance.Auth.Audience,
+                            ValidateIssuerSigningKey = true,
                             ValidateLifetime = true,
-
-                            IssuerSigningKey = Config.Instance.Auth.GetSymmetricSecurityKey,
-                            ValidateIssuerSigningKey = true
+                            ValidIssuer = Config.Instance.Auth.Issuer,
+                            ValidAudience = Config.Instance.Auth.Audience,
+                            IssuerSigningKey = Config.Instance.Auth.GetSymmetricSecurityKey
                         };
                     });
+            services.AddAuthorization();
             services.AddControllers();
             services.Configure<FormOptions>(x =>
             {
@@ -61,22 +57,32 @@ namespace FileExchanger
             {
                 configuration.RootPath = "wwwroot";
             });
+
             services.AddTransient<IAuthorizationHandler, AuthHandler>();
             services.AddTransient<IAuthorizationHandler, AdminHandler>();
+            services.AddTransient<IShareService, ShareService>();
+            services.AddTransient<ITokenService, TokenService>();
+            services.AddTransient<IAuthService, AuthService>();
+            services.AddTransient<IDirectoryService, DirectoryService>();
+            services.AddTransient<IStorageFileService, StorageFileService>();
+
             services.AddAuthorization(opts => {
                 opts.AddPolicy("AuthStorage",
-                    policy => policy.Requirements.Add(new AuthRequirement(Configs.DefaultService.FileStorage)));
+                    policy => policy.Requirements.Add(new AuthRequirement(DefaultService.FileStorage)));
                 opts.AddPolicy("AuthExchanger",
-                    policy => policy.Requirements.Add(new AuthRequirement(Configs.DefaultService.FileExchanger)));
+                    policy => policy.Requirements.Add(new AuthRequirement(DefaultService.FileExchanger)));
                 opts.AddPolicy("Admin",
                     policy => policy.Requirements.Add(new AdminRequirement()));
-            });
+            });    
             services.AddMemoryCache();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseSwagger();
+            app.UseSwaggerUI();
+
             app.UseDeveloperExceptionPage();
 
             app.UseHttpsRedirection();

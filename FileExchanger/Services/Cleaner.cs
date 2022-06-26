@@ -1,9 +1,7 @@
 ﻿using Core;
-using FileExchanger.Configs;
+using Core.Enums;
 using System;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace FileExchanger.Services
 {

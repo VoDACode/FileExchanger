@@ -24,7 +24,8 @@ export class StorageObjectPropertiesComponentComponent implements AfterViewInit{
   ngAfterViewInit(): void {
     $.ajax({
       method: "GET",
-      url: `api/files/s/${this.item?.rootKey}/${this.item?.key}/info`,
+      url: `api/files/s/info`,
+      data: {DirectoryKey: this.item?.rootKey, FileKey: this.item?.key},
       headers:{
         Authorization: "Bearer " + AuthService.token
       },

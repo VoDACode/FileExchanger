@@ -33,11 +33,13 @@ namespace FileExchanger
                     instance = new Config();
                     Reload();
                     instance.lastUpdaat = File.GetLastWriteTime(instance.ConfigFileName);
+                    instance.OnUpdata?.Invoke();
                 }
                 else if(instance.lastUpdaat != File.GetLastWriteTime(instance.ConfigFileName))
                 {
                     Reload();
                     instance.lastUpdaat = File.GetLastWriteTime(instance.ConfigFileName);
+                    instance.OnUpdata?.Invoke();
                 }
                 
                 return instance;
@@ -65,7 +67,6 @@ namespace FileExchanger
                     });
                 }
             }
-            instance.OnUpdata?.Invoke();
         }
         public static void Rewrite()
         {

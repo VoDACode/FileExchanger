@@ -9,25 +9,23 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Telegram.Bot;
 
 namespace FileExchanger.Controllers
 {
     [Route("api/c")]
     [ApiController]
-    public class ConfirmController : ControllerBase
+    public class ConfirmController : BaseController
     {
-        DbApp db;
         IMemoryCache cache;
-        AuthClientModel authClient => db.AuthClients.SingleOrDefault(p => p.Email == User.Identity.Name);
-        public ConfirmController(DbApp db, IMemoryCache memoryCache)
+        public ConfirmController(DbApp db, IMemoryCache memoryCache) : base(db)
         {
-            this.db = db;
             cache = memoryCache;
         }
 
         [HttpGet("e/{key}")]
-        public IActionResult ConfirmEmail(string key)
+        public async Task<IActionResult> ConfirmEmail(string key)
         {
             AuthClientModel authClient = new AuthClientModel();
             if (!cache.TryGetValue($"EMAIL_CONFIRM_{key}", out authClient))
@@ -44,7 +42,7 @@ namespace FileExchanger.Controllers
                 Owner = authClient
             });
             db.SaveChanges();
-            Response.Cookies.Append(Config.Instance.Auth.CookiesName, JwtHelper.CreateToken(authClient.Email, authClient.Password));
+            Response.Cookies.Append(Config.Instance.Auth.CookiesName, await JwtHelper.CreateToken(authClient.Id));
             return Redirect("/");
         }
 
@@ -77,7 +75,7 @@ namespace FileExchanger.Controllers
             var tgClient = db.TelegramUsers.SingleOrDefault(p => p.AuthKey == code && !p.IsAuth);
             if (tgClient == null)
                 return NotFound();
-            tgClient.AuthClient = authClient;
+            tgClient.AuthClient = AuthClient;
             tgClient.IsAuth = true;
             tgClient.AuthKey = null;
             db.SaveChanges();

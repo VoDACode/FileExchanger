@@ -41,12 +41,15 @@ export class ReginComponent implements OnInit {
     $.ajax({
       method: 'POST',
       url: `/api/auth/regin`,
-      contentType: 'text',
-      data: this.password,
-      headers:{
-        Email: this.email,
-        Username: this.username
-      },
+      dataType: 'json',
+      contentType: 'application/json',
+      data: JSON.stringify({
+        email: this.email,
+        password: this.password,
+        confirmPassword: this.password,
+        username: this.username,
+        ts: new Date().toISOString().slice(0, 19).replace('T', ' ')
+      }),
       success: (data) => {
         this.router.navigate(['/c/email']);
       },

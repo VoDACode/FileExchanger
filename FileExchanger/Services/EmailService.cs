@@ -6,12 +6,12 @@ namespace FileExchanger.Services
 {
     public static class EmailService
     {
-        public static void Send(string to, string subject, string text)
+        public static async Task Send(string to, string subject, string text)
         {
             using (SmtpClient client = Connect())
             {
                 using (MailMessage message = new MailMessage(Config.Instance.Email.Address, to, subject, text))
-                    client.Send(message);
+                    await client.SendMailAsync(message);
             }
         }
         private static SmtpClient Connect()

@@ -15,15 +15,9 @@ namespace FileExchanger.Controllers
     [Authorize(Policy = "Admin")]
     [Route("api/config")]
     [ApiController]
-    public class ConfigController : ControllerBase
+    public class ConfigController : BaseController
     {
-        private DbApp db;
-        private AuthClientModel? authClient => db.AuthClients.SingleOrDefault(p => p.Email == User.Identity.Name);
-
-        public ConfigController(DbApp db)
-        {
-            this.db = db;
-        }
+        public ConfigController(DbApp db) : base(db) { }
 
         [HttpGet]
         public IActionResult GetConfig()
@@ -41,7 +35,7 @@ namespace FileExchanger.Controllers
 
             for (int i = 0; i < path.Length - 1; i++)
             {
-                if(root[path[i]] is JArray)
+                if (root[path[i]] is JArray)
                 {
                     var item = ((JArray)root[path[i]])[int.Parse(path[i + 1])];
                     setVal((JObject)item);
@@ -102,7 +96,7 @@ namespace FileExchanger.Controllers
         [HttpPost("add")]
         public IActionResult AddParameter(string p, string value)
         {
-            if(string.IsNullOrWhiteSpace(p) || string.IsNullOrWhiteSpace(value))
+            if (string.IsNullOrWhiteSpace(p) || string.IsNullOrWhiteSpace(value))
                 return BadRequest();
             JObject json = (JObject)JsonConvert.DeserializeObject(Encoding.UTF8.GetString(Convert.FromBase64String(value)));
             var path = p.Split('.');
@@ -120,9 +114,9 @@ namespace FileExchanger.Controllers
                     root = (JObject)root[path[i]];
                 }
             }
-            if(array == default)
+            if (array == default)
                 return BadRequest();
-            array.Add(json);       
+            array.Add(json);
             Config.Rewrite();
             return Ok();
         }

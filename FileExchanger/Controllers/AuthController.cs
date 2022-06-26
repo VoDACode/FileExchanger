@@ -1,105 +1,104 @@
-﻿using FileExchanger.Helpers;
-using Core.Helpers;
-using FileExchanger.Services;
-using Microsoft.AspNetCore.Authorization;
+﻿using FileExchanger.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
-using Core;
-using Core.Models;
-using System.IO;
+using System.Threading.Tasks;
+using FileExchanger.Interfaces;
+using FileExchanger.Requests;
+using FileExchanger.Responses;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FileExchanger.Controllers
 {
     [Route("api/auth")]
     [ApiController]
-    public class AuthController : ControllerBase
+    public class AuthController : BaseController
     {
-        private DbApp db;
-        private AuthClientModel? authClient => db.AuthClients.SingleOrDefault(p => p.Email == User.Identity.Name);
         private IMemoryCache cache;
-        public AuthController(DbApp db, IMemoryCache memoryCache)
+        private readonly IAuthService authService;
+        public AuthController(IMemoryCache memoryCache, IAuthService authService)
         {
-            this.db = db;
             cache = memoryCache;
+            this.authService = authService;
         }
 
         [HttpPost("login")]
-        public void Login(string e, string p)
+        public async Task<IActionResult> Login(LoginRequest loginRequest)
         {
-            void incorrect()
+            if (loginRequest == null || string.IsNullOrEmpty(loginRequest.Email) || string.IsNullOrEmpty(loginRequest.Password))
             {
-                HttpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                HttpContext.Response.WriteAsync("INCORRECT_PASSWORD_OR_EMAIL");
+                return BadRequest(new TokenResponse
+                {
+                    Error = "Missing login data",
+                    ErrorCode = "L01"
+                });
             }
-            if (string.IsNullOrWhiteSpace(p) || string.IsNullOrWhiteSpace(e))
+
+            var loginResponse = await authService.LoginAsync(loginRequest);
+
+            if (!loginResponse.Success)
             {
-                incorrect();
-                return;
+                return Unauthorized(new
+                {
+                    loginResponse.ErrorCode,
+                    loginResponse.Error
+                });
             }
-            if (db.AuthClients.Any(o => o.Email == e && o.Password == p))
-            {
-                incorrect();
-                return;
-            }
-            p = PasswordHelper.GetHash(p);
-            var token = JwtHelper.CreateToken(e, p);
-            if (token == null)
-            {
-                incorrect();
-                return;
-            }
-            HttpContext.Response.Cookies.Append(Config.Instance.Auth.CookiesName, token);
-            HttpContext.Response.StatusCode = StatusCodes.Status201Created;
-            HttpContext.Response.WriteAsync(token);
-            Console.WriteLine(JwtHelper.Verify(token));
+            HttpContext.Response.Cookies.Append(Config.Instance.Auth.CookiesName, loginResponse.AccessToken);
+            return Ok(loginResponse);
         }
+
         [HttpPost("regin")]
-        public void Regin()
+        public async Task<IActionResult> Registration(RegistrationRequest registrationRequest)
         {
-            string e = HttpContext.Request.Headers["Email"];
-            string n = HttpContext.Request.Headers["Username"];
-            string p = null;
-            using (var reader = new StreamReader(Request.Body))
+            if (!ModelState.IsValid)
             {
-                p = reader.ReadToEndAsync().Result;
+                var errors = ModelState.Values.SelectMany(x => x.Errors.Select(c => c.ErrorMessage)).ToList();
+                if (errors.Any())
+                    return BadRequest(new TokenResponse
+                    {
+                        Error = $"{string.Join(",", errors)}",
+                        ErrorCode = "R11"
+                    });
             }
-            if (string.IsNullOrWhiteSpace(e) || string.IsNullOrWhiteSpace(p) || string.IsNullOrWhiteSpace(n) || n.Length < 4)
-            {
-                Response.StatusCode = StatusCodes.Status400BadRequest;
-                Response.WriteAsync("BAD_REQUEST");
-                return;
-            }
-            if (db.AuthClients.Any(o => o.Email == e))
-            {
-                Response.StatusCode = StatusCodes.Status400BadRequest;
-                Response.WriteAsync("EMAIL_ADDRESS_ALREADY_BUSY");
-                return;
-            }
-            var user = new AuthClientModel()
-            {
-                Email = e,
-                Password = PasswordHelper.GetHash(p),
-                Name = n
-            };
+
+            var registrationResponse = await authService.RegistrationAsync(registrationRequest);
+
+            if (!registrationResponse.Success)
+                return UnprocessableEntity(registrationResponse);
+
             string confirmKey = "".RandomString(64);
             var host = HttpContext.Request.Host;
-            cache.Set($"EMAIL_CONFIRM_{confirmKey}", user, DateTime.Now.AddHours(1));
-            EmailService.Send(e, "Confirm email!", $"https://{host.Host}:{host.Port}/api/c/e/{confirmKey}");
+            cache.Set($"EMAIL_CONFIRM_{confirmKey}", registrationResponse.Email, DateTime.Now.AddHours(1));
+            await EmailService.Send(registrationResponse.Email, "Confirm email!", $"https://{host.Host}:{host.Port}/api/c/e/{confirmKey}");
 
-            Response.StatusCode = StatusCodes.Status200OK;
-            Response.WriteAsync("OK");
+            return Ok(registrationResponse.Email);
         }
+
+        [Authorize]
+        [HttpDelete("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            var logout = await authService.LogoutAsync(UserID);
+            if (!logout.Success)
+                return UnprocessableEntity(logout);
+            return Ok();
+        }
+
+        [Authorize]
+        [HttpGet("info")]
+        public async Task<IActionResult> Info()
+        {
+            var userResponse = await authService.GetAuthInfoAsync(UserID);
+            if (!userResponse.Success)
+                return UnprocessableEntity(userResponse);
+            return Ok(userResponse);
+        }
+
         [Authorize]
         [HttpGet("check")]
-        public void CheckAuth() => Ok();
+        public IActionResult CheckAuth() => Ok();
     }
 }

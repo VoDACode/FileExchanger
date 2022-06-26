@@ -22,6 +22,7 @@ namespace FileExchanger.Services
         private List<Telegram.Handlers.Handler> handlers = new List<Telegram.Handlers.Handler>();
         private TelegramBotClient bot { get; set; }
         public ITelegramBotClient Bot => bot;
+        private bool _isRuning = false;
         public string Username => Bot.GetMeAsync().Result.Username;
         private List<long> keys = new List<long>();
         private TelegramBotService()
@@ -33,6 +34,10 @@ namespace FileExchanger.Services
 
         public void Start()
         {
+            if (_isRuning)
+            {
+                return;
+            }
             try
             {
                 bot = new TelegramBotClient(Config.Instance.Security.Telegram.Token);
@@ -48,6 +53,7 @@ namespace FileExchanger.Services
                     receiverOptions,
                     cancellationToken
                 );
+                _isRuning = true;
             } catch (Exception ex)
             {
                 Console.WriteLine(ex);

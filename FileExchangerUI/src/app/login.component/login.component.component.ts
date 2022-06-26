@@ -44,7 +44,13 @@ export class LoginComponent implements OnInit {
   onLogin(){
     $.ajax({
       method: 'POST',
-      url: `/api/auth/login?e=${this.email}&p=${this.password}`,
+      url: `/api/auth/login`,
+      dataType: 'json',
+      contentType: 'application/json',
+      data: JSON.stringify({
+        email: this.email,
+        password: this.password
+      }),
       error: (data) => {
         alert(data.responseText);
       },

@@ -1,8 +1,8 @@
-﻿using FileExchanger.Helpers;
+﻿using Core.Enums;
+using FileExchanger.Helpers;
 
 namespace FileExchanger.Configs
 {
-    public enum DefaultService { FileExchanger, FileStorage }
     public class ServicesConfig : Configurations
     {
         private FileExchangerConfig exchanger = new FileExchangerConfig();

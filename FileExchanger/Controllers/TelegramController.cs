@@ -15,14 +15,11 @@ namespace FileExchanger.Controllers
     [Authorize]
     [Route("api/telegram")]
     [ApiController]
-    public class TelegramController : ControllerBase
+    public class TelegramController : BaseController
     {
-        private DbApp db;
         private IMemoryCache cache;
-        AuthClientModel authClient => db.AuthClients.SingleOrDefault(p => p.Email == User.Identity.Name);
-        public TelegramController(DbApp db, IMemoryCache memoryCache)
+        public TelegramController(DbApp db, IMemoryCache memoryCache) : base(db)
         {
-            this.db = db;
             cache = memoryCache;
         }
 
@@ -66,13 +63,13 @@ namespace FileExchanger.Controllers
         public IActionResult IsConnectTelegram()
         {
             return Ok(Config.Instance.Security.Telegram.Enable &&
-                db.TelegramUsers.Any(p => p.IsAuth && p.AuthClient == authClient));
+                db.TelegramUsers.Any(p => p.IsAuth && p.AuthClient == AuthClient));
         }
 
         [HttpDelete("delete")]
         public IActionResult DeleteTelegram()
         {
-            var tg = db.TelegramUsers.SingleOrDefault(p => p.AuthClient == authClient);
+            var tg = db.TelegramUsers.SingleOrDefault(p => p.AuthClient == AuthClient);
             if (tg == null)
                 return NotFound();
             db.TelegramUsers.Remove(tg);

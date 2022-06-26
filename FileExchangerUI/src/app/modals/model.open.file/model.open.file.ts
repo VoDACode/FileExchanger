@@ -18,13 +18,14 @@ export class OpenFileModelComponent {
     onDownload(): void {
         $.ajax({
             method: "GET",
-            url: `api/files/s/${this.item?.rootKey}/${this.item?.key}/get-disposable-key`,
+            url: `api/files/s/get-disposable-key`,
+            data: { DirectoryKey: this.item?.rootKey, FileKey: this.item?.key },
             headers: {
                 Authorization: "Bearer " + AuthService.token
             },
             success: (data) => {
                 //@ts-ignore
-                DownloadFile(`api/files/s/download/${data}`);
+                DownloadFile(`api/files/s/download/${data.key}`);
             }
         });
     }
