@@ -98,6 +98,12 @@
       "ConnectYourTelegram": "Connect your Telegram",
       "DeleteYourTelegram": "Delete your Telegram",
       "SaveChanges":"Save changes"
+    },
+    "ShareSettings":{
+      "Title": "Share settings",
+      "DeleteShare": "Stop share",
+      "Copy": "Copy",
+      "Close": "Close"
     }
   },
   "Config":{

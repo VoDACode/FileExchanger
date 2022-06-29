@@ -1,5 +1,5 @@
 <div class="modal-header">
-  <h5 class="modal-title" id="exampleModalLabel">{{ 'FileExchanger.GroupSettings.ModelJoinLink.Title' | translate }}</h5>
+  <h5 class="modal-title" id="exampleModalLabel">{{ 'FileStorage.ShareSettings.Title' | translate }}</h5>
   <button
     type="button"
     class="btn-close"
@@ -11,13 +11,13 @@
   <div class="input-group mb-3">
     <input type="text" disabled [value]="getKey" class="form-control" placeholder="Link" aria-label="Link"  aria-describedby="link">
     <span class="input-group-text" id="link">
-      <button type="button" class="btn btn-info" (click)="copyKey()">Copy</button>
+      <button type="button" class="btn btn-info" (click)="copyKey()">{{ 'FileStorage.ShareSettings.Copy' | translate }}</button>
     </span>
   </div>
-  <button type="button" class="btn btn-danger" (click)="deleteShare()">Disabled</button>
+  <button type="button" class="btn btn-danger" (click)="deleteShare()">{{ 'FileStorage.ShareSettings.DeleteShare' | translate }}</button>
 </div>
 <div class="modal-footer">
   <button type="button" class="btn btn-secondary" (click)="modalRef.close()">
-    {{ 'FileExchanger.GroupSettings.ModelJoinLink.Close' | translate }}
+    {{ 'FileStorage.ShareSettings.Close' | translate }}
   </button>
 </div>

@@ -98,6 +98,12 @@
       "ConnectYourTelegram": "Подключить Ваш Telegram",
       "DeleteYourTelegram": "Отключить Telegram",
       "SaveChanges": "Сохранить"
+    },
+    "ShareSettings":{
+      "Title": "Настройки публикации",
+      "DeleteShare": "Закрыть доступ",
+      "Copy": "Копировать",
+      "Close": "Закрыть"
     }
   },
   "Config": {
