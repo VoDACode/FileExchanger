@@ -26,7 +26,7 @@ namespace FileExchanger
                 {
                     webBuilder.UseStartup<Startup>()
                     .UseIISIntegration();
-                    webBuilder.UseUrls("https://*:5005");
+                    webBuilder.UseUrls("https://*:80");
                 });
     }
 }
