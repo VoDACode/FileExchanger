@@ -24,9 +24,7 @@ namespace FileExchanger
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>()
-                    .UseIISIntegration();
-                    webBuilder.UseUrls("https://*:80");
+                    webBuilder.UseStartup<Startup>();
                 });
     }
 }
