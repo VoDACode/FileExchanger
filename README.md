@@ -32,7 +32,7 @@
   </li>
   <li>
     <code>-DB_NAME [<i>String</i>]</code> - <i>(optional)</i> Database name.</br>
-    Default: <b>FileExchanger_[<i>TICS_AT_INITIALIZATION</i>]</b></br>
+    Default: <b>FileExchanger_[<i>TICKS_AT_INITIALIZATION</i>]</b></br>
     Example: <code>-DB_NAME FileExchanger</code>
    </li>
   <li>
