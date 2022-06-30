@@ -69,7 +69,7 @@
         <td>{{obj.downloadCount}}/{{obj.maxDownloadCount}}</td>
         <td>{{viewDeleteTime(obj)}}</td>
         <td (click)="onCopyLink(obj)" style="cursor: pointer">{{ 'FileExchanger.FileList.CopyLink' | translate }}</td>
-        <td><button type="button" class="btn btn-dark" (click)="onDelete(obj)">{{ 'FileList.Delete' | translate }}</button></td>
+        <td><button type="button" class="btn btn-dark" (click)="onDelete(obj)">{{ 'FileExchanger.FileList.Delete' | translate }}</button></td>
         <td>
           <form *ngIf="obj.accessMode != '2'" method="get" id="downloadForm_{{obj.id}}" action="/api/files/download/{{obj.downloadKey}}/{{obj.name}}">
             <button type="button" class="btn btn-info" (click)="onDownload(obj)">{{ 'FileExchanger.FileList.Download' | translate }}</button>
