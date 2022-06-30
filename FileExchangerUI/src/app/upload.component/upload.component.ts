@@ -88,7 +88,7 @@ export class UploadComponent {
   }
 
   onCopyLink(obj: FileModel): void {
-    ChildHelper.copy(`${location.protocol}//${location.host}/d/${obj.downloadKey}/${obj.name}`);
+    ChildHelper.copy(`${location.protocol}//${location.host}/d/${obj.key}/${obj.name}`);
   }
 
   onUpload(): void {
@@ -183,7 +183,7 @@ export class UploadComponent {
   }
 
   onDelete(obj: FileModel): void {
-    const url = `api/files/e/delete/${obj.downloadKey}/${obj.name}`;
+    const url = `api/files/e/delete/${obj.key}/${obj.name}`;
     $.ajax({
       url: url,
       method: 'POST',

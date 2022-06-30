@@ -71,10 +71,10 @@
         <td (click)="onCopyLink(obj)" style="cursor: pointer">{{ 'FileExchanger.FileList.CopyLink' | translate }}</td>
         <td><button type="button" class="btn btn-dark" (click)="onDelete(obj)">{{ 'FileExchanger.FileList.Delete' | translate }}</button></td>
         <td>
-          <form *ngIf="obj.accessMode != '2'" method="get" id="downloadForm_{{obj.id}}" action="/api/files/download/{{obj.downloadKey}}/{{obj.name}}">
+          <form *ngIf="obj.accessMode != '2'" method="get" id="downloadForm_{{obj.id}}" action="/api/files/download/{{obj.key}}/{{obj.name}}">
             <button type="button" class="btn btn-info" (click)="onDownload(obj)">{{ 'FileExchanger.FileList.Download' | translate }}</button>
           </form>
-            <button *ngIf="obj.accessMode == '2'" type="button" class="btn btn-info" [routerLink]="['d',obj.downloadKey, obj.name]">{{ 'FileExchanger.FileList.Download' | translate }}</button>
+            <button *ngIf="obj.accessMode == '2'" type="button" class="btn btn-info" [routerLink]="['d',obj.key, obj.name]">{{ 'FileExchanger.FileList.Download' | translate }}</button>
         </td>
       </tr>
       </tbody>

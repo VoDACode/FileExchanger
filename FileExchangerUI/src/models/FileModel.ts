@@ -2,7 +2,7 @@ export class FileModel{
   public id: number = 0;
   public name: string = "";
   public size: number = 0;
-  public downloadKey: string = "";
+  public key: string = "";
   public createDate: string = "";
   public accessMode: string = "";
   public password: string = "";
