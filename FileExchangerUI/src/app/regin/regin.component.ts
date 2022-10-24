@@ -48,7 +48,7 @@ export class ReginComponent implements OnInit {
         password: this.password,
         confirmPassword: this.password,
         username: this.username,
-        ts: new Date().toISOString().slice(0, 19).replace('T', ' ')
+        ts: new Date().toISOString().slice(0, 19)
       }),
       success: (data) => {
         this.router.navigate(['/c/email']);
